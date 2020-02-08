@@ -33,6 +33,9 @@
                   @if( Session::get('status') == "True" )
                       <input type="text" id="notifAlert" value="1">
                   @endif
+                  @if( Session::get('statusUpdate') == "True" )
+                      <input type="text" id="updateNotif" value="1">
+                  @endif
               </div>
               <div class="box-body">
                 <div class="row-content">

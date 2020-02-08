@@ -130,6 +130,7 @@ class CustomerController extends Controller
     {
         //
 
+
     }
 
     /**
@@ -142,7 +143,47 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         //
-	    dd("hello");
+
+        $custName = $request->input("custName");
+        $address = $request->input("Address");
+        $city = $request->input("City");
+        $custType = $request->input("custType");
+        $custSince = $request->input("custSince");
+        $tinNo = $request->input("tinNo");
+        $contPerson = $request->input("contPerson");
+        $Designation = $request->input("Designation");
+        $telNo = $request->input("telNo");
+        $contNo = $request->input("contNo");
+        $emailAdd = $request->input("emailAddress");
+        $cashPay = $request->input("cashPay");
+        $orCopy = $request->input("orCopy");
+
+        $clientUpdate = DB::table('client')
+                        ->where('CLIENTID' , $id)
+                        ->update([
+                            'NAME' => $custName,
+                            'TYPE' => $custType,
+                            'DTI_NO' => $tinNo,
+                            'ADDRESS' => $address,
+                            'CITY_MUN' => $city,
+                            'CON_PERSON' => $contPerson,
+                            'DESIGNATION' => $Designation,
+                            'TEL_NO' => $telNo,
+                            'CELL_NO' => $contNo,
+                            'EMAIL_ADDR' => $emailAdd,
+                            'CLIENT_DATE' => $custSince,
+                            'PAYMENT_TYPE' => $cashPay,
+                            'ORCOPY' => $orCopy
+                        ]);
+
+        if($clientUpdate == true){
+            $request->session()->flash('statusUpdate', 'True');
+            return redirect('Customer');
+        }else{
+            $request->session()->flash('status', 'False');
+            return redirect('CustomerController/show', $id);
+        }
+
     }
 
     /**
