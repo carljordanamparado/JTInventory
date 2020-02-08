@@ -3,14 +3,12 @@
     
     @include('partials._head')
 
-    <body class="hold-transition sidebar-mini layout-fixed">
+    <body class="hold-transition skin-blue sidebar-mini">
         
         @include('partials._nav')
 
         <div class="wrapper">
-
-            @yield('content')
-
+           @yield('content')
         </div>
 
         @include('partials._javascript')

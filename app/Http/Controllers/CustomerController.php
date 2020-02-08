@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Session;
+
 
 class CustomerController extends Controller
 {
@@ -24,7 +27,10 @@ class CustomerController extends Controller
     public function create()
     {
         //
-	    return view('customer.addcustomer');
+        $clientType = DB::table('client_type')->get();
+
+        return view('customer.addcustomer' , ['clientType' => $clientType]);
+
     }
 
     /**
@@ -35,7 +41,61 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $clientCode = DB::table('client')->max('CLIENT_CODE');
+        $clientCode = $clientCode + 1;
+
+        if(strlen($clientCode) == 1){
+            $cCode = "000" . strval($clientCode);
+        }elseif(strlen($clientCode) == 2){
+            $cCode = "00" . strval($clientCode);
+        }elseif(strlen($clientCode) == 3){
+            $cCode = "0" . strval($clientCode);
+        }else{
+            $cCode = strlen($clientCode);
+        }
+
+        $custName = $request->input("custName");
+        $address = $request->input("Address");
+        $city = $request->input("City");
+        $custType = $request->input("custType");
+        $custSince = $request->input("custSince");
+        $tinNo = $request->input("tinNo");
+        $contPerson = $request->input("contPerson");
+        $Designation = $request->input("Designation");
+        $telNo = $request->input("telNo");
+        $contNo = $request->input("contNo");
+        $emailAdd = $request->input("emailAddress");
+        $cashPay = $request->input("cashPay");
+        $orCopy = $request->input("orCopy");
+
+        $client = DB::table("client")->insert([
+	        [
+		        'NAME' => $custName,
+		        'TYPE' => $custType,
+		        'DTI_NO' => $tinNo,
+		        'ADDRESS' => $address,
+		        'CITY_MUN' => $city,
+		        'CON_PERSON' => $contPerson,
+		        'DESIGNATION' => $Designation,
+		        'TEL_NO' => $telNo,
+		        'CELL_NO' => $contNo,
+		        'EMAIL_ADDR' => $emailAdd,
+		        'CLIENT_DATE' => $custSince,
+		        'CLIENT_CODE' => $cCode,
+		        'PAYMENT_TYPE' => $cashPay,
+		        'ORCOPY' => $orCopy
+	        ]
+        ]);
+
+        if($client == true){
+	        $request->session()->flash('status', 'True');
+        	return redirect('Customer');
+        }else{
+	        $request->session()->flash('status', 'False');
+			return redirect('CustomerController/create');
+        }
+
     }
 
     /**
@@ -47,6 +107,17 @@ class CustomerController extends Controller
     public function show($id)
     {
         //
+	    $client = DB::table('client')
+		        ->where("CLIENTID", "=" , $id)
+		        ->get();
+	    $clientType = DB::table('client_type')->get();
+
+
+
+	    return view('customer.editcustomer')
+		        ->with('client', $client)
+	            ->with('clientType', $clientType);
+
     }
 
     /**
@@ -58,6 +129,7 @@ class CustomerController extends Controller
     public function edit($id)
     {
         //
+
     }
 
     /**
@@ -70,6 +142,7 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         //
+	    dd("hello");
     }
 
     /**

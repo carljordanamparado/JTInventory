@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('Dashboard', 'PagesController@getDashboard');
+Route::get('Dashboard', ['uses' => 'PagesController@getDashboard', 'as' => 'Dashboard']);
 Route::get('Customer', ['uses' => 'PagesController@getCustomerView' , 'as' => 'Customer']);
 
 // Resoures
