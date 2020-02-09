@@ -20,4 +20,13 @@ class PagesController extends Controller
 
     	return view('customer.viewcustomer' , ['client' => $client]);
     }
+
+    public function getPriceCustomerView(){
+        $client = DB::table('client')
+            ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
+            ->select('client.*', 'client_type.CLIENT_TYPE')
+            ->get();
+
+        return view('pricelist.viewpricelist' , ['client' => $client]);
+    }
 }

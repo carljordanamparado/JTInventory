@@ -132,10 +132,8 @@
                         <div class="btn-group">
                             <button type="button" id="btnClear" class="btn btn-primary pull-left">Masterlist</button>
                         </div>
+                    </form>
                 </div>
-
-                </form>
-
 
             </div>
             <!-- /.row -->

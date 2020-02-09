@@ -13,7 +13,15 @@
 
 Route::get('Dashboard', ['uses' => 'PagesController@getDashboard', 'as' => 'Dashboard']);
 Route::get('Customer', ['uses' => 'PagesController@getCustomerView' , 'as' => 'Customer']);
+Route::get('Pricelist', ['uses' => 'PagesController@getPriceCustomerView', 'as' => 'Pricelist']);
+Route::get('PriceController/create/{id}', ['uses' => 'PriceController@create', 'as' => 'PriceController.create']);
+
+// Jquery Controller
+
+Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as' => 'getProductSize']);
+
 
 // Resoures
 
 Route::resource('CustomerController', 'CustomerController');
+Route::resource('PriceController', 'PriceController' , ['except' => 'create']);
