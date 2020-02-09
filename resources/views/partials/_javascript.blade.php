@@ -42,4 +42,4 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="{{ asset('js/maskmoney.js') }}"></script>
 
-
+<script type="text/javascript" src="{{ asset('BladeJavascript/PricelistJS/addpricelist.js') }}"></script>

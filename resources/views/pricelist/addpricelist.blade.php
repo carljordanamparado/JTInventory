@@ -14,8 +14,7 @@
                     <h3 class="box-title"> Add Customer Pricelist </h3>
                 </div>
                 <div class="box-body">
-                <form role="form" method="post" action="">
-                    {{ csrf_field() }}
+
 
                     @foreach ($clientInfo as $row)
 
@@ -40,95 +39,106 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="telNumber">Telephone No.</label>
                             <input type="text" class="form-control" id="telNo" name="telNo" placeholder="Telephone NO." value="{{ $row -> TEL_NO }}" {{ $readonly }}>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="contNumber">Contact No.</label>
                             <input type="text" class="form-control" id="contNo" name="contNo" placeholder="Contact NO." value="{{ $row -> CELL_NO }}" {{ $readonly }}>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="emailAddress">Email Address</label>
                             <input type="text" class="form-control" id="emailAddress" data-validation="email" name="emailAddress" placeholder="Email Address" value="{{ $row -> EMAIL_ADDR }}" {{ $readonly }}>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label for="PriceDate">Price Date</label>
-                            <input type="date" class="form-control" data-validation="date" id="PriceDate" name="PriceDate" value="" >
-                        </div>
+
                     </div>
+                <form role="form" method="post" id="priceInfo">
+
+                    <input type="hidden" value="{{ $clientID }}" name="clientID">
+                    {{ csrf_field() }}
 
                     <div class="box">
 
                         <div class="box-header">
                             <h3 class="box-title"> Pricelist Information </h3>
                         </div>
-                            <div class="box-body table-responsivebody">
-                                    <table class="table table-bordered table-hover table-sortable" id="tab_logic">
-                                        <thead>
-                                            <tr >
-                                                <th class="text-center">
-                                                    <label for="Products"> Products </label>
-                                                </th>
-                                                <th class="text-center">
-                                                    <label for="Products"> Product Size </label>
-                                                </th>
-                                                <th class="text-center">
-                                                    <label for="Products"> Product Price </label>
-                                                </th>
-                                                <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="temp_body">
 
-                                            <tr id="temp0">
-                                                <td data-name="prodCode">
-                                                    <select name="productCode" id="prodCode" class="form-control prodCode">
-                                                        <option value="" selected> Choose Option</option>
-                                                        @foreach($product as $product2)
-                                                            <option value="{{ $product2 -> PROD_CODE }}"> {{ $product2 -> PRODUCT  }}</option>
-                                                        @endforeach
-                                                    </select>
+                        <div class="row" id="template">
+                            <div class="form-group col-md-3">
+                                <label for="Products"> Products </label>
+                                <select name="productCode" id="prodCode" data-validation="required" class="form-control">
+                                    <option value="" selected> Choose Option</option>
+                                    @foreach($product as $product)
+                                        <option value="{{ $product -> PROD_CODE }}"> {{ $product -> PRODUCT  }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" id="prodName" name="prodName" value="">
+                            </div>
+                            <div class="form-group col-md-3 prodToBeClear">
+                                <label for="Products"> Product Size </label>
+                                <select name="prodSize" id="prodSize"  data-validation="required" class="form-control" disabled="true">
+                                    <option value="" selected> Choose Option</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Products"> Product Price </label>
+                                <input type="text" id="prodPrice"data-validation="required"  name="prodPrice" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="PriceDate">Price Date</label>
+                                <input type="date" class="form-control" data-validation="date" id="PriceDate" name="PriceDate" value="" >
+                            </div>
 
-                                                </td>
-                                                <td data-name="prodSize">
-                                                    <select name="prodSize" id="prodSize" class="form-control prodSize">
-                                                        <option value="" selected> Choose Option</option>
-                                                        @foreach($prodSize as $prodSize2)
-                                                            <option value="{{ $prodSize2 -> SIZES }}"> {{ $prodSize2 -> SIZES  }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </td>
-                                                <td data-name="prodPrice">
-                                                    <input type="text" id="prodPrice" name="prodPrice" class="form-control prodPrice">
-                                                </td>
-                                            </tr>
-                                            <tr id="temp1"></tr>
-
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            <div class="box-footer">
-                                    <a id="add_row" class="btn btn-primary pull-right">Add Product</a>
-                                    <a id='delete_row' class="pull-right btn btn-warning">Delete Product</a>
-                                
+                        </div>
+                        <div class="box-footer">
+                            <div class="btn-group pull-right">
+                                <button type="button" id="submit" class="btn btn-primary ">Add Price</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary pull-left">Back</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" id="btnClear" class="btn btn-primary pull-left">Clear</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" id="btnMasterlist" class="btn btn-primary pull-left">Masterlist</button>
                             </div>
                         </div>
-
-                        <div class="box">
-                            <div class="box-header">
-
-                            </div>
-                            <div class="box-body">
-                                <button type="submit" class="btn btn-success"> Add Pricelist Information </button>
-                            </div>
-                        </div>
+                    </div>
                 </form>
+                </div>
+            </div>
+
+            {{-- Table for Product Price --}}
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"> Saved Product Price </h3>
+                </div>
+                <div class="box-body">
+                    <div class="row table-responsive col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th> Products </th>
+                                    <th> Products Size </th>
+                                    <th> Product Price </th>
+                                    <th> Product Date </th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>
+
         </section>
 
     </div>
@@ -139,70 +149,67 @@
 
 
 @section('scripts')
+
     <script type="text/javascript">
+
+
+
 
         $(document).ready(function(){
 
-            var i = 1;
 
+            $.validate({});
 
+            $('#prodCode').on('change', function(){
+                $('#prodName').val($('#prodCode option:selected').text());
+                $.ajax({
+                    url: "{{ route('getProductSize') }}?prodcode=" + $(this).val(),
+                    method: 'GET',
+                    success: function($data){
+                        if($data == ''){
+                            $('#prodSize option:selected').text("Choose Option");
 
-            $('.prodPrice').maskMoney();
-
-
-            {{--for(var j = 0 ; i < j ; j++){--}}
-
-            {{--    $('#prodCode'+j).on('change', function(){--}}
-
-            {{--        alert("hello");--}}
-
-            {{--        --}}{{--$('#prodName'+i).val($('#prodCode+i+ option:selected').text());--}}
-            {{--        --}}{{--$.ajax({--}}
-            {{--        --}}{{--    url: "{{ route('getProductSize') }}?prodcode=" + $(this).val(),--}}
-            {{--        --}}{{--    method: 'GET',--}}
-            {{--        --}}{{--    success: function($data){--}}
-            {{--        --}}{{--        if($data == ''){--}}
-            {{--        --}}{{--            $('#prodSize+i+ option:selected').text("Choose Option");--}}
-            {{--        --}}{{--        }else{--}}
-            {{--        --}}{{--            $('#prodSize'+i).html($data);--}}
-            {{--        --}}{{--        }--}}
-            {{--        --}}{{--    }--}}
-            {{--        --}}{{--});--}}
-            {{--    });--}}
-
-            {{--}--}}
-
-            $('#add_row').on('click', function(){
-
-                var prodSelect = "<td><select name='productCode' id='prodCode' class='form-control prodCode'><option value='' selected> Choose Option</option>@foreach($product as $product)<option value='{{ $product -> PROD_CODE }}'> {{ $product -> PRODUCT  }} </option>@endforeach</select> <input type=\"hidden\" id=\"prodName\" value=\"\"></td>";
-
-                var prodSize = "<td> <select name=\"prodSize\" id=\"prodSize\" class=\"form-control prodSize\">\n" +
-                    "                                                        <option value=\"\" selected> Choose Option</option>\n" +
-                    "                                                        @foreach($prodSize as $prodSize)\n" +
-                    "                                                            <option value=\"{{ $prodSize -> SIZES }}\"> {{ $prodSize -> SIZES  }}</option>\n" +
-                    "                                                        @endforeach\n" +
-                    "                                                    </select></td>";
-                var prodPrize = "<td><input type=\"text\" id=\"prodPrice"+i+"\" name=\"prodPrice\" class=\"form-control prodPrice\"><td>";
-
-                $('#temp'+i).html(prodSelect + prodSize + prodPrize);
-                $('#tab_logic').append('<tr id="temp'+(i+1)+'"></tr>');
-                $('#prodPrice'+i).maskMoney();
-                i++;
-
+                        }else{
+                            $('#prodSize').html($data);
+                            $('#prodSize').attr("disabled", false);
+                        }
+                    }
+                });
             });
 
-            $("#delete_row").click(function(){
-                if(i>1){
-                    $("#temp"+(i-1)).html('');
-                    i--;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
+            $('#submit').on('click', function(){
 
+                $.validate({
+                    form: '#priceInfo'
+                });
 
-
-
+                $.ajax({
+                    url: '{{ route('PriceController.store') }}' ,
+                    type: "POST",
+                    data: $('#priceInfo').serialize(),
+                    success: function( response ) {
+                      if(response.status == "true"){
+                                $("#priceInfo").trigger("reset");
+                                $('#prodSize option:selected').text("Choose Option");
+                                $('#prodSize').attr("disabled", true);
+                                swal("Product Successfully Added", "", "success");
+                      }else{
+                          swal("Error in adding of Product", "danger");
+                      }
+                    }
+                });
+            });
         });
 
+
     </script>
+
+
+
 @endsection

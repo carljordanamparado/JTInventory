@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -46,7 +47,8 @@ class PriceController extends Controller
             ->with('clientInfo', $clientInfo)
             ->with('readonly', $readonly)
             ->with('product', $product)
-            ->with('prodSize', $prodSize);
+            ->with('prodSize', $prodSize)
+	        ->with('clientID', $id);
 
     }
 
@@ -59,6 +61,43 @@ class PriceController extends Controller
     public function store(Request $request)
     {
         //
+
+	    $clientid = $request -> clientID;
+	    $prodCode = $request -> productCode;
+	    $prodName = $request -> prodName;
+	    $prodSize = $request -> prodSize;
+	    $prodPrice = $request -> prodPrice;
+	    $prodDate = $request -> PriceDate;
+	    $prodPrice = floatval(str_replace(",", "", $prodPrice));
+
+
+
+	  $clientProduct = DB::table('product_list')->insert([
+			[
+				'CLIENTID' => $clientid,
+				'PROD_CODE' => $prodCode,
+				'PRODUCT' => $prodName,
+				'SIZE' => $prodSize,
+				'PRICE_DATE' => $prodDate
+			]
+	  ]);
+
+	  $clientPrice = DB::table('product_price')->insert([
+	  	    [
+	  	        'CLIENT_CODE' => $clientid,
+		        'PRODUCT_CODE' => $prodCode,
+		        'PRODUCT_PRICE' => $prodPrice
+	        ]
+	  ]);
+
+	  if($clientProduct == "TRUE" && $clientPrice == "TRUE"){
+		  return Response()->json(['status' => 'true']);
+	  }else{
+		  return Response()->json(['status' => 'false']);
+	  }
+
+
+
 
     }
 
