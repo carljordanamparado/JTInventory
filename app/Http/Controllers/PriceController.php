@@ -41,6 +41,11 @@ class PriceController extends Controller
             ->distinct('SIZES')
             ->get();
 
+        $prodList = DB::table('product_list')
+                    ->where('ID', $id)
+                    ->get();
+
+
 
 
         return view('pricelist.addpricelist')
@@ -48,7 +53,8 @@ class PriceController extends Controller
             ->with('readonly', $readonly)
             ->with('product', $product)
             ->with('prodSize', $prodSize)
-	        ->with('clientID', $id);
+	          ->with('clientID', $id)
+            ->with('prodList', $prodList);
 
     }
 
@@ -78,19 +84,14 @@ class PriceController extends Controller
 				'PROD_CODE' => $prodCode,
 				'PRODUCT' => $prodName,
 				'SIZE' => $prodSize,
+        'PRODUCT_PRICE' => $prodPrice,
 				'PRICE_DATE' => $prodDate
 			]
 	  ]);
 
-	  $clientPrice = DB::table('product_price')->insert([
-	  	    [
-	  	        'CLIENT_CODE' => $clientid,
-		        'PRODUCT_CODE' => $prodCode,
-		        'PRODUCT_PRICE' => $prodPrice
-	        ]
-	  ]);
 
-	  if($clientProduct == "TRUE" && $clientPrice == "TRUE"){
+
+	  if($clientProduct == "TRUE"){
 		  return Response()->json(['status' => 'true']);
 	  }else{
 		  return Response()->json(['status' => 'false']);
