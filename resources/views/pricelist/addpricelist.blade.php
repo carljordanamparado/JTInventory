@@ -118,20 +118,39 @@
                 </div>
                 <div class="box-body">
                     <div class="row table-responsive col-md-12">
-                        <table class="table table-bordered">
+                        <table id="prodListTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th> Products </th>
-                                    <th> Products Size </th>
-                                    <th> Product Price </th>
-                                    <th> Product Date </th>
-                                    <th> Action </th>
+                                    <th class="text-center"> Products </th>
+                                    <th class="text-center"> Products Size </th>
+                                    <th class="text-center"> Product Price </th>
+                                    <th class="text-center"> Product Date </th>
+                                    <th class="text-center"> Action </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td></td>
-                                </tr>
+                                @foreach($prodList as $prodList)
+                                    <tr>
+
+                                        <td class="text-center"><input type="hidden" id="prodID" value="{{ $prodList-> ID }}">{{ $prodList-> PRODUCT }}</td>
+                                        <td class="text-center">{{ $prodList-> SIZE }}</td>
+                                        <td class="text-center"><input type="text" name="editProdPrice" class="prodPrice" value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" disabled="true"></td>
+                                        <td class="text-center">{{ $prodList-> PRICE_DATE }}</td>
+                                        <td class="text-center">
+
+                                            <div class="btn-group-vertical btn-action">
+                                                <a type="button" class="btn btn-info btn-edit"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                <a type="button" class="btn btn-warning"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>
+                                            </div>
+
+                                            <div class="btn-group-vertical btn-edit-yes hidden">
+                                                <a type="button" class="btn btn-info btn-yes"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Yes</a>
+                                                <a type="button" class="btn btn-danger btn-no"><span class="fa fa-trash">&nbsp;&nbsp;</span>No</a>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -156,10 +175,19 @@
 
 
         $(document).ready(function(){
-
-
+            // Validation
             $.validate({});
+            // End of Validation
 
+            // Datatables
+            $('#prodListTable').DataTable({
+                "columnsDefs":[
+                    { "orderDataType" : "dom-text", type: 'numeric-comma' , },
+                ]
+            });
+            // End of Datatables
+
+            // Dynamic Select Option of Product => Size
             $('#prodCode').on('change', function(){
                 $('#prodName').val($('#prodCode option:selected').text());
                 $.ajax({
@@ -176,6 +204,7 @@
                     }
                 });
             });
+            // End of file
 
             $.ajaxSetup({
                 headers: {
@@ -183,6 +212,7 @@
                 }
             });
 
+            // Submittion of Products
             $('#submit').on('click', function(){
 
                 $.validate({
@@ -198,15 +228,36 @@
                                 $("#priceInfo").trigger("reset");
                                 $('#prodSize option:selected').text("Choose Option");
                                 $('#prodSize').attr("disabled", true);
-                                swal("Product Successfully Added", "", "success");
+                                swal({title: "Success!", text: "Product Price is added.", type: "success"})
+                                    .then((value) => {
+                                        location.reload();
+                                    });
+
                       }else{
                           swal("Error in adding of Product", "danger");
                       }
                     }
                 });
             });
-        });
+            // End of file
 
+            $('.btn-edit').on('click', function(){
+                $(this).closest('tr').find('input,button').prop('disabled', false);
+                $(this).closest('tr').find('button, .btn-edit-yes').removeClass('hidden');
+                $(this).closest('tr').find('button, .btn-action').addClass('hidden');
+            });
+
+            $('.btn-no').on('click', function(){
+                $(this).closest('tr').find('input,button').prop('disabled', true);
+                $(this).closest('tr').find('button, .btn-edit-yes').addClass('hidden');
+                $(this).closest('tr').find('button, .btn-action').removeClass('hidden');
+            });
+
+            $('.btn-yes').on('click', function(){
+              var price = $(this).closest('tr').find('.prodPrice').val();
+              alert(price);
+            });
+        });
 
     </script>
 

@@ -61,10 +61,8 @@
                                                 <td>{{ $row -> NAME }}</td>
                                                 <td>{{ $row -> CLIENT_TYPE }}</td>
                                                 <td>{{ $row -> ADDRESS }}</td>
-                                                <td><div class="btn-group-vertical">
+                                                <td class="text-center"><div class="btn-group-vertical">
                                                         <a type="button" class="btn btn-primary" href="{{ route('PriceController.create', $row->CLIENTID) }}"><span class="fa fa-plus">&nbsp;&nbsp;</span>Add Price</a>
-                                                        <a type="button" class="btn btn-info" href="{{ route('CustomerController.show', $row->CLIENTID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                                        <a type="button" class="btn btn-warning"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>
                                                     </div>
                                                 </td>
                                             </tr>

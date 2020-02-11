@@ -76,7 +76,8 @@
                                         <td>{{ $row -> TEL_NO }}</td>
                                         <td>{{ $row -> CELL_NO }}</td>
                                         <td>{{ $row -> EMAIL_ADDR }}</td>
-                                        <td><div class="btn-group-vertical">
+                                        <td class="text-center">
+                                            <div class="btn-group-vertical">
                                                 <a type="button" class="btn btn-info" href="{{ route('CustomerController.show', $row->CLIENTID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
                                                 <a type="button" class="btn btn-warning"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>
                                             </div>

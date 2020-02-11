@@ -43,3 +43,5 @@
 <script src="{{ asset('js/maskmoney.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('BladeJavascript/PricelistJS/addpricelist.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/dom-text.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/numeric-comma.js') }}"></script>

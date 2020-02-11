@@ -279,8 +279,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="{{ route('Customer') }}"><i class="fa fa-circle-o"></i> Customers </a></li>
-            <li><a href="{{ route('Pricelist') }}"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+            <li class="active"><a href="{{ route('Customer') }}"><i class="fa fa-users"></i> Customers List </a></li>
+            <li><a href="{{ route('Pricelist') }}"><i class="fa fa-product-hunt"></i> Product Pricelist </a></li>
           </ul>
         </li>
       </ul>

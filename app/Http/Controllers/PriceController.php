@@ -42,18 +42,15 @@ class PriceController extends Controller
             ->get();
 
         $prodList = DB::table('product_list')
-                    ->where('ID', $id)
+                    ->where('CLIENTID', $id)
                     ->get();
-
-
-
 
         return view('pricelist.addpricelist')
             ->with('clientInfo', $clientInfo)
             ->with('readonly', $readonly)
             ->with('product', $product)
             ->with('prodSize', $prodSize)
-	          ->with('clientID', $id)
+            ->with('clientID', $id)
             ->with('prodList', $prodList);
 
     }
