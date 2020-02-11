@@ -19,6 +19,7 @@ Route::get('PriceController/create/{id}', ['uses' => 'PriceController@create', '
 // Jquery Controller
 
 Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as' => 'getProductSize']);
+Route::post('updateProductPrice', ['uses' => 'JqueryController@updateProductPrice', 'as' => 'updatePrice']);
 
 
 // Resoures

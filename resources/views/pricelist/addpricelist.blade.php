@@ -134,7 +134,7 @@
 
                                         <td class="text-center"><input type="hidden" id="prodID" value="{{ $prodList-> ID }}">{{ $prodList-> PRODUCT }}</td>
                                         <td class="text-center">{{ $prodList-> SIZE }}</td>
-                                        <td class="text-center"><input type="text" name="editProdPrice" class="prodPrice" value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" disabled="true"></td>
+                                        <td class="text-center"><input type="text" name="editProdPrice" class="prodPrice" value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" data-value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" disabled="true"></td>
                                         <td class="text-center">{{ $prodList-> PRICE_DATE }}</td>
                                         <td class="text-center">
 
@@ -241,22 +241,8 @@
             });
             // End of file
 
-            $('.btn-edit').on('click', function(){
-                $(this).closest('tr').find('input,button').prop('disabled', false);
-                $(this).closest('tr').find('button, .btn-edit-yes').removeClass('hidden');
-                $(this).closest('tr').find('button, .btn-action').addClass('hidden');
-            });
+            p
 
-            $('.btn-no').on('click', function(){
-                $(this).closest('tr').find('input,button').prop('disabled', true);
-                $(this).closest('tr').find('button, .btn-edit-yes').addClass('hidden');
-                $(this).closest('tr').find('button, .btn-action').removeClass('hidden');
-            });
-
-            $('.btn-yes').on('click', function(){
-              var price = $(this).closest('tr').find('.prodPrice').val();
-              alert(price);
-            });
         });
 
     </script>

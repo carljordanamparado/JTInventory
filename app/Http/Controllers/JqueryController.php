@@ -30,4 +30,26 @@ class JqueryController extends Controller
       return response()->json([$html]);
 
     }
+
+    public function updateProductPrice(Request $request){
+
+
+        $id = $request -> id;
+        $price = $request -> price;
+
+        $price = floatval(str_replace(",", "", $price));
+
+        $updatePrice = DB::table('product_list')
+                        ->where('id', $id)
+                        ->update(['PRODUCT_PRICE' => $price]);
+
+        if($updatePrice == 1){
+		  return Response()->json(['updateStatus' => 'true']);
+        }else{
+		  return Response()->json(['updateStatus' => 'false']);
+        }
+
+
+    }
+
 }
