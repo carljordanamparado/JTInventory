@@ -51,6 +51,12 @@ $(document).ready(function(){
 
             });
 
+            
+            
+            // $('.prodPrice').on('change',function(){
+            //     var Price = $(this).closest('tr').find('.prodPrice').val();
+            //     alert(Price);
+            // });
 
 
 });

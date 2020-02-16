@@ -29,4 +29,14 @@ class PagesController extends Controller
 
         return view('pricelist.viewpricelist' , ['client' => $client]);
     }
+
+    public function getCylinderBalance(){
+        $client = DB::table('client')
+            ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
+            ->select('client.*', 'client_type.CLIENT_TYPE')
+            ->get();
+
+        return view('cylinder.viewcylinder', ['client' => $client]);
+    }
+
 }

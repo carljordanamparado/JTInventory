@@ -279,8 +279,9 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="{{ route('Customer') }}"><i class="fa fa-users"></i> Customers List </a></li>
-            <li><a href="{{ route('Pricelist') }}"><i class="fa fa-product-hunt"></i> Product Pricelist </a></li>
+            <li class="{{ (request()->is('Customer')) ? 'active' : '' }}"><a href="{{ route('Customer') }}"><i class="fa fa-users"></i> Customers List </a></li>
+          <li class="{{ (request()->is('Pricelist')) ? 'active' : '' }}"><a href="{{ route('Pricelist') }}"><i class="fa fa-product-hunt"></i> Product Pricelist </a></li>
+            <li class="{{ (request()->is('Cylinder')) ? 'active' : '' }}"><a href="{{ route('Cylinder') }}"><i class="fa fa-product-hunt"></i> Cylinder Balance </a></li>
           </ul>
         </li>
       </ul>

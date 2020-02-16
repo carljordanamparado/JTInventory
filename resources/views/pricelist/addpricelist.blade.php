@@ -53,6 +53,7 @@
                         </div>
 
                     </div>
+                        
                 <form role="form" method="post" id="priceInfo">
 
                     <input type="hidden" value="{{ $clientID }}" name="clientID">

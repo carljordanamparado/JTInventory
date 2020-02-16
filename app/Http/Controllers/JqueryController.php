@@ -24,16 +24,31 @@ class JqueryController extends Controller
                 $html .= '<option value="' . $prodSize->SIZES . '">' . $prodSize->SIZES . '</option>';
             }
         }
-
-
-
       return response()->json([$html]);
+    }
 
+    public function getProductSize2(Request $request){
+            $prodCode = $request -> prodcode;
+            $html = '';
+
+             $prodSize = DB::table('client')
+                 ->join('product_list', 'client.CLIENTID', '=', 'product_list.CLIENTID')
+                 ->where('PROD_CODE', $prodCode)
+                 ->select('SIZE')
+                 ->get();
+
+            foreach ($prodSize as $prodSize) {
+                if($prodSize->SIZE == ''){
+
+                }else {
+                    $data = $prodSize -> SIZE;
+                }
+            }
+
+            return $data;
     }
 
     public function updateProductPrice(Request $request){
-
-
         $id = $request -> id;
         $price = $request -> price;
 
