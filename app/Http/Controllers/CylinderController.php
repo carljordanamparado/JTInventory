@@ -25,15 +25,31 @@ class CylinderController extends Controller
     public function create($id)
     {
         //
+        $clientInfo = db::table('client')
+            ->where('CLIENTID', $id)
+            ->get();
+
         $clientProduct = db::table('client')
             ->join('product_list', 'product_list.CLIENTID' , '=' , 'client.CLIENTID')
+            ->where('product_list.CLIENTID', $id)
+            ->get();
+
+
+
+        $cylinderList = db::table('product_list')
+            ->join('cylinder_balance', 'product_list.PROD_CODE', '=', 'cylinder_balance.product_code')
+            ->where('CLIENT_CODE', $id)
+            ->groupby('cylinder_balance.id')
+            ->orderby('cylinder_balance.cylinder_cutoffdate')
             ->get();
 
         $readonly = "readonly=true";
 
         return view('cylinder.addcylinder')
             ->with('readonly', $readonly)
-            ->with('clientProduct', $clientProduct);
+            ->with('clientinfo', $clientInfo)
+            ->with('clientProduct', $clientProduct)
+            ->with('cylinder', $cylinderList);
 
     }
 
@@ -134,10 +150,18 @@ class CylinderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+
+        $cylinder_id = $request -> id;
+
+        $cylinderList = DB::table('cylinder_balance')->where('id', '=' , $cylinder_id)->delete();
+
+         return response()->json([
+            'success' => 'Record deleted successfully!'
+        ]);
     }
 }

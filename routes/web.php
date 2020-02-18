@@ -15,8 +15,15 @@ Route::get('Dashboard', ['uses' => 'PagesController@getDashboard', 'as' => 'Dash
 Route::get('Customer', ['uses' => 'PagesController@getCustomerView' , 'as' => 'Customer']);
 Route::get('Pricelist', ['uses' => 'PagesController@getPriceCustomerView', 'as' => 'Pricelist']);
 Route::get('Cylinder', ['uses' => 'PagesController@getCylinderBalance', 'as' => 'Cylinder']);
+Route::get('Purchase_Order', ['uses' => 'PagesController@getPurchaseOrder', 'as' => 'Purcase_Order']);
+
+// Resources Exception
+
+// Get
 Route::get('PriceController/create/{id}', ['uses' => 'PriceController@create', 'as' => 'PriceController.create']);
 Route::get('CylinderController/create/{id}', ['uses' => 'CylinderController@create', 'as' => 'CylinderController.create']);
+// Post
+Route::post('CylinderController/delete', ['uses' => 'CylinderController@destroy', 'as' => 'CylinderController.destroy']);
 
 
 // Jquery Controller
@@ -30,5 +37,6 @@ Route::post('updateProductPrice', ['uses' => 'JqueryController@updateProductPric
 
 Route::resource('CustomerController', 'CustomerController');
 Route::resource('PriceController', 'PriceController' , ['except' => 'create']);
-Route::resource('CylinderController', 'CylinderController' , ['except' => 'create']);
+Route::resource('CylinderController', 'CylinderController' , ['except' => ['create','destroy']]);
+Route::resource('PurchaseOrderController', 'PurchaseOrderController');
 

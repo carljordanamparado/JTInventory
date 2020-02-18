@@ -12,9 +12,10 @@
                 <div class="box-body">
 
 
-                    @foreach ($clientProduct as $row)
+                   @foreach ($clientinfo as $row)
 
-                    @endforeach
+                   @endforeach
+
 
                     <div class="row">
                         <div class="form-group col-md-3">
@@ -95,53 +96,47 @@
               </div>
             </div>
 
-            {{-- Table for Product Price --}}
+            {{--Table for Product Price--}}
 
-{{--            <div class="box">--}}
-{{--                <div class="box-header">--}}
-{{--                    <h3 class="box-title"> Saved Product Price </h3>--}}
-{{--                </div>--}}
-{{--                <div class="box-body">--}}
-{{--                    <div class="row table-responsive col-md-12">--}}
-{{--                        <table id="prodListTable" class="table table-bordered table-striped">--}}
-{{--                            <thead>--}}
-{{--                                <tr>--}}
-{{--                                    <th class="text-center"> Products </th>--}}
-{{--                                    <th class="text-center"> Products Size </th>--}}
-{{--                                    <th class="text-center"> Product Price </th>--}}
-{{--                                    <th class="text-center"> Product Date </th>--}}
-{{--                                    <th class="text-center"> Action </th>--}}
-{{--                                </tr>--}}
-{{--                            </thead>--}}
-{{--                            <tbody>--}}
-{{--                                @foreach($clientProduct as $prodList)--}}
-{{--                                    <tr>--}}
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"> Saved Product Price </h3>
+                </div>
+                <div class="box-body">
+                    <div class="row table-responsive col-md-12">
+                        {{ method_field('DELETE') }}
+                        <table id="prodListTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"> Product ID </th>
+                                    <th class="text-center"> Products </th>
+                                    <th class="text-center"> Products Size </th>
+                                    <th class="text-center"> Cylinder Quantity </th>
+                                    <th class="text-center"> Cut Off Date </th>
+                                    <th class="text-center"> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($cylinder as $cylinder)
+                                    <tr>
+                                        <td class="text-center">{{ $cylinder -> id  }}</td>
+                                        <td class="text-center"><input type="hidden" id="prodID" value="{{ $cylinder-> id }}">{{ $cylinder-> PRODUCT }}</td>
+                                        <td class="text-center">{{ $cylinder-> SIZE }}</td>
+                                        <td class="text-center">{{ $cylinder-> cylinder_qty }} Pcs.</td>
+                                        <td class="text-center">{{ $cylinder-> cylinder_cutoffdate }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group-vertical btn-action">
+                                                <a type="button" class="btn btn-danger" id="deleteCylinder"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
-{{--                                        <td class="text-center"><input type="hidden" id="prodID" value="{{ $prodList-> ID }}">{{ $prodList-> PRODUCT }}</td>--}}
-{{--                                        <td class="text-center">{{ $prodList-> SIZE }}</td>--}}
-{{--                                        <td class="text-center"><input type="text" name="editProdPrice" class="prodPrice" value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" data-value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" disabled="true"></td>--}}
-{{--                                        <td class="text-center">{{ $prodList-> PRICE_DATE }}</td>--}}
-{{--                                        <td class="text-center">--}}
-
-{{--                                            <div class="btn-group-vertical btn-action">--}}
-{{--                                                <a type="button" class="btn btn-info btn-edit"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>--}}
-{{--                                                <a type="button" class="btn btn-warning"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>--}}
-{{--                                            </div>--}}
-
-{{--                                            <div class="btn-group-vertical btn-edit-yes hidden">--}}
-{{--                                                <a type="button" class="btn btn-info btn-yes"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Yes</a>--}}
-{{--                                                <a type="button" class="btn btn-danger btn-no"><span class="fa fa-trash">&nbsp;&nbsp;</span>No</a>--}}
-{{--                                            </div>--}}
-
-{{--                                        </td>--}}
-{{--                                    </tr>--}}
-{{--                                @endforeach--}}
-{{--                            </tbody>--}}
-{{--                        </table>--}}
-{{--                    </div>--}}
-
-{{--                </div>--}}
-{{--            </div>--}}
+                </div>
+            </div>
 
         </section>
 
@@ -170,7 +165,45 @@
                 });
             });
 
-        });
+           $(document).on('click' , '#deleteCylinder', function(e){
+
+               var id = $(this).closest('tr').find('#prodID').val();
+               e.preventDefault();
+
+               swal({
+                      title: "Are you sure?",
+                      text: "Once deleted, you will not be able to recover this Cylinder",
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                      if (willDelete) {
+                            swal("Success! This Cylinder has been deleted!", {
+                              icon: "success",
+                            });
+                             $.ajax({
+                                type: "POST",
+                                url: "{{ url("CylinderController/delete/") }}",
+                                data: {
+                                    'id':id,
+                                    '_token': $('input[name=_token]').val()
+                                },
+                                success: function (data) {
+                                    //
+                                    location.reload();
+                                }
+                             });
+                      } else {
+                        swal("Your Cylinder is safe!");
+                      }
+               });
+
+           });
+
+
+        }); // End of Document
+
     </script>
 
 

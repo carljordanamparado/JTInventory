@@ -38,8 +38,12 @@
 <script src="{{ asset('Datatables/js/jquery.dataTables.min.js') }}"></script>
 
 
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script src="{{ asset('bower_components/select2/dist/js/select2.js') }}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
 <script src="{{ asset('js/maskmoney.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('BladeJavascript/PricelistJS/addpricelist.js') }}"></script>

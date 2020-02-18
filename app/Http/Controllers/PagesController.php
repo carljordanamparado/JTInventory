@@ -39,4 +39,13 @@ class PagesController extends Controller
         return view('cylinder.viewcylinder', ['client' => $client]);
     }
 
+    public function getPurchaseOrder(){
+        $client = DB::table('client')
+            ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
+            ->select('client.*', 'client_type.CLIENT_TYPE')
+            ->get();
+
+        return view('purchase_order.viewpurchase', ['client' => $client]);
+    }
+
 }

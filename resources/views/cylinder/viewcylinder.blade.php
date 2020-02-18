@@ -57,7 +57,7 @@
                                                 <td>{{ $row -> ADDRESS }}</td>
                                                 <td class="text-center">
                                                     <div class="btn-group-vertical">
-                                                    <a type="button" class="btn btn-primary" href="{{ route('CylinderController.create', $row->CLIENTID)}}"><span class="fa fa-plus">&nbsp;&nbsp;</span>Add Price</a>
+                                                    <a type="button" class="btn btn-primary" href="{{ url('CylinderController/create', $row->CLIENTID)}}"><span class="fa fa-plus">&nbsp;&nbsp;</span>View Cylinder</a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -88,7 +88,7 @@
             $('#cylinderBalance').DataTable({
             });
 
-           
+
 
         });
 

@@ -280,8 +280,9 @@
           </a>
           <ul class="treeview-menu">
             <li class="{{ (request()->is('Customer')) ? 'active' : '' }}"><a href="{{ route('Customer') }}"><i class="fa fa-users"></i> Customers List </a></li>
-          <li class="{{ (request()->is('Pricelist')) ? 'active' : '' }}"><a href="{{ route('Pricelist') }}"><i class="fa fa-product-hunt"></i> Product Pricelist </a></li>
+            <li class="{{ (request()->is('Pricelist')) ? 'active' : '' }}"><a href="{{ route('Pricelist') }}"><i class="fa fa-product-hunt"></i> Product Pricelist </a></li>
             <li class="{{ (request()->is('Cylinder')) ? 'active' : '' }}"><a href="{{ route('Cylinder') }}"><i class="fa fa-product-hunt"></i> Cylinder Balance </a></li>
+            <li class="{{ (request()->is('Purchase_Order')) ? 'active' : '' }}"><a href="{{ route('Purcase_Order') }}"><i class="fa fa-product-hunt"></i> Purchase Order </a></li>
           </ul>
         </li>
       </ul>
