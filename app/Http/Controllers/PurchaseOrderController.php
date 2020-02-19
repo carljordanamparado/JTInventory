@@ -29,7 +29,6 @@ class PurchaseOrderController extends Controller
             ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
             ->select('client.*', 'client_type.CLIENT_TYPE')
             ->get();
-
         return view('purchase_order.addpurchaseorder')
             ->with('client', $client);
 

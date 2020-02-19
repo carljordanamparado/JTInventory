@@ -49,6 +49,7 @@ class JqueryController extends Controller
     }
 
     public function updateProductPrice(Request $request){
+
         $id = $request -> id;
         $price = $request -> price;
 
@@ -65,6 +66,49 @@ class JqueryController extends Controller
         }
 
 
+    }
+
+    public function getProductPO(Request $request){
+        $clientCode = $request -> prodcode;
+        $html = '';
+        $html2 = '';
+
+        $prodSize = DB::table('product_list')
+            ->where('CLIENTID', $clientCode)
+            ->get();
+
+        foreach ($prodSize as $prodSize) {
+            if($prodSize->PROD_CODE == ''){
+
+            }else {
+                $html .= '<option value="' . $prodSize->PROD_CODE . '">' . $prodSize->PRODUCT . '</option>';
+            }
+        }
+        return response()->json(array('html' => $html));
+    }
+
+    public function getProductSizePO(Request $request){
+        $clientCode = $request -> prodcode;
+        $id = $request -> id;
+
+
+
+        $html = '';
+        $html2 = '';
+
+        $prodSize = DB::table('product_list')
+            ->where('CLIENTID', $id)
+            ->where('PROD_CODE', $clientCode)
+            ->get();
+
+        foreach ($prodSize as $prodSize) {
+            if($prodSize->SIZE == ''){
+
+            }else {
+                $html .= '<option value="' . $prodSize->SIZE . '">' . $prodSize->SIZE . '</option>';
+            }
+        }
+        return response()->json(array('html' => $html));
     }
 
 }
