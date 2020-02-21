@@ -11,32 +11,30 @@
 
      <div class="content-wrapper">
 
+         @foreach($purchaseOrder as $purchaseOrder)
+         @endforeach
+
         <section class="content">
-            <form role="form" method="post" action="{{ route('PurchaseOrderController.store') }}">
+             <form role="form" method="POST" action="{{ route('PurchaseOrderController.store') }}">
                 {{ csrf_field() }}
             <div class="box">
                 <div class="box-header">
                   <small> Purchase Order Information </small>
-                    <input type="hidden" name="status" value="1">
+                    <input type="hidden" name="status" value="2">
                 </div>
                 <div class="box-body">
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Customer Client</label>
-                            <select class="form-control" id="custCode" name="custCode">
-                              <option selected="selected">Choose Option</option>
-                              @foreach($client as $row)
-                                  <option value="{{ $row -> CLIENTID }}"> {{ $row -> CLIENT_CODE  }} - {{ $row -> NAME }} </option>
-                              @endforeach
-                            </select>
+                            <input class="form-control" id="custCode" name="custCode" value="{{ $purchaseOrder -> CLIENTID }}" readonly>
                         </div>
                         <div class="form-group col-md-4">
                             <label>Purchase NO.</label>
-                            <input class="form-control" type="text" name="poNo" id="poNo">
+                            <input class="form-control" type="text" name="poNo" id="poNo" value="{{ $purchaseOrder -> PO_NO }}" readonly>
                         </div>
                         <div class="form-group col-md-4">
                             <label>Purchase Date</label>
-                            <input class="form-control" type="date" name="poDate" id="poDate">
+                            <input class="form-control" type="date" name="poDate" id="poDate" value="{{ $purchaseOrder -> PO_DATE }}" readonly>
                         </div>
                     </div>
                     {{--End of line--}}
@@ -58,7 +56,7 @@
                             <input class="form-control" type="text"  id="productQty" value="0">
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="emailAddress">Add Balance</label>
+                            <label for="emailAddress">Add Product</label>
                             <button class="form-control btn btn-info" id="addProduct" type="button"> Add Product </button>
                         </div>
                     </div>
@@ -82,7 +80,14 @@
                             </tr>
                             </thead>
                             <tbody class="poTable">
-
+                                @foreach($purchaseOrderList as $purchaseOrderList)
+                                    <tr class="text-center">
+                                        <td>{{ $purchaseOrderList -> PRODUCT }}</td>
+                                        <td>{{ $purchaseOrderList -> SIZE }}</td>
+                                        <td>{{ $purchaseOrderList -> QUANTITY }}</td>
+                                        <td><button class='btn btn-error' type='button' id='btn-remove'> Remove </button></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
 
@@ -109,25 +114,27 @@
 @section('scripts')
 
     <script type="text/javascript">
-        $('#custCode').select2({
-            selectOnClose: true,
-        });
 
-             function product(){
-                 $.ajax({
-                     url: "{{ route('getProductPO') }}?prodcode=" + $('#custCode').val(),
-                     method: 'GET',
-                     success: function($data){
-                         console.log($data);
-                         if($data.html == ''){
-                             $('#productCode option:selected').text("Choose Option");
-                         }else{
-                             $('#productCode').append($data.html);
-                             $('#productCode').attr("disabled", false);
-                         }
-                     }
-                 });
-             }
+        $(document).ready(function(){
+
+            product();
+            productSize();
+
+            function product(){
+                  $.ajax({
+                    url: "{{ route('getProductPO') }}?prodcode=" + $('#custCode').val(),
+                    method: 'GET',
+                    success: function($data){
+                        console.log($data);
+                        if($data.html == ''){
+                            $('#productCode option:selected').text("Choose Option");
+                        }else{
+                            $('#productCode').append($data.html);
+                            $('#productCode').attr("disabled", false);
+                        }
+                    }
+                });
+            }
 
             function productSize(){
 
@@ -154,58 +161,52 @@
                 });
             }
 
+            $('#productCode').on('change', function(){
 
+                    if($(this).val() == "Choose Option"){
+                        $('#productSize').empty();
+                        $('#productSize').append("<option value='' selected> Choose Option  </option>")
+                    }else{
+                        $('#productSize').empty();
+                        productSize();
+                    }
 
-        $('#custCode').on('change', function(){
+            });
 
-                $('.poTable').empty();
+            $('#addProduct').on('click', function(){
 
-                product();
-        });
+                var productName = $('#productCode option:selected').text();
+                var productCode = $('#productCode option:selected').val();
+                var productSize = $('#productSize option:selected').text();
+                var productQty = $('#productQty').val();
 
+                var flag = '';
 
+                $(".poTable").find("tr").each(function () {
+                    var td1 = $(this).find("td:eq(0)").text();
+                    var td2 = $(this).find("td:eq(1)").text();
 
-        $('#productCode').on('change', function(){
-             if($(this).val() == "Choose Option"){
-                 $('#productSize').empty();
-                 $('#productSize').append("<option value='' selected> Choose Option  </option>")
-             }else{
-                 $('#productSize').empty();
-                 productSize();
-             }
-        });
+                    console.log(td1);
 
-        $('#addProduct').on('click', function(){
+                    if ((productName == td1 && productSize == td2)) {
+                        flag = 1;
+                    }
+                });
 
-            var productName = $('#productCode option:selected').text();
-            var productCode = $('#productCode option:selected').val();
-            var productSize = $('#productSize option:selected').text();
-            var productQty = $('#productQty').val();
+                if(flag == 1){
+                    swal("Exisiting Product and Product Size" , "" , "error");
+                }else{
+                    var tableElements = "<tr class='text-center'> " +
+                        "<td><input type='hidden' name='productCode[]' id='productCode' value='"+ productCode + "'>" + productName + "</td> " +
+                        "<td><input type='hidden' name='productSize[]' id='productSize' value='"+ productSize + "'>"+ productSize +"</td> " +
+                        "<td><input type='hidden' name='productQty[]' id='productQty' value='"+ productQty + "'>"+ productQty +"</td> " +
+                        "<td><button class='btn btn-error' type='button' id='btn-remove'> Remove </button></td>" +
+                        " </tr>";
 
-            var flag = '';
-
-            $(".poTable").find("tr").each(function () {
-                var td1 = $(this).find("td:eq(0)").text();
-
-                console.log(td1);
-
-                if ((productName == td1)) {
-                    flag = 1;
+                    $('.poTable').append(tableElements);
                 }
             });
 
-            if(flag == 1){
-                swal("Exisiting Product" , "" , "error");
-            }else{
-                var tableElements = "<tr class='text-center'> " +
-                    "<td><input type='hidden' name='productCode[]' id='productCode' value='"+ productCode + "'>" + productName + "</td> " +
-                    "<td><input type='hidden' name='productSize[]' id='productSize' value='"+ productSize + "'>"+ productSize +"</td> " +
-                    "<td><input type='hidden' name='productQty[]' id='productQty' value='"+ productQty + "'>"+ productQty +"</td> " +
-                    "<td><button class='btn btn-error' type='button' id='btn-remove'> Remove </button></td>" +
-                    " </tr>";
-
-                $('.poTable').append(tableElements);
-            }
         });
 
     </script>

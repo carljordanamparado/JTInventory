@@ -82,6 +82,7 @@ class JqueryController extends Controller
 
             }else {
                 $html .= '<option value="' . $prodSize->PROD_CODE . '">' . $prodSize->PRODUCT . '</option>';
+
             }
         }
         return response()->json(array('html' => $html));

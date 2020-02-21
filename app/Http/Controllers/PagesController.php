@@ -40,12 +40,12 @@ class PagesController extends Controller
     }
 
     public function getPurchaseOrder(){
-        $client = DB::table('client')
-            ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
-            ->select('client.*', 'client_type.CLIENT_TYPE')
+
+        $purchaseList = db::table('client')
+            ->join('client_po' , 'client.CLIENTID' , '=' , 'client_po.CLIENTID')
             ->get();
 
-        return view('purchase_order.viewpurchase', ['client' => $client]);
+        return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);
     }
 
 }

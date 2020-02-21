@@ -43,6 +43,49 @@ class PurchaseOrderController extends Controller
     public function store(Request $request)
     {
         //
+
+        if($request -> status == 1){
+             $purchase = db::table('client_po')
+                ->insert([
+                    'CLIENTID' => $request -> custCode,
+                    'PO_NO' => $request -> poNo,
+                    'PO_DATE' => $request -> poDate,
+                    'STATUS' => "1"
+                ]);
+
+
+            for($i = 0 ; $i < count($request -> productCode) ; $i++){
+
+                $productPurchase = db::table('client_po_list')
+                    ->insert([
+                        'CLIENTPO_ID' => $request -> custCode,
+                        'PO_NO' => $request -> poNo,
+                        'PO_DATE' => $request -> poDate,
+                        'PRODUCT' => $request -> productCode[$i],
+                        'SIZE' => $request -> productSize[$i],
+                        'QUANTITY' => $request -> productQty[$i]
+                    ]);
+
+            }
+
+        }elseif($request -> status == 2){
+
+                for($i = 0 ; $i < count($request -> productCode) ; $i++){
+
+                $productPurchase = db::table('client_po_list')
+                    ->insert([
+                        'CLIENTPO_ID' => $request -> custCode,
+                        'PO_NO' => $request -> poNo,
+                        'PO_DATE' => $request -> poDate,
+                        'PRODUCT' => $request -> productCode[$i],
+                        'SIZE' => $request -> productSize[$i],
+                        'QUANTITY' => $request -> productQty[$i]
+                    ]);
+
+            }
+        }
+
+       return redirect('Purchase_Order');
     }
 
     /**
@@ -54,6 +97,22 @@ class PurchaseOrderController extends Controller
     public function show($id)
     {
         //
+
+        $purchaseOrder = DB::table('client_po')
+            ->where('PO_NO', $id)
+            ->get();
+
+
+        $purchaseOrderList = DB::table('client_po_list')
+            ->join('products', 'client_po_list.PRODUCT' ,'=', 'products.PROD_CODE')
+            ->where('PO_NO', $id)
+            ->get();
+
+        return view('purchase_order.editpurchaseorder')
+            ->with('id', $id)
+            ->with('purchaseOrder', $purchaseOrder)
+            ->with('purchaseOrderList', $purchaseOrderList);
+
     }
 
     /**
