@@ -99,9 +99,8 @@
                                 </div>
                             </div> --}}
                             <div class="form-group col-md-4">
-                                {{ $row -> PAYMENT_TYPE }}
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" name="cashPay" id="cashPay" @if($row -> PAYMENT_TYPE == 1) checked="checked" @endif value="" >Cash Payment
+                                    <input type="checkbox" name="cashPay" id="cashPay" @if($row -> PAYMENT_TYPE == 1) checked="checked" @endif value="1" >Cash Payment
                                 </label>
                                 &nbsp;&nbsp;&nbsp;
                                 <label class="radio-inline">
@@ -115,8 +114,6 @@
                             <div class="form-group col-md-4">
 
                             </div>
-
-
 
                         </div>
 

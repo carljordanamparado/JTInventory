@@ -89,10 +89,10 @@ class CustomerController extends Controller
         ]);
 
         if($client == true){
-	        $request->session()->flash('status', 'True');
+//	        $request->session()->flash('status', 'True');
         	return redirect('Customer');
         }else{
-	        $request->session()->flash('status', 'False');
+//	        $request->session()->flash('status', 'False');
 			return redirect('CustomerController/create');
         }
 
@@ -177,10 +177,10 @@ class CustomerController extends Controller
                         ]);
 
         if($clientUpdate == true){
-            $request->session()->flash('statusUpdate', 'True');
+//            $request->session()->flash('statusUpdate', 'True');
             return redirect('Customer');
         }else{
-            $request->session()->flash('status', 'False');
+//            $request->session()->flash('status', 'False');
             return redirect('CustomerController/show', $id);
         }
 

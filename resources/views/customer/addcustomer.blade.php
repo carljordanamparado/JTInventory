@@ -96,10 +96,10 @@
                         </label>
                         &nbsp;&nbsp;&nbsp;
                         <label class="radio-inline">
-                            <input type="radio" name="orCopy" id="origCopy" value="0">Original Copy
+                            <input type="radio" name="orCopy" id="origCopy" value="1">Original Copy
                             </label>
                         <label class="radio-inline">
-                            <input type="radio" name="orCopy" id="pinkCopy" value="1">Pink Copy
+                            <input type="radio" name="orCopy" id="pinkCopy" value="2">Pink Copy
                         </label>
                     </div>
 
@@ -141,14 +141,14 @@
 
 
     $(document).ready(function(){
-        $.validate({});
-
-
-        $('#submit').on('click', function(){
-            $.validate({
-                modules: '#custInfo'
-            });
-        });
+        // $.validate({});
+        //
+        //
+        // $('#submit').on('click', function(){
+        //     $.validate({
+        //         modules: '#custInfo'
+        //     });
+        // });
         
     });
        

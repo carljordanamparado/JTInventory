@@ -271,18 +271,36 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU NAVIGATION</li>
-        <li class="active treeview">
+        <li class=" {{ (request()->is('Customer')) || (request()->is('Pricelist')) || (request()->is('Purchase_Order'))   ? 'active' : '' }} treeview">
         <a href="">
-            <i class="fa fa-dashboard"></i> <span>Customer Masterfile</span>
+            <i class="fa fa-users"></i> <span>Customer Masterfile</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="{{ (request()->is('Customer')) ? 'active' : '' }}"><a href="{{ route('Customer') }}"><i class="fa fa-users"></i> Customers List </a></li>
+            <li class="{{ (request()->is('Customer')) ? 'active' : '' }}"><a href="{{ route('Customer') }}"><i class="fa fa-user"></i> Customers List </a></li>
             <li class="{{ (request()->is('Pricelist')) ? 'active' : '' }}"><a href="{{ route('Pricelist') }}"><i class="fa fa-product-hunt"></i> Product Pricelist </a></li>
-            <li class="{{ (request()->is('Cylinder')) ? 'active' : '' }}"><a href="{{ route('Cylinder') }}"><i class="fa fa-product-hunt"></i> Cylinder Balance </a></li>
-            <li class="{{ (request()->is('Purchase_Order')) ? 'active' : '' }}"><a href="{{ route('Purcase_Order') }}"><i class="fa fa-product-hunt"></i> Purchase Order </a></li>
+            <li class="{{ (request()->is('Cylinder')) ? 'active' : '' }}"><a href="{{ route('Cylinder') }}"><i class="fa fa-cubes"></i> Cylinder Balance </a></li>
+            <li class="{{ (request()->is('Purchase_Order')) ? 'active' : '' }}"><a href="{{ route('Purcase_Order') }}"><i class="fa fa-shopping-cart"></i> Purchase Order </a></li>
+          </ul>
+        </li>
+        <li class=" {{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }} treeview">
+        <a href="">
+            <i class="fa fa-wrench"></i> <span>System Utilities</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> System User </a></li>
+            <li class=""><a href=""><i class="fa fa-history"></i> Audit Trail Monitoring </a></li>
+            <li class=""><a href=""><i class="fa fa-address-card"></i> Sales Representative </a></li>
+            <li class=""><a href=""><i class="fa fa-clipboard-list"></i> Sales Invoice Decleration </a></li>
+            <li class=""><a href=""><i class="fa fa-clipboard-list"></i> ICR Decleration </a></li>
+            <li class=""><a href=""><i class="fa fa-clipboard-list"></i> CLC Declaration </a></li>
+            <li class=""><a href=""><i class="fa fa-clipboard-list"></i> DR Decleration </a></li>
+            <li class=""><a href=""><i class="fa fa-clipboard-list"></i> OR Decleration </a></li>
           </ul>
         </li>
       </ul>

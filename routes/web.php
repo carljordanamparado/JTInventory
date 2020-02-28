@@ -16,6 +16,7 @@ Route::get('Customer', ['uses' => 'PagesController@getCustomerView' , 'as' => 'C
 Route::get('Pricelist', ['uses' => 'PagesController@getPriceCustomerView', 'as' => 'Pricelist']);
 Route::get('Cylinder', ['uses' => 'PagesController@getCylinderBalance', 'as' => 'Cylinder']);
 Route::get('Purchase_Order', ['uses' => 'PagesController@getPurchaseOrder', 'as' => 'Purcase_Order']);
+Route::get('SystemUtilities/SystemUsers', ['uses' => 'PagesController@getSystemUsers', 'as' => 'SystemUsers']);
 
 // Resources Exception
 
@@ -41,4 +42,5 @@ Route::resource('CustomerController', 'CustomerController');
 Route::resource('PriceController', 'PriceController' , ['except' => 'create']);
 Route::resource('CylinderController', 'CylinderController' , ['except' => ['create','destroy']]);
 Route::resource('PurchaseOrderController', 'PurchaseOrderController');
+Route::resource('SystemUsersController', 'SystemUsersController');
 

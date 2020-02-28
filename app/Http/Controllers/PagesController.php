@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PagesController extends Controller
@@ -46,6 +47,12 @@ class PagesController extends Controller
             ->get();
 
         return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);
+    }
+
+    public function getSystemUsers(){
+
+        dd(Auth::check());
+        return view('SystemUtilities.Users.viewusers');
     }
 
 }

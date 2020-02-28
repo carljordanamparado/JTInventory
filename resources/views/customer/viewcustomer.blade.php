@@ -30,12 +30,12 @@
                 <div class="col-md-2" role="alert">
                   <a href="{{ route('CustomerController.create') }}" class="btn btn-block btn-primary btn-flat addCustomer pull-right"> Add Customer </a>
               </div>
-                  @if( Session::get('status') == "True" )
-                      <input type="text" id="notifAlert" value="1">
-                  @endif
-                  @if( Session::get('statusUpdate') == "True" )
-                      <input type="text" id="updateNotif" value="1">
-                  @endif
+{{--                  @if( Session::get('status') == "True" )--}}
+{{--                      <input type="text" id="notifAlert" value="1">--}}
+{{--                  @endif--}}
+{{--                  @if( Session::get('statusUpdate') == "True" )--}}
+{{--                      <input type="text" id="updateNotif" value="1">--}}
+{{--                  @endif--}}
               </div>
               <div class="box-body">
                 <div class="row-content">
