@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class SystemUsersController extends Controller
 {
@@ -77,6 +78,13 @@ class SystemUsersController extends Controller
     public function show($id)
     {
         //
+
+        $users = db::table('users')->where('ID', $id)->get();
+
+
+        return view('SystemUtilities.Users.editusers')
+            ->with('id', $id)
+            ->with('users', $users);
     }
 
     /**
@@ -88,6 +96,8 @@ class SystemUsersController extends Controller
     public function edit($id)
     {
         //
+
+        
     }
 
     /**
@@ -100,6 +110,20 @@ class SystemUsersController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $salesRep = db::table('users')
+        ->where('ID', $id)
+        ->update([
+            'DESIGNATION' => $request -> designation,
+            'LASTNAME' => $request -> lname,
+            'FIRSTNAME' => $request -> fname,
+            'MIDDLENAME' => $request -> mname,
+            'EMAIL' => $request -> email,
+            'USER_AUTHORIZATION' => $request -> auth,
+        ]);
+
+    return redirect()->route('SystemUsers');
+        
     }
 
     /**

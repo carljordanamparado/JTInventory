@@ -13,7 +13,9 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var array
+     *
      */
+    protected $table = 'users';
     protected $fillable = [
         'USERID','PASSWORD','USERNAME','DESIGNATION','USER_AUTHORIZATION','LASTNAME','FIRSTNAME','MIDDLENAME','EMAIL',
     ];
@@ -24,11 +26,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'PASSWORD', 'remember_token',
+       'PASSWORD', 'remember_token',
     ];
 
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['PASSWORD'] = bcrypt($password);
-    }
+
 }

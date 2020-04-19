@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
 
 class PagesController extends Controller
 {
@@ -51,8 +54,20 @@ class PagesController extends Controller
 
     public function getSystemUsers(){
 
-        dd(Auth::check());
-        return view('SystemUtilities.Users.viewusers');
+        $systemUsers = db::Table('users')->get();
+       
+        return view('SystemUtilities.Users.viewusers')
+            ->with('systemUsers', $systemUsers);
     }
+
+    public function getLogin(){
+        return view('login');
+    }
+
+    public function postLogin(Request $request){
+
+    }
+
+    
 
 }

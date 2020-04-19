@@ -208,6 +208,10 @@
             }
         });
 
+        $(document).on('click', '#btn-remove', function(){
+            $(this).closest('tr').remove();
+        });
+
     </script>
 
 @endsection

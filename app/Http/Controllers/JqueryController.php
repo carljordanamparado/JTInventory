@@ -111,5 +111,122 @@ class JqueryController extends Controller
         }
         return response()->json(array('html' => $html));
     }
+    // Sales Invoice
+    public function noValidate(Request $request){
+        $buttonVal = $request -> buttonVal;
+        $invoiceNo = $request -> invoiceNo;
+
+        if($buttonVal == "invoice"){ // Invoice
+           
+            $si_assigned = db::table('si_assigned')
+                ->where('FROM_OR_NO', '<=', $invoiceNo)
+                ->where('TO_OR_NO', '>=', $invoiceNo)
+                ->get();
+            
+           if($si_assigned->isEmpty() == false){
+
+               $si_report = db::table('si_assigned_report')
+                   ->where('INVOICE_NO', $invoiceNo)
+                   ->where(function ($query){
+                           $query->where('REMARKS', '=' , 'DONE')
+                           ->orWhere('REMARKS', '=', 'CANCELLED')
+                           ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                   })
+                   ->get();
+               if($si_report->isEmpty() == true){
+                   return Response()->json(['status' => 'notEmpty']);
+               }else{
+                   foreach($si_report as $remarks){
+                       return Response()->json(['status' => $remarks->REMARKS]);
+                   }
+
+               }
+
+           }else{
+                return Response()->json(['status' => 'empty']);
+           }
+
+        }else{ // For Button Recognitions
+
+        }
+
+    }
+
+    // Add Sales Invoice Customer Details
+    public function poCustomerDetails(Request $request){
+       $cust_id = $request-> cust_id;
+       $po_id = $request-> po_id;
+       $html  = '';
+       $html2 = '';
+       $date = '';
+       $product = '';
+
+       $cust_details = db::table('client')
+           ->where('CLIENTID', $cust_id)
+           ->get();
+
+       $po_date = db::table('client_po_list')
+           ->select('po_date')
+           ->where('PO_NO', $po_id)
+           ->distinct()
+           ->get();
+
+       $poProducts = db::table('client_po_list')
+           ->join('products', 'products.PROD_CODE' , '=' , 'client_po_list.PRODUCT')
+           ->where('PO_NO', $po_id)
+           ->get();
+
+       // Dito ko sana ilalagay kaso parang humahaba na
+
+
+
+       foreach($cust_details as $cust_detail){
+           $html .= '<option value="' . $cust_detail -> CLIENTID . '" id="custOptions" readonly>' . $cust_detail->NAME . '</option>';
+           $html2 = $cust_detail->NAME;
+       }
+
+       foreach($po_date as $po_date){
+           $date .= $po_date -> po_date;
+       }
+
+       foreach($poProducts as $products){
+           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" >' . $products->PRODUCT . '</option>';
+       }
+
+        return response()->json(array('html' => $html , 'html2' => $html2 , 'date' => $date , 'product' => $product));
+    }
+
+    function poProductDetails(Request $request){
+        $cust_id = $request-> cust_id;
+        $po_id = $request-> po_id;
+        $prodCode = $request -> prodCode;
+
+        $size = '';
+        $quantity = '';
+        $amount = '';
+
+        $productDetails = db::table('client_po_list')
+            ->where('PO_NO', $po_id)
+            ->where('PRODUCT', $prodCode)
+            ->get();
+
+        $amount = db::table('client_po_list as a')
+            ->join('product_list as b', 'a.CLIENTPO_ID' , '=' , 'b.CLIENTID')
+            ->where('a.PO_NO', $po_id)
+            ->where('b.PROD_CODE', $prodCode)
+            ->groupBy('b.ID')
+            ->get();
+
+        foreach($productDetails as $product){
+            $size = $product -> SIZE;
+            $quantity = $product -> QUANTITY;
+        }
+
+        foreach($amount as $productAmount){
+            $amount = $productAmount -> PRODUCT_PRICE;
+        }
+
+        return response()->json(array('size' => $size , 'quantity' => $quantity , 'amount' => $amount));
+    }
 
 }
