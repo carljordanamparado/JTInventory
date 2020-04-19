@@ -35,30 +35,3 @@
         </div>
     </div>
 </div>
-
-@section('scripts')
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('#unitPrice').maskMoney();
-
-                function addParticular(){
-                    var particular = $('#particular').val();
-                    // var unitPrice = parseFloat($('#unitPrice').val().replace(/,/g, '')); // Remove Comma in Parse Float Value
-                    var unitPrice = $('#unitPrice').val();
-                    var qty = parseFloat($('#Quantity').val());
-
-                    var tableElements = "<tr class='text-center'> " +
-                        "<td><input type='hidden' name='particular[]' id='particular' value='" + particular + "'>" + particular + "</td> " +
-                        "<td><input type='hidden' name='unitPrice[]' id='unitPrice' value='" + unitPrice + "'>" + unitPrice + "</td> " +
-                        "<td><input type='hidden' name='productQty[]' id='productQty' value='" + productQty + "'>" + productQty + "</td> " +
-                        "<td><button class='btn btn-error' type='button' id='btn-remove'> Remove </button></td>" +
-                        " </tr>";
-
-                }
-
-                $('#addParticular').on('click', function(){
-                    addParticular();
-                });
-            });
-        </script>
-@endsection
