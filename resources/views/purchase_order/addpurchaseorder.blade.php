@@ -24,7 +24,7 @@
                         <div class="form-group col-md-4">
                             <label>Customer Client</label>
                             <select class="form-control" id="custCode" name="custCode">
-                              <option selected="selected">Choose Option</option>
+                              <option selected="selected" value="">Choose Option</option>
                               @foreach($client as $row)
                                   <option value="{{ $row -> CLIENTID }}"> {{ $row -> CLIENT_CODE  }} - {{ $row -> NAME }} </option>
                               @endforeach
@@ -118,13 +118,11 @@
                      url: "{{ route('getProductPO') }}?prodcode=" + $('#custCode').val(),
                      method: 'GET',
                      success: function($data){
-                         console.log($data);
-                         if($data.html == ''){
-                             $('#productCode option:selected').text("Choose Option");
-                         }else{
+
                              $('#productCode').append($data.html);
+
                              $('#productCode').attr("disabled", false);
-                         }
+
                      }
                  });
              }
@@ -157,10 +155,10 @@
 
 
         $('#custCode').on('change', function(){
+            $('.poTable').empty();
+            $('#productCode').empty().append("<option value=''> Choose Option </option> ");
+            product();
 
-                $('.poTable').empty();
-
-                product();
         });
 
 
@@ -175,8 +173,7 @@
              }
         });
 
-        $('#addProduct').on('click', function(){
-
+        function addProduct(){
             var productName = $('#productCode option:selected').text();
             var productCode = $('#productCode option:selected').val();
             var productSize = $('#productSize option:selected').text();
@@ -186,10 +183,10 @@
 
             $(".poTable").find("tr").each(function () {
                 var td1 = $(this).find("td:eq(0)").text();
+                var td2 = $(this).find("td:eq(1)").text();
 
-                console.log(td1);
 
-                if ((productName == td1)) {
+                if ((productName == td1 && productSize == td2)) {
                     flag = 1;
                 }
             });
@@ -206,6 +203,20 @@
 
                 $('.poTable').append(tableElements);
             }
+        }
+
+        $('#addProduct').on('click', function(){
+            var productCode = $('#productCode option:selected').val();
+            var custCode = $('#custCode option:selected').val();
+            if(productCode == ""){
+                swal("No selected product", "Please choose..." , "error");
+            }else if(custCode == "" ){
+                swal("No selected client", "Please choose..." , "error");
+            }
+            else{
+                addProduct();
+            }
+
         });
 
         $(document).on('click', '#btn-remove', function(){

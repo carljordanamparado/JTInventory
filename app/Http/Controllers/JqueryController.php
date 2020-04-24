@@ -74,6 +74,7 @@ class JqueryController extends Controller
         $html2 = '';
 
         $prodSize = DB::table('product_list')
+            ->groupBy('PROD_CODE')
             ->where('CLIENTID', $clientCode)
             ->get();
 
@@ -119,9 +120,17 @@ class JqueryController extends Controller
         if($buttonVal == "invoice"){ // Invoice
            
             $si_assigned = db::table('si_assigned')
+                ->join('sales_rep' , 'sales_rep.ID' , '=', 'si_assigned.SALESREP_ID')
                 ->where('FROM_OR_NO', '<=', $invoiceNo)
                 ->where('TO_OR_NO', '>=', $invoiceNo)
                 ->get();
+
+            $issuedBy = '';
+
+            foreach($si_assigned as $issuerName){
+                $issuedBy = $issuerName -> ASSIGNED_BY;
+                $issuerID = $issuerName -> SALESREP_ID;
+            }
             
            if($si_assigned->isEmpty() == false){
 
@@ -134,10 +143,10 @@ class JqueryController extends Controller
                    })
                    ->get();
                if($si_report->isEmpty() == true){
-                   return Response()->json(['status' => 'notEmpty']);
+                   return response()->json(array('issuedBy' => $issuedBy , 'issuerID' => $issuerID));
                }else{
                    foreach($si_report as $remarks){
-                       return Response()->json(['status' => $remarks->REMARKS]);
+                       return response()->json(array(['status' => $remarks->REMARKS ]));
                    }
 
                }
@@ -172,6 +181,7 @@ class JqueryController extends Controller
            ->get();
 
        $poProducts = db::table('client_po_list')
+            ->select('*', 'client_po_list.ID as PROD_ID')
            ->join('products', 'products.PROD_CODE' , '=' , 'client_po_list.PRODUCT')
            ->where('PO_NO', $po_id)
            ->get();
@@ -190,7 +200,7 @@ class JqueryController extends Controller
        }
 
        foreach($poProducts as $products){
-           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" >' . $products->PRODUCT . '</option>';
+           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" data-id=" '. $products -> PROD_ID . ' ">' . $products->PRODUCT . '</option>';
        }
 
         return response()->json(array('html' => $html , 'html2' => $html2 , 'date' => $date , 'product' => $product));
@@ -200,6 +210,8 @@ class JqueryController extends Controller
         $cust_id = $request-> cust_id;
         $po_id = $request-> po_id;
         $prodCode = $request -> prodCode;
+        $prod_id = $request -> prodId;
+
 
         $size = '';
         $quantity = '';
@@ -207,8 +219,11 @@ class JqueryController extends Controller
 
         $productDetails = db::table('client_po_list')
             ->where('PO_NO', $po_id)
-            ->where('PRODUCT', $prodCode)
+            ->where('ID', $prod_id)
             ->get();
+
+//        dd($productDetails);
+
 
         $amount = db::table('client_po_list as a')
             ->join('product_list as b', 'a.CLIENTPO_ID' , '=' , 'b.CLIENTID')

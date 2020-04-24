@@ -82,6 +82,7 @@
                             <tbody class="poTable">
                                 @foreach($purchaseOrderList as $purchaseOrderList)
                                     <tr class="text-center">
+{{--                                        <td>{{ $purchaseOrderList -> ID }}</td> Task For Deleting--}}
                                         <td>{{ $purchaseOrderList -> PRODUCT }}</td>
                                         <td>{{ $purchaseOrderList -> SIZE }}</td>
                                         <td>{{ $purchaseOrderList -> QUANTITY }}</td>
@@ -197,6 +198,7 @@
                     swal("Exisiting Product and Product Size" , "" , "error");
                 }else{
                     var tableElements = "<tr class='text-center'> " +
+                        "<td><input type='hidden' id='id' value='"+ productCode + "'>" + productName + "</td> " +
                         "<td><input type='hidden' name='productCode[]' id='productCode' value='"+ productCode + "'>" + productName + "</td> " +
                         "<td><input type='hidden' name='productSize[]' id='productSize' value='"+ productSize + "'>"+ productSize +"</td> " +
                         "<td><input type='hidden' name='productQty[]' id='productQty' value='"+ productQty + "'>"+ productQty +"</td> " +
@@ -205,6 +207,11 @@
 
                     $('.poTable').append(tableElements);
                 }
+            });
+
+            $(document).on('click', '#btn-remove', function(){
+                $(this).closest('tr').remove();
+
             });
 
         });

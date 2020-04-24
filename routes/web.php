@@ -59,4 +59,4 @@ Route::resource('ICRDeclaration', 'ICRController', ['except' => 'create']);
 Route::resource('CLCDeclaration', 'CLCController', ['except' => 'create']);
 Route::resource('DRDeclaration', 'DRController', ['except' => 'create']);
 Route::resource('ORDeclaration', 'ORController', ['except' => 'create']);
-Route::resource('Sales', 'SalesInvoice', ['except' => 'create']);
+Route::resource('Sales', 'SalesInvoice', ['except' => ['create'] ]);
