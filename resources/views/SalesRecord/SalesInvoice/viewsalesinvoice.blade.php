@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('content')
-
+    @include('SalesRecord.SalesInvoice.viewinvoice')
   <div class="content-wrapper">
      <section class="content">
          <div class="box">
@@ -26,26 +26,7 @@
                             <tbody>
                                     @foreach($invoice_data as $data)
                                         <tr class="text-center">
-                                            <td><a data-toggle="modal" href="#myModal">{{ $data->INVOICE_NO }}</a></td>
-                                            <div class="modal fade" id="myModal" role="dialog">
-                                                <div class="modal-dialog">
-
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                            <h4 class="modal-title">Modal Header</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Some text in the modal.</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
+                                            <td><a href="#invoiceModal" data-toggle="modal" data-target="#invoiceModal">{{ $data->INVOICE_NO }}</a></td>
                                             <td>{{ $data->INVOICE_DATE }}</td>
                                             <td>{{ $data->NAME }}</td>
                                             <td>{{ $data->DESIGNATION }}</td>

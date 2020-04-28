@@ -41,10 +41,12 @@ Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as
 Route::get('getProductSize2', ['uses'  => 'JqueryController@getProductSize2' , 'as' => 'getProductSize2']);
 Route::get('getProductPO', ['uses'  => 'JqueryController@getProductPO' , 'as' => 'getProductPO']);
 Route::get('getProductSizePO', ['uses'  => 'JqueryController@getProductSizePO' , 'as' => 'getProductSizePO']);
+Route::get('InvoiceModal', ['uses' => 'JquerryController@invoiceNoModal' , 'as' => 'invoiceModal']);
 Route::post('updateProductPrice', ['uses' => 'JqueryController@updateProductPrice', 'as' => 'updatePrice']);
 Route::post('noValidate', ['uses' => 'JqueryController@noValidate', 'as' => 'noValidate']);
 Route::post('poCustomerDetails', ['uses' => 'JqueryController@poCustomerDetails', 'as' => 'poCustDetails']);
 Route::post('poProductDetails', ['uses' => 'JqueryController@poProductDetails', 'as' => 'poProdDetails']);
+
 
 // Resoures
 

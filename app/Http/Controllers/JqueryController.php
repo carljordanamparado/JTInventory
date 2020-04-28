@@ -244,4 +244,8 @@ class JqueryController extends Controller
         return response()->json(array('size' => $size , 'quantity' => $quantity , 'amount' => $amount));
     }
 
+    function invoiceNoModal(Request $request){
+
+    }
+
 }
