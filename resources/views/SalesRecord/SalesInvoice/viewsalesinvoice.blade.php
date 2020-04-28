@@ -10,44 +10,57 @@
                <a href="{{ route('Sales.create') }}" class="btn btn-block btn-primary btn-flat addCustomer pull-right"> Add Sales Invoice </a>
              </div>
            </div>
-           {{-- <div class="box-body">
+            <div class="box-body">
                 <div class="box-body table-responsive">
-                        <table id="salesRep" class="table table-bordered table-striped">
+                        <table id="salesInvoice" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Sales Representative Nickname</th>
-                                    <th class="text-center">Sales Representative Name</th>
-                                    <th class="text-center">Designation</th>
-                                    <th class="text-center">Address</th>
-                                    <th class="text-center">Birthdate</th>
-                                    <th class="text-center">Contact No.</th>
-                                    <th class="text-center">Email Address</th>
+                                    <th class="text-center">INVOICE NO</th>
+                                    <th class="text-center">INVOICE DATE</th>
+                                    <th class="text-center">CUSTOMER NAME</th>
+                                    <th class="text-center">DESIGNATION</th>
+                                    <th class="text-center">CONTACT NO</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                    @foreach($invoice_data as $data)
+                                        <tr class="text-center">
+                                            <td><a data-toggle="modal" href="#myModal">{{ $data->INVOICE_NO }}</a></td>
+                                            <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog">
 
-                                @foreach($salesrep as $salesrep)
-                                    <tr class="text-center">
-                                        <td>{{ $salesrep -> SALESREP_NAME }}</td>
-                                        <td>{{ $salesrep -> LASTNAME }} , {{ $salesrep -> FIRSTNAME }} {{ $salesrep -> MIDDLENAME }}</td>
-                                        <td>{{ $salesrep -> DESIGNATION }}</td>
-                                        <td>{{ $salesrep -> ADDRESS }}</td>
-                                        <td>{{ $salesrep -> BIRTH_DATE }}</td>
-                                        <td>{{ $salesrep -> CONTACT_NO }}</td>
-                                        <td>{{ $salesrep -> EMAIL }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                                <a type="button" class="btn btn-warning" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-exclamation">&nbsp;&nbsp;</span>Lost Report</a>
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">Modal Header</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Some text in the modal.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            <td>{{ $data->INVOICE_DATE }}</td>
+                                            <td>{{ $data->NAME }}</td>
+                                            <td>{{ $data->DESIGNATION }}</td>
+                                            <td>{{ $data->CELL_NO }}</td>
+                                            <td class="text-center">
+                                                <div class="btn-group-vertical">
+                                                    <a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                             </tbody>
                         </table>
                       </div>
-           </div> --}}
+           </div>
          </div>
          <!-- /.row -->
        </section>
@@ -57,11 +70,11 @@
 
 @section('scripts')
 
-    {{-- <script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function(){
 
-              $('#salesRep').DataTable({});
+              $('#salesInvoice').DataTable({});
         });
-    </script> --}}
+    </script>
 
 @endsection

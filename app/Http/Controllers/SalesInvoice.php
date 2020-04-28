@@ -19,7 +19,14 @@ class SalesInvoice extends Controller
     public function index()
     {
         //
-        return view('SalesRecord.SalesInvoice.viewsalesinvoice');
+
+        $invoice_data = db::table('client')
+            ->join('sales_invoice', 'client.CLIENTID' , '=' , 'sales_invoice.CLIENT_ID')
+            ->get();
+
+
+        return view('SalesRecord.SalesInvoice.viewsalesinvoice')
+            ->with("invoice_data", $invoice_data);
     }
 
     /**
@@ -74,8 +81,8 @@ class SalesInvoice extends Controller
                 'CYLINDER_IDS' => $request -> inputtedTypeId ,
             ]);
 
-//            $sales_invoice_insert = db::table('sales_invoice')
-//                ->insert($sales_invoice);
+            $sales_invoice_insert = db::table('sales_invoice')
+                ->insert($sales_invoice);
 
             $sales_invoice_order = '';
 
@@ -89,8 +96,8 @@ class SalesInvoice extends Controller
                     'QTY' => $request -> productQty[$i]
                 ]);
 
-//                $sales_invoice_order_insert = db::table('sales_invoice_order')
-//                    ->insert($sales_invoice_order);
+                $sales_invoice_order_insert = db::table('sales_invoice_order')
+                    ->insert($sales_invoice_order);
             }
 
             $sales_invoice_po = array([
@@ -101,58 +108,94 @@ class SalesInvoice extends Controller
                 'PO_NO' => $request -> poNo
             ]);
 
-//            $sales_invoice_po_insert = db::table('sales_invoice_po')
-//                ->insert($sales_invoice_po);
-            $sales_invoice_report = array();
+            $sales_invoice_po_insert = db::table('sales_invoice_po')
+                ->insert($sales_invoice_po);
+
+            $qty = array();
+            $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+            $MO2 = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
 
             for($i = 0; $i < count($request -> productCode) ; $i++ ) {
 
-                $product_qty = "";
-
                 if($request -> productCode[$i] == "C2H2"){
-                       $sales_invoice_report = array_add($sales_invoice_report, 'C2H2', $request -> productQty[$i]);
+                    $C2H2 += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "AR"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'AR', $request -> productQty[$i]);
+                    $AR += (int)$request -> productQty[$i];
                 }
                 if($request -> productCode[$i] == "CO2"){
-                    $sales_invoice_report = array_merge('CO2', $request -> productQty[$i]);
+                    $CO2 += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "IO2"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'IO2', $request -> productQty[$i]);
+                    $IO2 += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "LPG"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'LPG', $request -> productQty[$i]);
+                    $LPG += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "MO2"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'MO2', $request -> productQty[$i]);
+                    $MO2 += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "N2"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'N2', $request -> productQty[$i]);
+                    $N2 += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "N20"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'N20', $request -> productQty[$i]);
+                    $N20 += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "H"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'H', $request -> productQty[$i]);
+                    $H += (int)$request -> productQty[$i] ;
                 }
                 if($request -> productCode[$i] == "COMPMED"){
-                    $sales_invoice_report = array_add($sales_invoice_report, 'COMPMED', $request -> productQty[$i]);
+                    $COMPMED += (int)$request -> productQty[$i] ;
                 }
-
-
-
-
             }
-            dd($sales_invoice_report);
+
+            $qty = array_add($qty , 'C2H2', $C2H2);
+            $qty = array_add($qty , 'CO2', $CO2);
+            $qty = array_add($qty , 'AR', $AR);
+            $qty = array_add($qty , 'COMPMED', $COMPMED);
+            $qty = array_add($qty , 'H', $H);
+            $qty = array_add($qty , 'IO2', $IO2);
+            $qty = array_add($qty , 'LPG', $LPG);
+            $qty = array_add($qty , 'N2', $N2);
+            $qty = array_add($qty , 'MO2', $MO2);
+            $qty = array_add($qty , 'N2O', $N20);
+
+            $totalPayment = 0;
+            $totalPayment2 = 0;
+
+            if($request -> PaymentType == "1"){
+                $totalPayment = (float)str_replace( ',', '', $request -> depositAmt) + (float) str_replace( ',', '', $request -> downPay);
+            }elseif($request -> PaymentType == "2"){
+                $totalPayment2 = (float)str_replace( ',', '', $request -> depositAmt) + (float) str_replace( ',', '', $request -> downPay);
+            }
 
 
 
+            $sales_invoice_report = array([
+                'INVOICE_NO' => $request -> invoiceNo,
+                'CLIENT_NAME' => $request -> custDetails,
+                'PO_NO' => $request -> poNo,
+                'INVOICE_DATE' => $request -> invoiceDate,
+                'C2H2' => $qty['C2H2'],
+                'AR' => $qty['AR'],
+                'CO2' => $qty['CO2'],
+                'IO2' => $qty['IO2'],
+                'LPG' => $qty['LPG'],
+                'MO2' => $qty['MO2'],
+                'N2' => $qty['N2'],
+                'N2O' => $qty['N2O'],
+                'H' => $qty['H'],
+                'COMPMED' => $qty['COMPMED'],
+                'OTHERS' => $request->otherCharge,
+                'CASH' => $totalPayment,
+                'ACCOUNT' => $totalPayment2,
+                'TOTAL' => $request->grandTotal
+            ]);
 
+            $sales_invoice_report_insert = db::table('sales_invoice_report')
+                ->insert($sales_invoice_report);
 
-
-
-
+            return response()->json(array('status' => 'success'));
 
         }catch (Exception $e){
             return response()->json(array('error' => $e));

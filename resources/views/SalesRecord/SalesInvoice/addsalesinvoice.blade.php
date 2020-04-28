@@ -245,6 +245,7 @@
 <script type="text/javascript" src="{{ asset('BladeJavascript/SalesRecord/AddSalesInvoice.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+
         function submitButton(){
 
             $.ajaxSetup({
@@ -258,7 +259,11 @@
                 type: "POST",
                 data: $('#salesinvoiceform').serialize(),
                 success: function(response){
-                    console.log(response);
+                    try{
+                        swal('Sales invoice successfully', '', 'success');
+                    }catch (Exception) {
+                        swal(Exception , Exception , 'error');
+                    }
                 },
                 error: function(jqXHR){
                     console.log(jqXHR);
