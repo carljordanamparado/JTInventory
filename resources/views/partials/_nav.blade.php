@@ -303,7 +303,7 @@
           <li class=""><a href="{{ route('ORDeclaration.index')}}"><i class="fa fa-clipboard-list"></i> OR Decleration </a></li>
           </ul>
         </li>
-         <li class=" {{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }} treeview">
+         <li class=" {{ (request()->is('Sales') || request()->is('CylinderReceipt'))  ? 'active' : '' }} treeview">
         <a href="">
             <i class="fa fa-wrench"></i> <span>Sales Record</span>
             <span class="pull-right-container">
@@ -311,8 +311,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('Sales.index') }}"><i class="fa fa-user"></i> Sales Invoice </a></li>
-            <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Incoming Cylinder Receipt </a></li>
+            <li class="{{ (request()->is('Sales')) ? 'active' : '' }}"><a href="{{ route('Sales.index') }}"><i class="fa fa-user"></i> Sales Invoice </a></li>
+            <li class="{{ (request()->is('CylinderReceipt')) ? 'active' : '' }}"><a href="{{ route('CylinderReceipt.index') }}"><i class="fa fa-user"></i> Incoming Cylinder Receipt </a></li>
             <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Cylinder Loan Contract </a></li>
             <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Official Receipt </a></li>
             <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Provisional Receipt </a></li>

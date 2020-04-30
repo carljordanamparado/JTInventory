@@ -245,6 +245,73 @@ class JqueryController extends Controller
     }
 
     function invoiceNoModal(Request $request){
+        $id = $request -> id;
+        $tableData = '';
+        $tableData2 = '';
+
+        $product_query = DB::table('sales_invoice_order as a')
+            ->join('products as b', 'a.PRODUCT', '=' , 'b.PROD_CODE')
+            ->where('INVOICE_NO', $id)
+            ->get();
+
+        $particular_query = db::table('other_charges')
+            ->where('INVOICE_NO', $id)
+            ->get();
+
+        $invoice_information = db::table('sales_invoice')
+            ->where('INVOICE_NO', $id)
+            ->get();
+
+        foreach($product_query as $data){
+
+            $data1 = '<td> '.$data -> PRODUCT.'</td>';
+            $data2 = '<td> '.$data -> SIZE.'</td>';
+            $data3 = '<td> '.$data -> UNIT_PRICE.'</td>';
+            $data4 = '<td> '.$data -> QTY .'</td>';
+
+            $tableData .= '<tr class="text-center">'.$data1. ' '. $data2 .' '.$data3.' '.$data4.'</tr>';
+        }
+
+        foreach($particular_query as $data){
+            $data1 = '<td>'.$data -> PARTICULAR.'</td>';
+            $data2 = '<td>'.$data -> UNIT_PRICE.'</td>';
+            $data3 = '<td>'.$data -> QUANTITY.'</td>';
+
+            $tableData2 .= '<tr class="text-center">'.$data1. ' '. $data2 .' '.$data3.' </tr>';
+        }
+
+        $deposit = 0;
+        $downpay = 0;
+        $totalamt = 0;
+        $type = '';
+
+        $dataArray = array();
+
+        foreach($invoice_information as $data){
+
+            $data1 = '';
+            $data2 = '';
+            $data3 = '';
+            $data4 = '';
+
+            if($data -> PAYMENT_TYPE == "1"){
+                $data3 = "CASH";
+            }else{
+                $data3 = "ACCOUNT";
+            }
+
+            $dataArray = array([
+                'Deposit' => $data -> DEPOSIT,
+                'Downpayment' => $data -> DOWNPAYMENT,
+                'Type' => $data3,
+                'Total' => $data -> TOTAL
+            ]);
+
+        }
+
+
+
+        return response()->json(array('table_data' => $tableData , 'table_data2' => $tableData2 , 'dataArray' => $dataArray));
 
     }
 

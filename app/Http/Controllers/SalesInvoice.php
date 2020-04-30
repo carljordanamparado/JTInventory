@@ -79,6 +79,7 @@ class SalesInvoice extends Controller
                 'FULLY_PAID' => $fullypaid,
                 'CYLINDER_ENTRY' => $request -> cylinderType,
                 'CYLINDER_IDS' => $request -> inputtedTypeId ,
+                'PAYMENT_TYPE' => $request -> PaymentType
             ]);
 
             $sales_invoice_insert = db::table('sales_invoice')
@@ -92,7 +93,7 @@ class SalesInvoice extends Controller
                     'INVOICE_DATE' => $request -> invoiceDate,
                     'PRODUCT' => $request -> productCode[$i],
                     'SIZE' => $request -> productSize[$i],
-                    'UNIT_PRICE' => $request -> productPrice[$i],
+                    'UNIT_PRICE' => (str_replace( ',', '', $request -> productPrice[$i])),
                     'QTY' => $request -> productQty[$i]
                 ]);
 
@@ -169,8 +170,6 @@ class SalesInvoice extends Controller
                 $totalPayment2 = (float)str_replace( ',', '', $request -> depositAmt) + (float) str_replace( ',', '', $request -> downPay);
             }
 
-
-
             $sales_invoice_report = array([
                 'INVOICE_NO' => $request -> invoiceNo,
                 'CLIENT_NAME' => $request -> custDetails,
@@ -195,15 +194,24 @@ class SalesInvoice extends Controller
             $sales_invoice_report_insert = db::table('sales_invoice_report')
                 ->insert($sales_invoice_report);
 
+            for($i = 0; $i < count($request -> particular); $i++){
+                $data_array = array([
+                    'INVOICE_NO' => $request -> invoiceNo,
+                    'QUANTITY' => $request -> qty[$i],
+                    'UNIT_PRICE' => str_replace( ',', '', $request -> unitPrice[$i]),
+                    'PARTICULAR' => $request -> particular[$i]
+                ]);
+
+                $other_insert = db::table('other_charges')
+                    ->insert($data_array);
+
+            }
+
             return response()->json(array('status' => 'success'));
 
         }catch (Exception $e){
             return response()->json(array('error' => $e));
         }
-
-
-
-
 
     }
 

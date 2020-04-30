@@ -6,7 +6,9 @@
      <section class="content">
          <div class="box">
            <div class="box-header">
+
              <div class="col-md-4" role="alert">
+                 <br>
                <a href="{{ route('Sales.create') }}" class="btn btn-block btn-primary btn-flat addCustomer pull-right"> Add Sales Invoice </a>
              </div>
            </div>
@@ -26,7 +28,7 @@
                             <tbody>
                                     @foreach($invoice_data as $data)
                                         <tr class="text-center">
-                                            <td><a href="#invoiceModal" data-toggle="modal" data-target="#invoiceModal">{{ $data->INVOICE_NO }}</a></td>
+                                            <td><a href="#invoiceModal" id="invoiceData" data-toggle="modal" data-target="#invoiceModal">{{ $data->INVOICE_NO }}</a></td>
                                             <td>{{ $data->INVOICE_DATE }}</td>
                                             <td>{{ $data->NAME }}</td>
                                             <td>{{ $data->DESIGNATION }}</td>
@@ -54,7 +56,31 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
-              $('#salesInvoice').DataTable({});
+            $('#salesInvoice').DataTable({});
+
+            $(document).on('click', '#invoiceData',  function(){
+                var id = $(this).text();
+
+                $.ajax({
+                    url: "{{ route('invoiceModal') }}",
+                    method: 'GET',
+                    data:
+                        {
+                            'id': id,
+                        },
+                    success: function(response){
+                        $('#Deposit').val(response.dataArray[0].Deposit.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                        $('#Downpayment').val((response.dataArray[0].Downpayment).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                        $('#Type').val(response.dataArray[0].Type);
+                        $('#totalAmt').val(response.dataArray[0].Total.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                        $('#invoiceDetails').empty();
+                        $('#particularProduct').empty();
+                        $('#invoiceDetails').append(response.table_data);
+                        $('#particularProduct').append(response.table_data2);
+                    }
+                });
+            });
+
         });
     </script>
 

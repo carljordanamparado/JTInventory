@@ -41,7 +41,7 @@ Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as
 Route::get('getProductSize2', ['uses'  => 'JqueryController@getProductSize2' , 'as' => 'getProductSize2']);
 Route::get('getProductPO', ['uses'  => 'JqueryController@getProductPO' , 'as' => 'getProductPO']);
 Route::get('getProductSizePO', ['uses'  => 'JqueryController@getProductSizePO' , 'as' => 'getProductSizePO']);
-Route::get('InvoiceModal', ['uses' => 'JquerryController@invoiceNoModal' , 'as' => 'invoiceModal']);
+Route::get('InvoiceModal', ['uses' => 'JqueryController@invoiceNoModal' , 'as' => 'invoiceModal']);
 Route::post('updateProductPrice', ['uses' => 'JqueryController@updateProductPrice', 'as' => 'updatePrice']);
 Route::post('noValidate', ['uses' => 'JqueryController@noValidate', 'as' => 'noValidate']);
 Route::post('poCustomerDetails', ['uses' => 'JqueryController@poCustomerDetails', 'as' => 'poCustDetails']);
@@ -62,3 +62,4 @@ Route::resource('CLCDeclaration', 'CLCController', ['except' => 'create']);
 Route::resource('DRDeclaration', 'DRController', ['except' => 'create']);
 Route::resource('ORDeclaration', 'ORController', ['except' => 'create']);
 Route::resource('Sales', 'SalesInvoice', ['except' => ['create'] ]);
+Route::resource('CylinderReceipt', 'CylinderReceipt');
