@@ -39,7 +39,10 @@ class SalesInvoice extends Controller
         //
 
         $poNo = db::table('client_po')
+            ->select('*', 'client_po.PO_NO')
+            ->join('sales_invoice_po', 'client_po.PO_NO', '!=', 'sales_invoice_po.PO_NO')
             ->get();
+       
 
         return view('SalesRecord.SalesInvoice.addsalesinvoice')
             ->with('poNo', $poNo);
@@ -204,7 +207,6 @@ class SalesInvoice extends Controller
 
                 $other_insert = db::table('other_charges')
                     ->insert($data_array);
-
             }
 
             return response()->json(array('status' => 'success'));

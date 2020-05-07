@@ -37,11 +37,15 @@ Route::post('CylinderController/delete', ['uses' => 'CylinderController@destroy'
 
 // Jquery Controller
 
+// Get
 Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as' => 'getProductSize']);
 Route::get('getProductSize2', ['uses'  => 'JqueryController@getProductSize2' , 'as' => 'getProductSize2']);
 Route::get('getProductPO', ['uses'  => 'JqueryController@getProductPO' , 'as' => 'getProductPO']);
 Route::get('getProductSizePO', ['uses'  => 'JqueryController@getProductSizePO' , 'as' => 'getProductSizePO']);
 Route::get('InvoiceModal', ['uses' => 'JqueryController@invoiceNoModal' , 'as' => 'invoiceModal']);
+Route::get('getICRPRoduct', ['uses' => 'JqueryController@icrProduct' , 'as' => 'icrProduct']);
+Route::get('getICRProductDetails', ['uses' => 'JqueryController@icrProductDetails' , 'as' => 'icrProductDetails']);
+// Post
 Route::post('updateProductPrice', ['uses' => 'JqueryController@updateProductPrice', 'as' => 'updatePrice']);
 Route::post('noValidate', ['uses' => 'JqueryController@noValidate', 'as' => 'noValidate']);
 Route::post('poCustomerDetails', ['uses' => 'JqueryController@poCustomerDetails', 'as' => 'poCustDetails']);

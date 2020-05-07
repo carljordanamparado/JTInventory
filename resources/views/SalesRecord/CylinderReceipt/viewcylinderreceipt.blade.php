@@ -16,16 +16,19 @@
                         <table id="salesInvoice" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th class="text-center">INVOICE NO</th>
-                                <th class="text-center">INVOICE DATE</th>
+                                <th class="text-center">ICR NO.</th>
+                                <th class="text-center">ICR DATE</th>
                                 <th class="text-center">CUSTOMER NAME</th>
-                                <th class="text-center">DESIGNATION</th>
-                                <th class="text-center">CONTACT NO</th>
+                                <th class="text-center">STATUS</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-
+                                @foreach($cylinder_data as $data)
+                                    <tr>
+                                        <td>{{ $data -> ICR_NO }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -37,4 +40,9 @@
 @endsection
 
 @section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#salesInvoice').dataTable();
+        });
+    </script>
 @endsection

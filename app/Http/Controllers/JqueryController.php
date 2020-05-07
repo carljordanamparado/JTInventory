@@ -113,52 +113,87 @@ class JqueryController extends Controller
         return response()->json(array('html' => $html));
     }
     // Sales Invoice
-    public function noValidate(Request $request){
-        $buttonVal = $request -> buttonVal;
-        $invoiceNo = $request -> invoiceNo;
+    public function noValidate(Request $request)
+    {
+        $buttonVal = $request->buttonVal;
+        $invoiceNo = $request->invoiceNo;
 
-        if($buttonVal == "invoice"){ // Invoice
-           
+        if ($buttonVal == "invoice") { // Invoice
+
             $si_assigned = db::table('si_assigned')
-                ->join('sales_rep' , 'sales_rep.ID' , '=', 'si_assigned.SALESREP_ID')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'si_assigned.SALESREP_ID')
                 ->where('FROM_OR_NO', '<=', $invoiceNo)
                 ->where('TO_OR_NO', '>=', $invoiceNo)
                 ->get();
 
             $issuedBy = '';
 
-            foreach($si_assigned as $issuerName){
-                $issuedBy = $issuerName -> ASSIGNED_BY;
-                $issuerID = $issuerName -> SALESREP_ID;
+            foreach ($si_assigned as $issuerName) {
+                $issuedBy = $issuerName->ASSIGNED_BY;
+                $issuerID = $issuerName->SALESREP_ID;
             }
-            
-           if($si_assigned->isEmpty() == false){
 
-               $si_report = db::table('si_assigned_report')
-                   ->where('INVOICE_NO', $invoiceNo)
-                   ->where(function ($query){
-                           $query->where('REMARKS', '=' , 'DONE')
-                           ->orWhere('REMARKS', '=', 'CANCELLED')
-                           ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
-                   })
-                   ->get();
-               if($si_report->isEmpty() == true){
-                   return response()->json(array('issuedBy' => $issuedBy , 'issuerID' => $issuerID));
-               }else{
-                   foreach($si_report as $remarks){
-                       return response()->json(array(['status' => $remarks->REMARKS ]));
-                   }
+            if ($si_assigned->isEmpty() == false) {
 
-               }
+                $si_report = db::table('si_assigned_report')
+                    ->where('INVOICE_NO', $invoiceNo)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+                if ($si_report->isEmpty() == true) {
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                } else {
+                    foreach ($si_report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
 
-           }else{
+                }
+
+            } else {
                 return Response()->json(['status' => 'empty']);
-           }
+            }
 
-        }else{ // For Button Recognitions
+        } elseif ($buttonVal == "icr") { // For Button Recognitions
+            $assigned = db::table('icr_assigned')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'icr_assigned.SALESREP_ID')
+                ->where('FROM_NO', '<=', $invoiceNo)
+                ->where('TO_NO', '>=', $invoiceNo)
+                ->get();
+
+            $issuedBy = '';
+
+            foreach ($assigned as $issuerName) {
+                $issuedBy = $issuerName->ASSIGNED_BY;
+                $issuerID = $issuerName->SALESREP_ID;
+            }
+
+            if ($assigned->isEmpty() == false) {
+
+                $report = db::table('icr_assigned_report')
+                    ->where('ICR_NO', $invoiceNo)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+
+                if ($report->isEmpty() == true) {
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                } else {
+                    foreach ($report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
+
+                }
+            }else{
+                return Response()->json(['status' => 'empty']);
+             }
 
         }
-
     }
 
     // Add Sales Invoice Customer Details
@@ -312,6 +347,40 @@ class JqueryController extends Controller
 
 
         return response()->json(array('table_data' => $tableData , 'table_data2' => $tableData2 , 'dataArray' => $dataArray));
+
+    }
+
+    public function icrProduct(Request $request){
+        
+        $cust_id = $request -> cust_id;
+        $option = '';
+
+
+        $product_query = db::table('product_list')
+            ->where('CLIENTID', $cust_id)
+            ->get();
+
+        foreach($product_query as $data){
+            $option .= '<option value="'.$data -> PROD_CODE.'" data-id="'.$data->ID.'"> '.$data -> PRODUCT.' </option>';
+        }
+
+        return response()->json(array('option' => $option));
+
+    }
+
+    public function icrProductDetails(Request $request){
+
+        $data_id = $request -> data_id;
+
+        $product_size_query = db::table('product_list')
+            ->where('ID', $data_id)
+            ->get();
+
+        foreach($product_size_query as $data){
+            $sizeData = $data -> SIZE;
+        }
+
+        return response()->json(array('size' => $sizeData));        
 
     }
 

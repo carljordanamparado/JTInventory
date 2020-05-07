@@ -10,6 +10,10 @@
     .lbl {
         display:block;
     }
+    .select2 {
+        width:100%!important;
+        height:100%!important;
+    }
   </style>
 
   <div class="content-wrapper">
@@ -43,7 +47,7 @@
                    <div class="row">
                        <div class="form-group col-md-4">
                            <label for=""> P.O. NO. </label>
-                            <select id="poNo" class="form-control" name="poNo">
+                            <select id="poNo" class="form-control poNo" name="poNo">
                                 <option value="" custId="">Choose Option</option>
                                         @foreach($poNo as $po)
                                         <option value="{{ $po->PO_NO }}" custId="{{ $po->CLIENTID }}">{{ $po->PO_NO }}</option>
@@ -245,6 +249,11 @@
 <script type="text/javascript" src="{{ asset('BladeJavascript/SalesRecord/AddSalesInvoice.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+
+        $('.poNo').select2({
+            placeholder: 'Select an option',
+            dropdownAutoWidth: true,
+        });
 
         function submitButton(){
 
