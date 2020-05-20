@@ -25,8 +25,21 @@
                             </thead>
                             <tbody>
                                 @foreach($cylinder_data as $data)
-                                    <tr>
+                                    <tr class="text-center">
                                         <td>{{ $data -> ICR_NO }}</td>
+                                        <td>{{ $data -> ICR_DATE }}</td>
+                                        <td>{{ $data -> NAME }}</td>
+                                        <td>@if($data -> ICR_TAG == 0)
+                                                Not Empty
+                                            @else
+                                                Empty
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group-vertical">
+                                                <a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

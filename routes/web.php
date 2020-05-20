@@ -67,3 +67,4 @@ Route::resource('DRDeclaration', 'DRController', ['except' => 'create']);
 Route::resource('ORDeclaration', 'ORController', ['except' => 'create']);
 Route::resource('Sales', 'SalesInvoice', ['except' => ['create'] ]);
 Route::resource('CylinderReceipt', 'CylinderReceipt');
+Route::resource('CylinderLoan', 'CylinderLoan');

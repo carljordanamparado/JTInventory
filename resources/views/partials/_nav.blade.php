@@ -313,7 +313,7 @@
           <ul class="treeview-menu">
             <li class="{{ (request()->is('Sales')) ? 'active' : '' }}"><a href="{{ route('Sales.index') }}"><i class="fa fa-user"></i> Sales Invoice </a></li>
             <li class="{{ (request()->is('CylinderReceipt')) ? 'active' : '' }}"><a href="{{ route('CylinderReceipt.index') }}"><i class="fa fa-user"></i> Incoming Cylinder Receipt </a></li>
-            <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Cylinder Loan Contract </a></li>
+            <li class="{{ (request()->is('CylinderLoan')) ? 'active' : '' }}"><a href="{{ route('CylinderLoan.index') }}"><i class="fa fa-user"></i> Cylinder Loan Contract </a></li>
             <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Official Receipt </a></li>
             <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Provisional Receipt </a></li>
           </ul>

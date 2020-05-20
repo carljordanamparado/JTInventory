@@ -193,6 +193,44 @@ class JqueryController extends Controller
                 return Response()->json(['status' => 'empty']);
              }
 
+        }elseif ($buttonVal == "clc") { // For Button Recognitions
+            $assigned = db::table('clc_assigned')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'clc_assigned.SALESREP_ID')
+                ->where('FROM_NO', '<=', $invoiceNo)
+                ->where('TO_NO', '>=', $invoiceNo)
+                ->get();
+
+            $issuedBy = '';
+
+            foreach ($assigned as $issuerName) {
+                $issuedBy = $issuerName->ASSIGNED_BY;
+                $issuerID = $issuerName->SALESREP_ID;
+            }
+
+
+            if ($assigned->isEmpty() == false) {
+
+                $report = db::table('clc_assigned_report')
+                    ->where('CLC_NO', $invoiceNo)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+
+                if ($report->isEmpty() == true) {
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                } else {
+                    foreach ($report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
+
+                }
+            }else{
+                return Response()->json(['status' => 'empty']);
+            }
+
         }
     }
 
