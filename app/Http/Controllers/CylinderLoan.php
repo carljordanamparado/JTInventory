@@ -44,19 +44,27 @@ class CylinderLoan extends Controller
         //
 
         $cylinder_loan_data = array([
-            'CLC_NO' => ,
-            'CLC_DATE' => ,
-            'CLIENT_NO' => ,
-            'RELEASEDBY' => ,
-            'RECEIVED_DATE' => ,
-            'RECEIVEDBY' => ,
-            'INVOICE' =>
+            'CLC_NO' => $request-> clcNo,
+            'CLC_DATE' => $request -> cylinderDate,
+            'CLIENT_NO' => $request -> customer,
+            'RELEASEDBY' => $request -> releasedBy,
+            'RECEIVED_DATE' => $request -> releasedDate,
+            'RECEIVEDBY' => $request -> receivedBy,
+            'INVOICE' => $request -> invoiceNo
         ]);
+
+        $cylinder_loan_insert = db::table('cylinder_loan_contract')
+            ->insert($cylinder_loan_data);
 
         $cylinder_load_product = array();
 
         $cylinder_load_product = [
-            
+            'CLC_NO' => ,
+            'CLC_DATE' => ,
+            'CLIENT_NO' => ,
+            'PRODUCT' => ,
+            'SIZE' => ,
+            'QUANTITY' =>
         ];
 
 
