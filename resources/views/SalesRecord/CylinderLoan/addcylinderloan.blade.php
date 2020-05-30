@@ -138,11 +138,11 @@
                     type: "POST",
                     data: $('#cylinderform').serialize(),
                     success: function(response){
-                        /*try{
+                        try{
                             swal('Incoming Cylinder Receipt successfully added', '', 'success');
                         }catch (Exception) {
                             swal(Exception , Exception , 'error');
-                        }*/
+                        }
                     },
                     error: function(jqXHR){
                         console.log(jqXHR);

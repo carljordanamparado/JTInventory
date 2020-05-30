@@ -15,7 +15,13 @@ class CylinderLoan extends Controller
     public function index()
     {
         //
-        return view('SalesRecord.CylinderLoan.viewcylinderloan');
+
+        $cylinder_data = db::table('cylinder_loan_contract')
+            ->join('client', 'cylinder_loan_contract.CLIENT_NO', '=' , 'client.CLIENTID')
+            ->get();
+
+        return view('SalesRecord.CylinderLoan.viewcylinderloan')
+            ->with('cylinder_data' , $cylinder_data);
     }
 
     /**
@@ -43,6 +49,8 @@ class CylinderLoan extends Controller
     {
         //
 
+//        dd($request -> all());
+
         $cylinder_loan_data = array([
             'CLC_NO' => $request-> clcNo,
             'CLC_DATE' => $request -> cylinderDate,
@@ -56,16 +64,90 @@ class CylinderLoan extends Controller
         $cylinder_loan_insert = db::table('cylinder_loan_contract')
             ->insert($cylinder_loan_data);
 
-        $cylinder_load_product = array();
+        $cylinder_loan_product = array();
 
-        $cylinder_load_product = [
-            'CLC_NO' => ,
-            'CLC_DATE' => ,
-            'CLIENT_NO' => ,
-            'PRODUCT' => ,
-            'SIZE' => ,
-            'QUANTITY' =>
-        ];
+        for($i = 0 ; $i < count($request -> productCode) ; $i++){
+            $cylinder_loan_product = [
+                'CLC_NO' => $request -> clcNo,
+                'CLC_DATE' => $request -> cylinderDate,
+                'CLIENT_NO' => $request -> customer,
+                'PRODUCT' => $request -> productCode[$i],
+                'SIZE' => $request -> productSize[$i],
+                'QUANTITY' => $request -> productQty[$i]
+            ];
+
+            $clylinder_loan_product_insert = db::table('cylinder_loan_contract_list')
+                ->insert($cylinder_loan_product);
+        }
+
+        $qty = array();
+        $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+        $MO2 = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+
+        for($i = 0; $i < count($request -> productCode) ; $i++ ) {
+
+            if($request -> productCode[$i] == "C2H2"){
+                $C2H2 += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "AR"){
+                $AR += (int)$request -> productQty[$i];
+            }
+            if($request -> productCode[$i] == "CO2"){
+                $CO2 += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "IO2"){
+                $IO2 += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "LPG"){
+                $LPG += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "MO2"){
+                $MO2 += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "N2"){
+                $N2 += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "N20"){
+                $N20 += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "H"){
+                $H += (int)$request -> productQty[$i] ;
+            }
+            if($request -> productCode[$i] == "COMPMED"){
+                $COMPMED += (int)$request -> productQty[$i] ;
+            }
+        }
+
+        $qty = array_add($qty , 'C2H2', $C2H2);
+        $qty = array_add($qty , 'CO2', $CO2);
+        $qty = array_add($qty , 'AR', $AR);
+        $qty = array_add($qty , 'COMPMED', $COMPMED);
+        $qty = array_add($qty , 'H', $H);
+        $qty = array_add($qty , 'IO2', $IO2);
+        $qty = array_add($qty , 'LPG', $LPG);
+        $qty = array_add($qty , 'N2', $N2);
+        $qty = array_add($qty , 'MO2', $MO2);
+        $qty = array_add($qty , 'N2O', $N20);
+
+        $sales_invoice_report = array([
+            'CLC_NO' => $request -> clcNo,
+            'CLIENT_NAME' => $request -> customer,
+            'CLC_DATE' => $request -> cylinderDate,
+            'C2H2' => $qty['C2H2'],
+            'AR' => $qty['AR'],
+            'CO2' => $qty['CO2'],
+            'IO2' => $qty['IO2'],
+            'LPG' => $qty['LPG'],
+            'MO2' => $qty['MO2'],
+            'N2' => $qty['N2'],
+            'N2O' => $qty['N2O'],
+            'H' => $qty['H'],
+            'COMPMED' => $qty['COMPMED']
+        ]);
+
+        $sales_invoice_report_insert = db::table('cylinder_loan_contract_report2')
+            ->insert($sales_invoice_report);
+
 
 
     }

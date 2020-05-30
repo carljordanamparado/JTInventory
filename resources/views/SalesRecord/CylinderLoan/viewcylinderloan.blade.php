@@ -23,7 +23,15 @@
                             </tr>
                             </thead>
                             <tbody>
-
+                                @foreach($cylinder_data as $data)
+                                    <tr class="text-center">
+                                        <td>{{ $data -> CLC_NO }}</td>
+                                        <td>{{ $data -> CLC_DATE }}</td>
+                                        <td> {{ $data ->  NAME }}</td>
+                                        <td><a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
