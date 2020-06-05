@@ -23,8 +23,6 @@
 
         <section class="content">
 
-
-
             <div class="box">
                 <div class="box-header">
                     @if( Session::get('status') == "True" )

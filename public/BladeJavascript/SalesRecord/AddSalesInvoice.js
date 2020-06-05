@@ -118,7 +118,7 @@ $(document).ready(function(){
             success: function(response){
 
                 if(response.status == "empty"){
-                    $('#status').text("No Sales Invoice");
+                    $('#status').text("No Record Found");
                     $('#status').css("color", "red");
                     $('#status').css('font-size', '12px');
                     $('#issuedBy').val("");

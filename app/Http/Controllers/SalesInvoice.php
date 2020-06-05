@@ -39,10 +39,7 @@ class SalesInvoice extends Controller
         //
 
         $poNo = db::table('client_po')
-            ->select('*', 'client_po.PO_NO')
-            ->join('sales_invoice_po', 'client_po.PO_NO', '!=', 'sales_invoice_po.PO_NO')
             ->get();
-       
 
         return view('SalesRecord.SalesInvoice.addsalesinvoice')
             ->with('poNo', $poNo);
@@ -197,7 +194,13 @@ class SalesInvoice extends Controller
             $sales_invoice_report_insert = db::table('sales_invoice_report')
                 ->insert($sales_invoice_report);
 
-            for($i = 0; $i < count($request -> particular); $i++){
+            if($request -> particular == ""){
+                $count = 0;
+            }else{
+                $count = $request -> particular;
+            }
+
+            for($i = 0; $i < $count; $i++){
                 $data_array = array([
                     'INVOICE_NO' => $request -> invoiceNo,
                     'QUANTITY' => $request -> qty[$i],

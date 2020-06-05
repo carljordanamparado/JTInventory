@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class SystemUsersController extends Controller
 {
@@ -41,7 +42,7 @@ class SystemUsersController extends Controller
         $user = new User;
 
         $userid = $request -> userid;
-        $password = bcrypt($request -> password);
+        $password = Hash::make($request -> password);
         $username = $request -> lname . "," . $request -> fname . " " . $request -> mname;
         $designation = $request -> designation;
         $auth = $request -> auth;

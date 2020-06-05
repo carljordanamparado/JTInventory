@@ -66,6 +66,12 @@ class PagesController extends Controller
 
     public function postLogin(Request $request){
 
+        $userdata = array(
+            'USERID' => $request -> username ,
+            'PASSWORD' => $request -> password
+        );
+
+        dd(Auth::attempt($userdata));
     }
 
     

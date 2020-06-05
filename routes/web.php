@@ -50,6 +50,8 @@ Route::post('updateProductPrice', ['uses' => 'JqueryController@updateProductPric
 Route::post('noValidate', ['uses' => 'JqueryController@noValidate', 'as' => 'noValidate']);
 Route::post('poCustomerDetails', ['uses' => 'JqueryController@poCustomerDetails', 'as' => 'poCustDetails']);
 Route::post('poProductDetails', ['uses' => 'JqueryController@poProductDetails', 'as' => 'poProdDetails']);
+Route::post('getClientSalesInvoice', ['uses' => 'JqueryController@client_sales_invoice', 'as' => 'clientsalesinvoice']);
+
 
 
 // Resoures
@@ -68,3 +70,6 @@ Route::resource('ORDeclaration', 'ORController', ['except' => 'create']);
 Route::resource('Sales', 'SalesInvoice', ['except' => ['create'] ]);
 Route::resource('CylinderReceipt', 'CylinderReceipt');
 Route::resource('CylinderLoan', 'CylinderLoan');
+Route::resource('Deliver', 'DeliverController');
+Route::resource('DeliverSales','DeliverSalesinvoice');
+Route::resource('OfficialReceipt', 'OfficialReceipt');

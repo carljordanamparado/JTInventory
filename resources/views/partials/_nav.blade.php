@@ -272,7 +272,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU NAVIGATION</li>
         <li class=" {{ (request()->is('Customer')) || (request()->is('Pricelist')) || (request()->is('Purchase_Order'))   ? 'active' : '' }} treeview">
-        <a href="">
+        <a>
             <i class="fa fa-users"></i> <span>Customer Masterfile</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -286,7 +286,7 @@
           </ul>
         </li>
         <li class=" {{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }} treeview">
-        <a href="">
+        <a>
             <i class="fa fa-wrench"></i> <span>System Utilities</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -304,7 +304,7 @@
           </ul>
         </li>
          <li class=" {{ (request()->is('Sales') || request()->is('CylinderReceipt'))  ? 'active' : '' }} treeview">
-        <a href="">
+        <a>
             <i class="fa fa-wrench"></i> <span>Sales Record</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -314,11 +314,22 @@
             <li class="{{ (request()->is('Sales')) ? 'active' : '' }}"><a href="{{ route('Sales.index') }}"><i class="fa fa-user"></i> Sales Invoice </a></li>
             <li class="{{ (request()->is('CylinderReceipt')) ? 'active' : '' }}"><a href="{{ route('CylinderReceipt.index') }}"><i class="fa fa-user"></i> Incoming Cylinder Receipt </a></li>
             <li class="{{ (request()->is('CylinderLoan')) ? 'active' : '' }}"><a href="{{ route('CylinderLoan.index') }}"><i class="fa fa-user"></i> Cylinder Loan Contract </a></li>
-            <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Official Receipt </a></li>
-            <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> Provisional Receipt </a></li>
+            <li class="{{ (request()->is('Deliver')) ? 'active' : '' }}"><a href="{{ route('Deliver.index') }}"><i class="fa fa-user"></i> Delivery Receipt </a></li>
+            <li class="{{ (request()->is('OfficialReceipt')) ? 'active' : '' }}"><a href="{{ route('OfficialReceipt.index') }}"><i class="fa fa-user"></i> Official Receipt </a></li>
           </ul>
+           <a>
+             <i class="fa fa-wrench"></i> <span>Reports</span>
+             <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+           </a>
+           <ul class="treeview-menu">
+             <li class="{{ (request()->is('Sales')) ? 'active' : '' }}"><a href="{{ route('Sales.index') }}"><i class="fa fa-user"></i> Price List Report </a></li>
+             <li class="{{ (request()->is('Sales')) ? 'active' : '' }}"><a href="{{ route('Sales.index') }}"><i class="fa fa-user"></i> Masterlist Report </a></li>
+           </ul>
         </li>
       </ul>
+
     </section>
     <!-- /.sidebar -->
   </aside>

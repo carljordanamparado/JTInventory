@@ -231,6 +231,81 @@ class JqueryController extends Controller
                 return Response()->json(['status' => 'empty']);
             }
 
+        }elseif ($buttonVal == "DR"){
+            $assigned = db::table('dr_assigned')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'dr_assigned.SALESREP_ID')
+                ->where('FROM_NO', '<=', $invoiceNo)
+                ->where('TO_NO', '>=', $invoiceNo)
+                ->get();
+
+            $issuedBy = '';
+
+            foreach ($assigned as $issuerName) {
+                $issuedBy = $issuerName->ASSIGNED_BY;
+                $issuerID = $issuerName->SALESREP_ID;
+            }
+
+
+            if ($assigned->isEmpty() == false) {
+
+                $report = db::table('dr_assigned_report')
+                    ->where('DR_NO', $invoiceNo)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+
+                if ($report->isEmpty() == true) {
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                } else {
+                    foreach ($report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
+
+                }
+            }else{
+                return Response()->json(['status' => 'empty']);
+            }
+        }elseif($buttonVal == "OR"){
+            $assigned = db::table('or_assigned')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'or_assigned.SALESREP_ID')
+                ->where('FROM_OR_NO', '<=', $invoiceNo)
+                ->where('TO_OR_NO', '>=', $invoiceNo)
+                ->get();
+
+
+            $issuedBy = '';
+
+            foreach ($assigned as $issuerName) {
+                $issuedBy = $issuerName->ASSIGNED_BY;
+                $issuerID = $issuerName->SALESREP_ID;
+            }
+
+
+            if ($assigned->isEmpty() == false) {
+
+                $report = db::table('or_assigned_report')
+                    ->where('OR_NO', $invoiceNo)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+
+                if ($report->isEmpty() == true) {
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                } else {
+                    foreach ($report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
+
+                }
+            }else{
+                return Response()->json(['status' => 'empty']);
+            }
         }
     }
 
@@ -419,6 +494,27 @@ class JqueryController extends Controller
         }
 
         return response()->json(array('size' => $sizeData));        
+
+    }
+
+    public function client_sales_invoice(Request $request){
+        $data_id = $request -> client_id;
+        $tableData2 = '';
+
+        $sales_invoice = db::table('sales_invoice')
+            ->where('CLIENT_ID', $data_id)
+            ->get();
+
+        foreach($sales_invoice as $data){
+            $data0 = '<td> <input type="checkbox" id="radioButton"></td>';
+            $data1 = '<td>'.$data -> INVOICE_NO.'</td>';
+            $data2 = '<td>'.$data -> INVOICE_DATE.'</td>';
+            $data3 = '<td>'.$data -> TOTAL .'</td>';
+
+            $tableData2 .= '<tr class="text-center">'.$data0.' '.$data1.' '. $data2 .' '.$data3.' </tr>';
+        }
+
+        return response()->json(array('table_data2' => $tableData2));
 
     }
 
