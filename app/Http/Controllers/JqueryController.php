@@ -518,4 +518,18 @@ class JqueryController extends Controller
 
     }
 
+    public function cylinder_type_validation(Request $request){
+
+        $cylinder_type = $request -> cylinder_type;
+        $cylinder_id = $request -> id;
+
+        /*
+            0 => Empty
+            1 => ICR
+            2 => CLC
+            3 => DR
+        */
+
+    }
+
 }

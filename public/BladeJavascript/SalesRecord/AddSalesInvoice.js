@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
-    $('#salesDetails').hide();
-    $('.product').hide();
+    // $('#salesDetails').hide();
+    // $('.product').hide();
     $('#unitPrice').maskMoney();
     $('#downPay').maskMoney();
 
@@ -122,14 +122,14 @@ $(document).ready(function(){
                     $('#status').css("color", "red");
                     $('#status').css('font-size', '12px');
                     $('#issuedBy').val("");
-                    $('#salesDetails').hide();
+                    // $('#salesDetails').hide();
                     $('#submitButton').attr('disabled', true);
                 }else if(response.status == "DONE" || response.status == 'CANCELLED' || response.status == 'NO RECORD FOUND'){
                     $('#status').text(response.status);
                     $('#status').css("color", "red");
                     $('#status').css('font-size', '12px');
                     $('#issuedBy').val("");
-                    $('#salesDetails').hide();
+                    // $('#salesDetails').hide();
                     $('#submitButton').attr('disabled', true);
                 }else{
                     $('#status').text('Active');
@@ -169,7 +169,7 @@ $(document).ready(function(){
                 $('#CustDetails option').remove();
                 $('#CustDetails').append(response.html);
                 $('#CustDetails').attr("readonly", true);
-                $('#CustDetails').hide();
+                // $('#CustDetails').hide();
                 $('#custName').val(response.html2);
                 $('#poDate').val(response.date);
                 $('#productItem').empty().append("<option value=''> Choose Option </option> ");
@@ -325,6 +325,39 @@ $(document).ready(function(){
         computation();
     });
 
+    function validateCylinder(){
+
+        var cylinder_type = $('#cylinderType option:selected').val();
+        var id = $('#inputtedTypeId').val();
+
+        $.ajax({
+            url: "/validateCylinderType",
+            type: "POST",
+            data:{
+                '_token': $('input[name=_token]').val(),
+                'cylinder_type' : cylinder_type,
+                'id' : id
+            },
+            success: function(response){
+                $('#CustDetails option').remove();
+                $('#CustDetails').append(response.html);
+                $('#CustDetails').attr("readonly", true);
+                // $('#CustDetails').hide();
+                $('#custName').val(response.html2);
+                $('#poDate').val(response.date);
+                $('#productItem').empty().append("<option value=''> Choose Option </option> ");
+                $('#productItem').append(response.product);
+
+            },
+            error: function(jqXHR){
+                console.log(jqXHR);
+            }
+        });
+    }
+
+    $('#validateCylinder').on('click', function(){
+        validateCylinder();
+    });
 
 
 });

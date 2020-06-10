@@ -71,7 +71,9 @@ class PagesController extends Controller
             'PASSWORD' => $request -> password
         );
 
-        dd(Auth::attempt($userdata));
+       dd(Auth::attempt($userdata));
+
+
     }
 
     

@@ -11,6 +11,8 @@
 |
 */
 
+Auth::routes();
+
 Route::get('Dashboard', ['uses' => 'PagesController@getDashboard', 'as' => 'Dashboard']);
 Route::get('Customer', ['uses' => 'PagesController@getCustomerView' , 'as' => 'Customer']);
 Route::get('Pricelist', ['uses' => 'PagesController@getPriceCustomerView', 'as' => 'Pricelist']);
@@ -51,6 +53,7 @@ Route::post('noValidate', ['uses' => 'JqueryController@noValidate', 'as' => 'noV
 Route::post('poCustomerDetails', ['uses' => 'JqueryController@poCustomerDetails', 'as' => 'poCustDetails']);
 Route::post('poProductDetails', ['uses' => 'JqueryController@poProductDetails', 'as' => 'poProdDetails']);
 Route::post('getClientSalesInvoice', ['uses' => 'JqueryController@client_sales_invoice', 'as' => 'clientsalesinvoice']);
+Route::post('validateCylinderType', ['uses' => 'JqueryController@cylinder_type_validation', 'as' => 'cylinderTypeValidation']);
 
 
 
