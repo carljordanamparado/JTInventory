@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\DocBlock\Tags\Reference\Reference;
 
 class JqueryController extends Controller
 {
@@ -59,9 +60,9 @@ class JqueryController extends Controller
                         ->where('id', $id)
                         ->update(['PRODUCT_PRICE' => $price]);
 
-        if($updatePrice == 1){
+        if($updatePrice == "1"){
 		  return Response()->json(['updateStatus' => 'true']);
-        }else{
+        }elseif($updatePrice == "0"){
 		  return Response()->json(['updateStatus' => 'false']);
         }
 
@@ -329,9 +330,10 @@ class JqueryController extends Controller
            ->get();
 
        $poProducts = db::table('client_po_list')
-            ->select('*', 'client_po_list.ID as PROD_ID')
+           ->select('*', 'client_po_list.ID as PROD_ID')
            ->join('products', 'products.PROD_CODE' , '=' , 'client_po_list.PRODUCT')
            ->where('PO_NO', $po_id)
+           ->where('QUANTITY' , '!=', '0')
            ->get();
 
        // Dito ko sana ilalagay kaso parang humahaba na
@@ -348,7 +350,7 @@ class JqueryController extends Controller
        }
 
        foreach($poProducts as $products){
-           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" data-id=" '. $products -> PROD_ID . ' ">' . $products->PRODUCT . '</option>';
+           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" data-id=" '. $products -> PROD_ID . ' ">' . $products->PRODUCT . ' - '. $products -> SIZE.'</option>';
        }
 
         return response()->json(array('html' => $html , 'html2' => $html2 , 'date' => $date , 'product' => $product));
@@ -362,13 +364,15 @@ class JqueryController extends Controller
 
 
         $size = '';
-        $quantity = '';
+        $quantity = 0;
         $amount = '';
+        $usedQty = 0;
 
-        $productDetails = db::table('client_po_list')
+        $productDetails = db::table('client_po_list as a')
             ->where('PO_NO', $po_id)
             ->where('ID', $prod_id)
             ->get();
+
 
 //        dd($productDetails);
 
@@ -380,16 +384,27 @@ class JqueryController extends Controller
             ->groupBy('b.ID')
             ->get();
 
+
         foreach($productDetails as $product){
             $size = $product -> SIZE;
             $quantity = $product -> QUANTITY;
+        }
+
+        $past_sales_product_qty = db::table('sales_invoice as a')
+            ->select(DB::raw("SUM(b.QTY) as sum"))
+            ->join('sales_invoice_order as b', 'a.INVOICE_NO', '=' , 'b.INVOICE_NO')
+            ->WHERE('b.SIZE', $size)
+            ->get();
+
+        foreach($past_sales_product_qty as $usedData){
+            $usedQty = $usedData -> sum;
         }
 
         foreach($amount as $productAmount){
             $amount = $productAmount -> PRODUCT_PRICE;
         }
 
-        return response()->json(array('size' => $size , 'quantity' => $quantity , 'amount' => $amount));
+        return response()->json(array('size' => $size , 'quantity' => floatval($quantity) , 'amount' => $amount));
     }
 
     function invoiceNoModal(Request $request){
@@ -529,6 +544,22 @@ class JqueryController extends Controller
             2 => CLC
             3 => DR
         */
+
+    }
+
+    public function customer_po(Request $request){
+
+        $client_id = $request -> cust_id;
+        $option = '';
+
+        $po_list = db::table('client_po')
+            ->where('CLIENTID', $client_id)->get();
+
+        foreach($po_list as $data){
+            $option .= '<option value="'.$data -> PO_NO.'" custId="'.$data->CLIENTID.'"> '.$data -> PO_NO.' </option>';
+        }
+
+        return response()->json(array('option' => $option));
 
     }
 

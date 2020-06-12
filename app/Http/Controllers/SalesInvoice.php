@@ -41,8 +41,12 @@ class SalesInvoice extends Controller
         $poNo = db::table('client_po')
             ->get();
 
+        $client = db::table('client')
+            ->get();
+
         return view('SalesRecord.SalesInvoice.addsalesinvoice')
-            ->with('poNo', $poNo);
+            ->with('poNo', $poNo)
+            ->with('client', $client);
     }
 
     /**
@@ -53,8 +57,6 @@ class SalesInvoice extends Controller
      */
     public function store(Request $request)
     {
-
-//        dd($request->all());
 
         try{
             $fullypaid = '';
@@ -211,6 +213,19 @@ class SalesInvoice extends Controller
                 $other_insert = db::table('other_charges')
                     ->insert($data_array);
             }
+
+            for($i = 0; $i < count($request -> productCode); $i++){
+
+                $value = (floatval($request -> remQty) - floatval($request -> productQty[$i]));
+
+                $remQty = db::table('client_po_list')
+                    ->where('PO_NO', $request->poNo)
+                    ->where('PRODUCT', $request->productCode[$i])
+                    ->where('SIZE', $request->productSize[$i])
+                    ->update(['QUANTITY' => $value]);
+            }
+
+
 
             return response()->json(array('status' => 'success'));
 

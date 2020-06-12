@@ -46,21 +46,24 @@
 
                    <div class="row">
                        <div class="form-group col-md-4">
-                           <label for=""> P.O. NO. </label>
-                            <select id="poNo" class="form-control poNo" name="poNo">
-                                <option value="" custId="">Choose Option</option>
-                                        @foreach($poNo as $po)
-                                        <option value="{{ $po->PO_NO }}" custId="{{ $po->CLIENTID }}">{{ $po->PO_NO }}</option>
-                                    @endforeach
-                            </select>
+                           <label for=""> CUSTOMER DETAILS </label>
+                           <select id="custDetails" class="form-control custDetails" name="custDetails">
+                               <option value="" custId="">Choose Option</option>
+                               @foreach($client as $data)
+                                   <option value="{{ $data-> CLIENTID }}">{{ $data->CLIENT_CODE }} - {{ $data -> NAME}}</option>
+                               @endforeach
+                           </select>
+                           {{--<input type="text" id="custName" class="form-control">--}}
                        </div>
                        <div class="form-group col-md-4">
-                           <label for=""> CUSTOMER DETAILS </label>
-                           <select id="CustDetails" name="custDetails" class="form-control hidden">
-
-                           </select>
-                           <input type="text" id="custName" class="form-control" readonly>
+                           <label for=""> P.O. NO. </label>
+                            <select id="poNo" class="form-control poNo" name="poNo" disabled>
+                                    {{--@foreach($poNo as $po)
+                                        <option value="{{ $po->PO_NO }}" custId="{{ $po->CLIENTID }}">{{ $po->PO_NO }}</option>
+                                    @endforeach--}}
+                            </select>
                        </div>
+
                        <div class="form-group col-md-4">
                            <label for=""> PO DATE </label>
                            <input type="date" id="poDate" name="poDate" class="form-control" readonly>
@@ -73,19 +76,23 @@
                            <div class="box-header text-center">
                                <span> Product Information </span>
                            </div>
-                           <div class="form-group col-md-2">
+                           <div class="form-group col-md-4">
                                <label for="">PRODUCTS</label>
                                <select id="productItem" class="form-control">
                                    <option value=""> Choose Option </option>
                                </select>
                            </div>
-                           <div class="form-group col-md-2">
+                           <div class="form-group hidden">
                                <label for="">SIZE</label>
-                               <input type="text" id="productSize" class="form-control" readonly>
+                               <input type="text" id="productSize" class="form-control"  readonly>
                            </div>
-                           <div class="form-group col-md-2">
+                           <div class="form-group col-md-1">
+                               <label for="">Rem. Qty</label>
+                               <input type="text" id="remQuantity" name="remQty" class="form-control" readonly>
+                           </div>
+                           <div class="form-group col-md-1">
                                <label for="">Quantity</label>
-                               <input type="text" id="productQuantity" class="form-control" readonly>
+                               <input type="text" id="productQuantity" value="0" class="form-control">
                            </div>
                            <div class="form-group col-md-2">
                                <label for="">Amount</label>
@@ -250,9 +257,10 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        $('.poNo').select2({
+        $('.custDetails').select2({
             placeholder: 'Select an option',
             dropdownAutoWidth: true,
+            allowClear: true
         });
 
         function submitButton(){

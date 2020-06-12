@@ -5,9 +5,54 @@ $(document).ready(function(){
     $('#unitPrice').maskMoney();
     $('#downPay').maskMoney();
 
+
     $('#cancelInvoice').on('click', function(){
         window.history.back();
     });
+
+    $(document).on('change', '#custDetails' , function(){
+        load_purchaseOrder();
+    });
+
+    function load_purchaseOrder(){
+
+        var cust_id = $('#custDetails option:selected').val();
+
+
+        $.ajax({
+            url: "/customer_po",
+            type: "POST",
+            data:{
+                '_token': $('input[name=_token]').val(),
+                'cust_id' : cust_id,
+            },
+            success: function(response){
+                if(response.option != ""){
+                    $('#poNo').attr("disabled", false);
+                    $('#poNo').empty().append("<option value=''> Choose Option </option> ");
+                    $('#poNo').append(response.option);
+                    $('.poNo').select2({
+                        placeholder: 'Select an option',
+                        dropdownAutoWidth: true,
+                        allowClear: true
+                    });
+                }else{
+                    $('.poNo').select2({
+                        placeholder: 'Select an option',
+                        dropdownAutoWidth: true,
+                        allowClear: true
+                    });
+                    $('#poNo').attr("disabled", false);
+                    $('#poNo').empty().append("<option value=''> Choose Option </option> ");
+                }
+
+            },
+            error: function(jqXHR){
+                console.log(jqXHR);
+            }
+        });
+    }
+
 
     function clearForm(){
         $('#particular').val("");
@@ -166,11 +211,11 @@ $(document).ready(function(){
                 'po_id' : po_id
             },
             success: function(response){
-                $('#CustDetails option').remove();
+                /*$('#CustDetails option').remove();
                 $('#CustDetails').append(response.html);
                 $('#CustDetails').attr("readonly", true);
                 // $('#CustDetails').hide();
-                $('#custName').val(response.html2);
+                $('#custName').val(response.html2);*/
                 $('#poDate').val(response.date);
                 $('#productItem').empty().append("<option value=''> Choose Option </option> ");
                 $('#productItem').append(response.product);
@@ -199,7 +244,8 @@ $(document).ready(function(){
             },
             success: function(response){
                 $('#productSize').val(response.size);
-                $('#productQuantity').val(response.quantity);
+                $('#remQuantity').val(response.quantity)
+                $('#productQuantity').val(0);
                 var amount = (response.amount);
                 $('#productAmount').val(amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             },
@@ -226,6 +272,25 @@ $(document).ready(function(){
 
     });
 
+    function checkIfQtyisInputted(){
+
+        var input_qty = parseFloat($('#productQuantity').val());
+        var rem_qty = parseFloat($('#remQuantity').val());
+
+        if(input_qty > rem_qty){
+            swal("Inputted Qty is higher than Remaining Qty" , "Please input again" , "error");
+            $('#productQuantity').val(0);
+        }else{
+
+        }
+
+    }
+
+    $(document).on('keyup', '#productQuantity', function(){
+        checkIfQtyisInputted();
+    });
+
+
     function addProductList(){
 
         var productName = $('#productItem option:selected').text();
@@ -234,17 +299,18 @@ $(document).ready(function(){
         var productQty = $('#productQuantity').val();
         var productPrice = $('#productAmount').val();
 
-
-
         var flag = '';
 
         $("#productBody").find("tr").each(function () {
             var td1 = $(this).find("td:eq(0)").text();
             var td2 = $(this).find("td:eq(1)").text();
 
-            if (productName == td1 && productSize == td2) {
+            if (productName == td1 && productSize == td2 && parseFloat(productQty) == 0 ) {
                 flag = 1;
             }
+
+
+
         });
 
         if(flag == 1){
@@ -305,19 +371,29 @@ $(document).ready(function(){
 
         var totalAmt =  parseFloat($('#grandTotal').val().replace(/,/g, ''));
 
+        var productBody = $('#productBody').text().trim();
+        console.log(productBody);
+
+        if(productBody == ''){
+            $('#balAmount').val(deposit - downpayment);
+            $('#grandTotal').val(deposit);
+        }else{
+            if(sumofTwo > totalAmt){
+                var finalBalance = totalAmt ;
+                $('#depositAmt').val("0.00");
+                $('#downPay').val("0.00");
+                swal("Computation cannot proceed","Check inputted amount!!","error");
+                $('#balAmount').val(finalBalance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            }else{
+                var finalBalance = totalAmt - sumofTwo ;
+                $('#balAmount').val(finalBalance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            }
+        }
+
 
         // Init Computation
 
-        if(sumofTwo > totalAmt){
-            var finalBalance = totalAmt ;
-            $('#depositAmt').val("0.00");
-            $('#downPay').val("0.00");
-            swal("Computation cannot proceed","Check inputted amount!!","error");
-            $('#balAmount').val(finalBalance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-        }else{
-            var finalBalance = totalAmt - sumofTwo ;
-            $('#balAmount').val(finalBalance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-        }
+
 
     }
 
