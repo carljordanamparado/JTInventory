@@ -84,8 +84,7 @@ class SalesInvoice extends Controller
                 'PAYMENT_TYPE' => $request -> PaymentType
             ]);
 
-            $sales_invoice_insert = db::table('sales_invoice')
-                ->insert($sales_invoice);
+
 
             $sales_invoice_order = '';
 

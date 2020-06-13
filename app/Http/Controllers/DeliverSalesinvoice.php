@@ -25,6 +25,15 @@ class DeliverSalesinvoice extends Controller
     public function create()
     {
         //
+
+        $poNo = db::table('client_po')
+            ->get();
+
+        $client = db::table('client')
+            ->get();
+
+        return view('SalesRecord.DeliveryReceipt.adddeliverysales')
+            ->with('client', $client);
     }
 
     /**
@@ -36,22 +45,145 @@ class DeliverSalesinvoice extends Controller
     public function store(Request $request)
     {
         //
-        $delivery_sales_invoice = array([
-            'INVOICE_NO' => $request->poNo,
-            'DR_NO' => $request->deliveryNo,
-            'RECEIPT_DATE' => $request->invoiceDate
-        ]);
 
-        $delivery_sales_invoice_insert = db::table('delivery')
-            ->insert($delivery_sales_invoice);
-
-        if($delivery_sales_invoice_insert == true){
-            return response()->json(array('status' => 'success'));
+        if($request -> balAmount == '0.00'){
+            $fullypaid = 1;
         }else{
-            return response()->json(array('status' => 'error'));
+            $fullypaid = 0;
         }
 
+        $sales_invoice = array([
+            'DR_NO' => $request -> invoiceNo,
+            'DR_DATE' => $request -> invoiceDate,
+            'DEPOSIT' => (str_replace( ',', '', $request -> depositAmt)),
+            'DOWNPAYMENT' => (str_replace( ',', '', $request -> downPay)),
+            'BALANCE' => (str_replace( ',', '', $request -> balAmount)),
+            'TOTAL' => (str_replace( ',', '', $request -> grandTotal)),
+            'SALESREPID' => $request -> issuedId,
+            'RECEIVED_BY' => $request -> recBy,
+            'RECEIVED_DATE' => $request -> recDate,
+            'CLIENT_ID' => $request -> custDetails,
+            'FULLY_PAID' => $fullypaid,
+            'CYLINDER_ENTRY' => $request -> cylinderType,
+            'CYLINDER_IDS' => $request -> inputtedTypeId ,
+            'AS_INVOICE' => 1
+        ]);
 
+        $sales_invoice_insert = db::table('delivery_receipt')
+            ->insert($sales_invoice);
+
+        $sales_invoice_order = '';
+
+        for($i = 0; $i < count($request -> productCode) ; $i++ ){
+            $sales_invoice_order = array([
+                'DR_NO' => $request -> invoiceNo,
+                'DR_DATE' => $request -> invoiceDate,
+                'PRODUCT' => $request -> productCode[$i],
+                'SIZE' => $request -> productSize[$i],
+                'UNIT_PRICE' => (str_replace( ',', '', $request -> productPrice[$i])),
+                'QTY' => $request -> productQty[$i]
+            ]);
+
+            $sales_invoice_order_insert = db::table('delivery_receipt_order')
+                ->insert($sales_invoice_order);
+
+            $sales_invoice_po = array([
+                'DR_NO' => $request -> invoiceNo,
+                'DR_DATE' => $request -> invoiceDate,
+                'SALESREPID' => $request -> issuedId,
+                'CLIENT_ID' => $request -> custDetails,
+                'PO_NO' => $request -> poNo
+            ]);
+
+            $sales_invoice_po_insert = db::table('delivery_receipt_po')
+                ->insert($sales_invoice_po);
+
+            $qty = array();
+            $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+            $MO2 = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+
+            for($i = 0; $i < count($request -> productCode) ; $i++ ) {
+
+                if($request -> productCode[$i] == "C2H2"){
+                    $C2H2 += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "AR"){
+                    $AR += (int)$request -> productQty[$i];
+                }
+                if($request -> productCode[$i] == "CO2"){
+                    $CO2 += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "IO2"){
+                    $IO2 += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "LPG"){
+                    $LPG += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "MO2"){
+                    $MO2 += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "N2"){
+                    $N2 += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "N20"){
+                    $N20 += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "H"){
+                    $H += (int)$request -> productQty[$i] ;
+                }
+                if($request -> productCode[$i] == "COMPMED"){
+                    $COMPMED += (int)$request -> productQty[$i] ;
+                }
+            }
+
+            $qty = array_add($qty , 'C2H2', $C2H2);
+            $qty = array_add($qty , 'CO2', $CO2);
+            $qty = array_add($qty , 'AR', $AR);
+            $qty = array_add($qty , 'COMPMED', $COMPMED);
+            $qty = array_add($qty , 'H', $H);
+            $qty = array_add($qty , 'IO2', $IO2);
+            $qty = array_add($qty , 'LPG', $LPG);
+            $qty = array_add($qty , 'N2', $N2);
+            $qty = array_add($qty , 'MO2', $MO2);
+            $qty = array_add($qty , 'N2O', $N20);
+
+            $totalPayment = 0;
+            $totalPayment2 = 0;
+
+            if($request -> PaymentType == "1"){
+                $totalPayment = (float)str_replace( ',', '', $request -> depositAmt) + (float) str_replace( ',', '', $request -> downPay);
+            }elseif($request -> PaymentType == "2"){
+                $totalPayment2 = (float)str_replace( ',', '', $request -> depositAmt) + (float) str_replace( ',', '', $request -> downPay);
+            }
+
+            $sales_invoice_report = array([
+                'INVOICE_NO' => $request -> invoiceNo,
+                'CLIENT_NAME' => $request -> custDetails,
+                'DR_NO' => $request -> poNo,
+                'DR_DATE' => $request -> invoiceDate,
+                'C2H2' => $qty['C2H2'],
+                'AR' => $qty['AR'],
+                'CO2' => $qty['CO2'],
+                'IO2' => $qty['IO2'],
+                'LPG' => $qty['LPG'],
+                'MO2' => $qty['MO2'],
+                'N2' => $qty['N2'],
+                'N2O' => $qty['N2O'],
+                'H' => $qty['H'],
+                'COMPMED' => $qty['COMPMED'],
+                'OTHERS' => $request->otherCharge,
+                'CASH' => $totalPayment,
+                'ACCOUNT' => $totalPayment2,
+                'TOTAL' => $request->grandTotal
+            ]);
+
+            $sales_invoice_report_insert = db::table('sales_invoice_report')
+                ->insert($sales_invoice_report);
+
+
+
+
+        }
 
 
     }

@@ -28,56 +28,7 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_default_1">
                                         <div class="box-header text-center">
-                                            <button type="button" class="btn btn-primary col-md-12" data-toggle="modal" data-target=".bd-example-modal-lg"> Add Delivery As Sales Invoice </button>
-                                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form method="post" id="deliverysalesinvoice">
-                                                                {{ csrf_field() }}
-                                                                <div class="row">
-                                                                    <div class="form-group col-md-6">
-                                                                        <label for="">DELIVERY NO. &nbsp;<label id="status"></label> </label>
-                                                                        <input type="text" class="form-control" id="deliveryNo" name="deliveryNo" value="0">
-                                                                    </div>
-                                                                    <div class="form-group col-md-6">
-                                                                        <label class="lbl" for=""> &nbsp;</label>
-                                                                        <button type="button" class="form-control btn btn-primary btn-validate" id="invoiceValidate" value="DR"> Validate Delivery No. </button>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-md-6">
-                                                                        <label class="lbl" for="">DELIVERY DATE</label>
-                                                                        <input type="date" id="invoiceDate" name="invoiceDate" class="form-control">
-                                                                    </div>
-                                                                    <div class="form-group col-md-6">
-                                                                        <label class="lbl" for="">SALES INVOICE NO.</label>
-                                                                        <select id="salesInvoice" class="form-control poNo" name="poNo">
-                                                                            <option value="" custId="">Choose Option</option>
-                                                                            @foreach($data as $data)
-                                                                                <option value="{{ $data->INVOICE_NO }}"> {{ $data -> INVOICE_NO }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary" id="submitButton">Save changes</button>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <a href="{{ route('DeliverSales.create') }}" class="btn btn-block btn-primary btn-flat addCustomer pull-right"> Add Delivery as Invoice</a>
                                         </div>
                                         <div class="box-body table-responsive">
                                             <table id="deliveryInvoice" class="table table-bordered table-striped">
@@ -88,13 +39,7 @@
 
                                                 </thead>
                                                 <tbody>
-                                                        @foreach($deliver as $data)
-                                                            <tr class="text-center">
-                                                                <td> {{ $data -> DR_NO }}</td>
-                                                                <td> {{ $data -> INVOICE_NO }}</td>
-                                                                <td> {{ $data ->  RECEIPT_DATE }}</td>
-                                                            </tr>
-                                                        @endforeach
+
                                                 </tbody>
                                             </table>
                                         </div>

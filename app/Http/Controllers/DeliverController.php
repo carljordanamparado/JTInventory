@@ -19,8 +19,7 @@ class DeliverController extends Controller
         $sales_invoice_data = db::table('sales_invoice')
             ->get();
 
-        $deliver_sales_invoice = db::table('delivery')
-            ->get();
+
 
         $deliver = db::table('delivery_receipt')
             ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
@@ -29,7 +28,6 @@ class DeliverController extends Controller
 
         return view('SalesRecord.DeliveryReceipt.viewdelivery')
             ->with('data', $sales_invoice_data)
-            ->with('deliver', $deliver_sales_invoice)
             ->with('deliver_receipt', $deliver);
     }
 
