@@ -63,7 +63,8 @@ class PurchaseOrderController extends Controller
                         'PO_DATE' => $request -> poDate,
                         'PRODUCT' => $request -> productCode[$i],
                         'SIZE' => $request -> productSize[$i],
-                        'QUANTITY' => $request -> productQty[$i]
+                        'QUANTITY' => $request -> productQty[$i],
+                        'TOTAL_QUANTITY' => $request -> productQty[$i]
                     ]);
 
             }
@@ -79,7 +80,8 @@ class PurchaseOrderController extends Controller
                         'PO_DATE' => $request -> poDate,
                         'PRODUCT' => $request -> productCode[$i],
                         'SIZE' => $request -> productSize[$i],
-                        'QUANTITY' => $request -> productQty[$i]
+                        'QUANTITY' => $request -> productQty[$i],
+                        'TOTAL_QUANTITY' => $request -> productQty[$i]
                     ]);
 
             }

@@ -157,9 +157,9 @@ class DeliverSalesinvoice extends Controller
             }
 
             $sales_invoice_report = array([
-                'INVOICE_NO' => $request -> invoiceNo,
+                'DR_NO' => $request -> invoiceNo,
                 'CLIENT_NAME' => $request -> custDetails,
-                'DR_NO' => $request -> poNo,
+                'PO_NO' => $request -> poNo,
                 'DR_DATE' => $request -> invoiceDate,
                 'C2H2' => $qty['C2H2'],
                 'AR' => $qty['AR'],
@@ -174,11 +174,43 @@ class DeliverSalesinvoice extends Controller
                 'OTHERS' => $request->otherCharge,
                 'CASH' => $totalPayment,
                 'ACCOUNT' => $totalPayment2,
-                'TOTAL' => $request->grandTotal
+                'TOTAL' => (str_replace( ',', '', $request -> grandTotal))
             ]);
 
-            $sales_invoice_report_insert = db::table('sales_invoice_report')
+            $sales_invoice_report_insert = db::table('delivery_receipt_report')
                 ->insert($sales_invoice_report);
+
+
+            if($request -> particular == ""){
+                $count = 0;
+            }else{
+                $count = $request -> particular;
+            }
+
+            dd($count);
+
+            for($i = 0; $i < $count; $i++){
+                $data_array = array([
+                    'DR_NO' => $request -> invoiceNo,
+                    'QUANTITY' => $request -> qty[$i],
+                    'UNIT_PRICE' => str_replace( ',', '', $request -> unitPrice[$i]),
+                    'PARTICULAR' => $request -> particular[$i]
+                ]);
+
+                $other_insert = db::table('dr_other_charges')
+                    ->insert($data_array);
+            }
+
+            for($i = 0; $i < count($request -> productCode); $i++){
+
+                $value = (floatval($request -> remQty) - floatval($request -> productQty[$i]));
+
+                $remQty = db::table('client_po_list')
+                    ->where('PO_NO', $request->poNo)
+                    ->where('PRODUCT', $request->productCode[$i])
+                    ->where('SIZE', $request->productSize[$i])
+                    ->update(['QUANTITY' => $value]);
+            }
 
 
 
