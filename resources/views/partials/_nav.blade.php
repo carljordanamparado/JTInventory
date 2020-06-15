@@ -2,9 +2,9 @@
   <!-- Logo -->
   <a href="{{ route('Dashboard') }}" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><b>INV</span>
+    <span class="logo-mini"><b>INV</b></span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>Inventory</span>
+    <span class="logo-lg"><b>Inventory</b></span>
   </a>
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top">
@@ -13,7 +13,7 @@
       <span class="sr-only">Toggle navigation</span>
     </a>
 
-    {{--      <div class="navbar-custom-menu">--}}
+  {{--      <div class="navbar-custom-menu">--}}
     {{--        <ul class="nav navbar-nav">--}}
     {{--          <!-- Messages: style can be found in dropdown.less-->--}}
     {{--          <li class="dropdown messages-menu">--}}
@@ -350,15 +350,21 @@
             </a>
             <ul class="treeview-menu" style="display: block;">
               <li><a href="#"><i class="fa fa-circle-o"></i> Pricelist Report </a></li>
-              <li class="treeview menu-open" style="height: auto;">
-                <a href="#"><i class="fa fa-circle-o"></i> Level Two</a>
-              </li>
+              <li><a href="#"><i class="fa fa-circle-o"></i> Aging Report </a></li>
+              <li><a data-toggle="modal" data-target="#statementAccount"> <i class="fa fa-circle-o"></i> Statement of Account </a></li>
+              <li><a href="#"><i class="fa fa-circle-o"></i> Summary of Account </a></li>
+
+
             </ul>
           </li>
         </ul>
       </li>
     </ul>
-
   </section>
+
+    {{-- For Reports --}}
+
+
+
   <!-- /.sidebar -->
 </aside>

@@ -14,7 +14,7 @@
                     <span> Official Receipt </span>
                 </div>
                 <div class="box-body">
-                    <form method="post" id="deliverform">
+                    <form method="post" id="orForm">
                         {{ csrf_field() }}
                         <div class="row">
                             <div class="form-group col-md-3">
@@ -104,28 +104,28 @@
                             <div class="form-group col-md-3">
                                 <label for="">Payment Type</label>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="customRadioInline1" name="PaymentType" value="1"  class="custom-control-input" checked="true">
+                                    <input type="radio" id="p1" name="PaymentType" value="1"  class="custom-control-input paymentType">
                                     <label class="custom-control-label" for="customRadioInline1" >Partial Payment</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="customRadioInline2" name="PaymentType" value="2" class="custom-control-input">
+                                    <input type="radio" id="p2" name="PaymentType" value="2" class="custom-control-input paymentType">
                                     <label class="custom-control-label" for="customRadioInline2">Over Payment</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="customRadioInline2" name="PaymentType" value="2" class="custom-control-input">
+                                    <input type="radio" id="p3" name="PaymentType" value="3" class="custom-control-input paymentType">
                                     <label class="custom-control-label" for="customRadioInline2">Not Applicable</label>
                                 </div>
                             </div>
-                            <div class="form-group col-md-3">
+                            {{--<div class="form-group col-md-3">
                                 <label class="lbl" for="">Invoice No.</label>
                                 <input type="text" id="InvoiceNo" class="form-control" readonly>
-                            </div>
+                            </div>--}}
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Amount Paid</label>
                                 <input type="text" id="amountPaid" class="form-control" name="amountPaid">
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="lbl" for="">Remaining Balance</label>
+                                <label class="lbl" id="labelId" for="">Remaining Balance</label>
                                 <input type="text" id="remBalance" name="remBalance" class="form-control" readonly>
                             </div>
 
@@ -134,13 +134,13 @@
                             <div class="form-group col-md-3">
                             </div>
                             <div class="form-group col-md-3">
-                                <input type = "checkbox" id="" name="radioType">
+                                <input type = "checkbox" id="credCheck" name="radioType">
                                 <label class="lbl" for="">1% Creditable</label>
                                 <input type="text" id="creditable" name="creditable" class="form-control" readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Net Sales</label>
-                                <input type="text" id="netSales" name="netSales" class="form-control" name="amountPaid">
+                                <input type="text" id="netSales" name="netSales" class="form-control" readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Gross Sales</label>
@@ -155,11 +155,11 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Double Payment Invoice No.</label>
-                                <input type="text" id="amountPaid" class="form-control" name="amountPaid">
+                                <input type="text" id="doublePaymentNo" class="form-control" name="doublePaymentNo">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Double Payment Amount</label>
-                                <input type="text" id="remBalance" name="remBalance" class="form-control" readonly>
+                                <input type="text" id="doublePaymentAmt" name="doublePaymentAmt" class="form-control" readonly>
                             </div>
 
                         </div>
@@ -173,31 +173,31 @@
                                 <label for = "name"></label>
                                 <div>
                                     <label class = "checkbox-inline">
-                                        <input type = "radio" id="inlineCheckbox1" name="cashType" value="0"> Cheque
+                                        <input type = "radio" class="payType"  name="cashType" value="0"> Cheque
                                     </label>
                                     <label class = "checkbox-inline">
-                                        <input type = "radio" id="inlineCheckbox2" name="cashType" value="1"> Cash
+                                        <input type = "radio" class="payType" name="cashType" value="1"> Cash
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="lbl" for="">Remarks</label>
-                                <input type="text" id="Remarks" name="Remarks" class="form-control" readonly>
+                                <input type="text" id="Remarks" name="Remarks" class="form-control">
                             </div>
 
                         </div>
                         <div class="row" id="checkDetails">
                             <div class="form-group col-md-4">
                                 <label class="lbl" for="">Check Date</label>
-                                <input type="date" class="form-control" id="checkDate" name="checkDate">
+                                <input type="date" class="form-control cheque" id="checkDate" name="checkDate" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label class="lbl" for="">Check No.</label>
-                                <input type="text" id="Checkno" name="Checkno" class="form-control">
+                                <input type="text" id="Checkno" name="Checkno" class="form-control cheque" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label class="lbl" for="">Bank</label>
-                                <input type="text" id="Bank" name="Bank" class="form-control">
+                                <input type="text" id="Bank" name="Bank" class="form-control cheque" readonly>
                             </div>
 
                         </div>
@@ -208,7 +208,7 @@
                                     <button type="button" id="cancelInvoice" class="form-control btn btn-primary"> Cancel Invoice </button>
                                 </div>
                                 <div class="form-group col-md-3 pull-right">
-                                    <button type="button" id="submitButton" class="form-control btn btn-primary"> Add Sales Invoice </button>
+                                    <button type="button" id="submitButton" class="form-control btn btn-primary"> Add Official Receipt </button>
                                 </div>
                             </div>
                         </div>
@@ -227,7 +227,35 @@
     <script type="text/javascript" src="{{ asset('BladeJavascript/SalesRecord/addOR.js') }}"></script>
     <script>
         $(document).ready(function(){
+            function submitButton(){
 
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('Sales.store') }}" ,
+                    type: "POST",
+                    data: $('#salesinvoiceform').serialize(),
+                    success: function(response){
+                        try{
+                            swal('Sales invoice successfully', '', 'success');
+                        }catch (Exception) {
+                            swal(Exception , Exception , 'error');
+                        }
+                    },
+                    error: function(jqXHR){
+                        console.log(jqXHR);
+                    }
+                });
+            }
+
+            $('#submitButton').on('click', function(e){
+                e.preventDefault();
+                submitButton();
+            });
         });
     </script>
 @endsection

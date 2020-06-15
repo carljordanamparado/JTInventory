@@ -76,3 +76,8 @@ Route::resource('CylinderLoan', 'CylinderLoan');
 Route::resource('Deliver', 'DeliverController');
 Route::resource('DeliverSales','DeliverSalesinvoice');
 Route::resource('OfficialReceipt', 'OfficialReceipt');
+
+// Reports
+
+Route::get('getUserAccounts', ['uses'=> 'ReportPageController@viewStatementReport', 'as' => 'StatementReport']);
+Route::post('statementReport', ['uses'=> 'ReportPageController@statement_report', 'as' => 'statement_report']);

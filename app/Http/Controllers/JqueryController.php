@@ -517,14 +517,21 @@ class JqueryController extends Controller
         $tableData2 = '';
 
         $sales_invoice = db::table('sales_invoice')
+            ->select('INVOICE_NO as No', 'INVOICE_DATE as date' , 'BALANCE as balance')
+            ->where('CLIENT_ID', $data_id);
+
+        $delivery_invoice = db::table('delivery_receipt')
+            ->select('DR_NO as No', 'DR_DATE as date' , 'BALANCE as balance')
             ->where('CLIENT_ID', $data_id)
+            ->where('AS_INVOICE', '=', '1')
+            ->unionAll($sales_invoice)
             ->get();
 
-        foreach($sales_invoice as $data){
+        foreach($delivery_invoice as $data){
             $data0 = '<td> <input type="checkbox" id="radioButton"></td>';
-            $data1 = '<td>'.$data -> INVOICE_NO.'</td>';
-            $data2 = '<td>'.$data -> INVOICE_DATE.'</td>';
-            $data3 = '<td>'.$data -> TOTAL .'</td>';
+            $data1 = '<td>'.$data -> No .'</td>';
+            $data2 = '<td>'.$data -> date .'</td>';
+            $data3 = '<td>'.$data -> balance .'</td>';
 
             $tableData2 .= '<tr class="text-center">'.$data0.' '.$data1.' '. $data2 .' '.$data3.' </tr>';
         }
