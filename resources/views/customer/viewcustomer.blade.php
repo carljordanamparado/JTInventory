@@ -63,7 +63,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 @foreach($client as $row)
                                     <tr>
                                         <td>{{ $row -> CLIENTID }}</td>
@@ -83,10 +82,13 @@
                                             </div>
                                         </td>
                                     </tr>
+
                                 @endforeach
 
                             </tbody>
+
                         </table>
+                          {{ $client->links() }}
                       </div>
                       <!-- /.card-body -->
                     </div>
@@ -108,6 +110,10 @@
   $(document).ready(function() {
 
       $('#customerTable').DataTable({
+          "paging":   false,
+          "ordering": false,
+          "info":     false,
+          'searching': false,
       });
 
       var statusAlert = $('#notifAlert').val();

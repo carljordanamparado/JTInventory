@@ -68,6 +68,7 @@
 
                                         </tbody>
                                     </table>
+                                    {{ $client->links() }}
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -89,6 +90,11 @@
         $(document).ready(function() {
 
             $('#customerTable').DataTable({
+                "paging":   false,
+                "info":     false,
+                "ordering": false,
+                'searching': false,
+
             });
 
             var statusAlert = $('#notifAlert').val();

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class SystemUsersController extends Controller
 {
@@ -63,9 +64,13 @@ class SystemUsersController extends Controller
 
         $user->save();
 
-        auth()->login($user);
+        if (Auth::attempt($request->only('userid', 'password'))) {
+            return redirect()
+                ->route('Dashboard')
+                ->with('Welcome! Your account has been successfully created!');
+        }
 
-        return redirect()->to('SystemUtilities/SystemUsers');
+        /*return redirect()->to('SystemUtilities/SystemUsers');*/
 
 
     }

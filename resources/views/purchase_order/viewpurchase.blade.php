@@ -50,6 +50,8 @@
                                         <td>{{ $purchaselist -> PO_DATE }}</td>
                                         @if($purchaselist -> STATUS == 1)
                                             <td> ACTIVE </td>
+                                        @elseif($purchaselist -> STATUS == 2)
+                                            <td> INACTIVE </td>
                                         @endif
                                         <td class="text-center">
                                             <div class="btn-group-vertical">

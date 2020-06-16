@@ -1,18 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use Validator,Redirect,Response;
+Use App\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use App\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Input;
+use Session;
+use DB;
 
 class PagesController extends Controller
 {
+
     public function getDashboard(){
-        return view('Dashboard');
+
+        if(session()->has('user')){
+            return view('Dashboard');
+        }else{
+            return view('login');
+        }
     }
 
     public function getCustomerView(){
@@ -20,16 +26,21 @@ class PagesController extends Controller
 		$client = DB::table('client')
 				->join('client_type', 'client.TYPE', '=', 'client_type.ID')
 				->select('client.*', 'client_type.CLIENT_TYPE')
-				->get();
+                ->where('STATUS', '1')
+                ->orderByDesc('CLIENTID')
+                ->Paginate(50);
 
     	return view('customer.viewcustomer' , ['client' => $client]);
+
     }
 
     public function getPriceCustomerView(){
         $client = DB::table('client')
             ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
             ->select('client.*', 'client_type.CLIENT_TYPE')
-            ->get();
+            ->where('STATUS', '1')
+            ->orderByDesc('CLIENTID')
+            ->Paginate(50);
 
         return view('pricelist.viewpricelist' , ['client' => $client]);
     }
@@ -47,6 +58,8 @@ class PagesController extends Controller
 
         $purchaseList = db::table('client')
             ->join('client_po' , 'client.CLIENTID' , '=' , 'client_po.CLIENTID')
+            ->where('client_po.STATUS', '!=' , null)
+            ->where('client_po.CLIENTID', '!=' , null)
             ->get();
 
         return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);
@@ -66,14 +79,28 @@ class PagesController extends Controller
 
     public function postLogin(Request $request){
 
-        $userdata = array(
-            'USERID' => $request -> username ,
-            'PASSWORD' => $request -> password
-        );
 
-       dd(Auth::attempt($userdata));
+        $credentials = $request->only('username', 'password');
 
 
+        if(Auth::attempt(['userid' => $request -> userid, 'password' => $request->password])){
+
+            session()->push('user', auth::user());
+            return redirect() -> route('Dashboard');
+
+        }else{
+
+            return view('/');
+
+        }
+
+
+    }
+
+    public function AccountLogout(){
+
+        session()->flush();
+        Return view('login');
     }
 
     

@@ -153,16 +153,16 @@ class SalesInvoice extends Controller
                 }
             }
 
-            $qty = array_add($qty , 'C2H2', $C2H2);
-            $qty = array_add($qty , 'CO2', $CO2);
-            $qty = array_add($qty , 'AR', $AR);
-            $qty = array_add($qty , 'COMPMED', $COMPMED);
-            $qty = array_add($qty , 'H', $H);
-            $qty = array_add($qty , 'IO2', $IO2);
-            $qty = array_add($qty , 'LPG', $LPG);
-            $qty = array_add($qty , 'N2', $N2);
-            $qty = array_add($qty , 'MO2', $MO2);
-            $qty = array_add($qty , 'N2O', $N20);
+            $qty = arr::add($qty , 'C2H2', $C2H2);
+            $qty = arr::add($qty , 'CO2', $CO2);
+            $qty = arr::add($qty , 'AR', $AR);
+            $qty = arr::add($qty , 'COMPMED', $COMPMED);
+            $qty = arr::add($qty , 'H', $H);
+            $qty = arr::add($qty , 'IO2', $IO2);
+            $qty = arr::add($qty , 'LPG', $LPG);
+            $qty = arr::add($qty , 'N2', $N2);
+            $qty = arr::add($qty , 'MO2', $MO2);
+            $qty = arr::add($qty , 'N2O', $N20);
 
             $totalPayment = 0;
             $totalPayment2 = 0;
@@ -225,8 +225,6 @@ class SalesInvoice extends Controller
                     ->where('SIZE', $request->productSize[$i])
                     ->update(['QUANTITY' => $value]);
             }
-
-
 
             return response()->json(array('status' => 'success'));
 

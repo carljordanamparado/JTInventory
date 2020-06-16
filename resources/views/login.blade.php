@@ -12,9 +12,9 @@
 <body>
     <div class="login-card"><img class="profile-img-card" src="">
         <p class="profile-name-card"> </p>
-        <form class="form-signin" method="POST" action="{{ route('Login') }}">
+        <form class="form-signin" method="POST" action="{{ route('Userlogin') }}">
             {{ csrf_field() }}
-            <input class="form-control" name="username" type="text" id="inputUsername" required="" placeholder="Enter Username" autofocus="">
+            <input class="form-control" name="userid" type="text" id="inputUsername" required="" placeholder="Enter Username" autofocus="">
             <input class="form-control" name="password" type="password" id="inputPassword" required="" placeholder="Password">
             <button class="btn btn-primary btn-block btn-lg btn-signin" type="submit">Sign in</button>
         </form>

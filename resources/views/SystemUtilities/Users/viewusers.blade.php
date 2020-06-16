@@ -28,15 +28,15 @@
 
                                 @foreach($systemUsers as $systemUsers)
                                     <tr class="text-center">
-                                        <td>{{ $systemUsers -> ID }}</td>
-                                        <td>{{ $systemUsers -> USERID }}</td>
-                                        <td>{{ $systemUsers -> LASTNAME }} , {{ $systemUsers -> FIRSTNAME }} {{ $systemUsers -> MIDDLENAME }}</td>
-                                        <td>{{ $systemUsers -> DESIGNATION }}</td>
-                                        <td>{{ $systemUsers -> USER_AUTHORIZATION }}</td>
-                                        <td>{{ $systemUsers -> EMAIL }}</td>
+                                        <td>{{ $systemUsers -> id }}</td>
+                                        <td>{{ $systemUsers -> userid }}</td>
+                                        <td>{{ $systemUsers -> lastname }} , {{ $systemUsers -> firstname }} {{ $systemUsers -> middlename }}</td>
+                                        <td>{{ $systemUsers -> designation }}</td>
+                                        <td>{{ $systemUsers -> user_authorization }}</td>
+                                        <td>{{ $systemUsers -> email }}</td>
                                         <td class="text-center">
                                             <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href=" {{ route('SystemUsersController.show', $systemUsers -> ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                <a type="button" class="btn btn-info" href=" {{ route('SystemUsersController.show', $systemUsers -> id) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
                                             </div>
                                         </td>
                                     </tr>

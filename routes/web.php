@@ -20,7 +20,7 @@ Route::get('Cylinder', ['uses' => 'PagesController@getCylinderBalance', 'as' => 
 Route::get('Purchase_Order', ['uses' => 'PagesController@getPurchaseOrder', 'as' => 'Purcase_Order']);
 Route::get('SystemUtilities/SystemUsers', ['uses' => 'PagesController@getSystemUsers', 'as' => 'SystemUsers']);
 Route::get('/', ['uses' => 'PagesController@getLogin' , 'as' => '/']);
-route::post('Login', ['uses' => 'PagesController@postLogin' , 'as' => 'Login']);
+route::post('Login', ['uses' => 'PagesController@postLogin' , 'as' => 'Userlogin']);
 
 // Resources Exception
 
@@ -80,4 +80,10 @@ Route::resource('OfficialReceipt', 'OfficialReceipt');
 // Reports
 
 Route::get('getUserAccounts', ['uses'=> 'ReportPageController@viewStatementReport', 'as' => 'StatementReport']);
+
 Route::post('statementReport', ['uses'=> 'ReportPageController@statement_report', 'as' => 'statement_report']);
+
+Route::post('agingReport', ['uses'=> 'ReportPageController@aging_account', 'as' => 'aging_account']);
+
+
+Route::get('Logout', ['uses'=> 'PagesController@AccountLogout', 'as' => 'Logout']);

@@ -110,6 +110,7 @@ class PurchaseOrderController extends Controller
             ->where('PO_NO', $id)
             ->get();
 
+
         return view('purchase_order.editpurchaseorder')
             ->with('id', $id)
             ->with('purchaseOrder', $purchaseOrder)
