@@ -87,7 +87,7 @@
       </ul>
     </li>
       <li class="treeview menu-open" style="height: auto;">
-        <a href="#">
+        <a>
           <i class="fa fa-share"></i> <span>Reports</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -95,7 +95,7 @@
         </a>
         <ul class="treeview-menu" style="display: block;">
           <li class="treeview menu-open" style="height: auto;">
-            <a href="#"><i class="fa fa-circle-o"></i> Customer Reports
+            <a><i class="fa fa-circle-o"></i> Customer Reports
               <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>

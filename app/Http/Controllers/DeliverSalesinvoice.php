@@ -16,6 +16,7 @@ class DeliverSalesinvoice extends Controller
     public function index()
     {
         //
+
     }
 
     /**

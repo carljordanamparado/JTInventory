@@ -33,13 +33,20 @@
                                         <div class="box-body table-responsive">
                                             <table id="deliveryInvoice" class="table table-bordered table-striped">
                                                 <thead>
-                                                    <th class="text-center">Delivery No.</th>
-                                                    <th class="text-center">Delivery Sales Invoice</th>
-                                                    <th class="text-center">Deliver Date</th>
-
+                                                <th class="text-center"> Delivery No. </th>
+                                                <th class="text-center"> Delivery Date. </th>
+                                                <th class="text-center"> Customer Name </th>
+                                                <th class="text-center"> Actions </th>
                                                 </thead>
                                                 <tbody>
-
+                                                @foreach($deliver_invoice as $deliver_invoice)
+                                                    <tr class="text-center">
+                                                        <td> {{ $deliver_invoice -> DR_NO }}</td>
+                                                        <td> {{ $deliver_invoice -> DR_DATE }}</td>
+                                                        <td> {{ $deliver_invoice -> NAME }}</td>
+                                                        <td><a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                    </tr>
+                                                @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -54,7 +61,7 @@
                                                     <th class="text-center"> Delivery No. </th>
                                                     <th class="text-center"> Delivery Date. </th>
                                                     <th class="text-center"> Customer Name </th>
-                                                    <th class="text-center"> Actions </th>\
+                                                    <th class="text-center"> Actions </th>
                                                 </thead>
                                                 <tbody>
                                                     @foreach($deliver_receipt as $deliver_data)
