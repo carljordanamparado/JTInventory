@@ -17,7 +17,7 @@ class PagesController extends Controller
         if(session()->has('user')){
             return view('Dashboard');
         }else{
-            return view('login');
+            Return view('login');
         }
     }
 
@@ -74,7 +74,13 @@ class PagesController extends Controller
     }
 
     public function getLogin(){
-        return view('login');
+        if(session()->has('user')){
+            return view('Dashboard');
+        }else{
+            return view('login');
+        }
+
+
     }
 
     public function postLogin(Request $request){
@@ -100,7 +106,8 @@ class PagesController extends Controller
     public function AccountLogout(){
 
         session()->flush();
-        Return view('login');
+        return redirect()->route('loginPage');
+
     }
 
     

@@ -26,7 +26,12 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                               <label for=""> Authorization </label>
-                              <input type="text" class="form-control" id="Authorization" name="auth" placeholder="Enter Authorization">
+                                <select name="auth" class="form-control" id="userLevel">
+                                    <option value=""> Choose option</option>
+                                    @foreach($user_level as $user_level)
+                                        <option value="{{ $user_level->ID }}"> {{ $user_level -> USER_LEVEL }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group col-md-4">
                               <label for=""> Designation </label>

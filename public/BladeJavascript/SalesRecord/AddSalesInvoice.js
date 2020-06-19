@@ -10,14 +10,13 @@ $(document).ready(function(){
         window.history.back();
     });
 
-    $(document).on('change', '#custDetails' , function(){
+    $('#custDetails').on('change' , function(){
         load_purchaseOrder();
     });
 
     function load_purchaseOrder(){
 
         var cust_id = $('#custDetails option:selected').val();
-
 
         $.ajax({
             url: "/customer_po",

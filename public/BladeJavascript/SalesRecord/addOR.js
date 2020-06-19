@@ -23,6 +23,8 @@ $(document).ready(function(){
             },
             success: function(response){
 
+                console.log(response);
+
                 if(response.status == "empty"){
                     $('#status').text("No Record Found");
                     $('#status').css("color", "red");
@@ -41,7 +43,7 @@ $(document).ready(function(){
                     $('#status').text('Active');
                     $('#status').css("color", 'Green');
                     $('#status').css('font-size', '12px');
-                    $('#cancelInvoice').val(response.issuedBy);
+                    $('#issuedBy').val(response.issuedBy);
                     $('#issuedId').val(response.issuerID);
                     $('#salesDetails').show();
                     $('#submitButton').attr('disabled', false);
@@ -112,11 +114,13 @@ $(document).ready(function(){
            var firstTd = rowValue.find("td:eq(1)").text();
            var secondTd = rowValue.find("td:eq(2)").text();
            var thirdTd = rowValue.find("td:eq(3)").text();
+           var fourthTd = rowValue.find("td:eq(4)").text();
 
            var tableData = "<tr class='text-center'> " +
-               "<td> "+ firstTd + "</td> " +
-               "<td> "+ secondTd + "</td> " +
-               "<td>" + thirdTd + "</td> " +
+               "<td> <input type='hidden' name='reportNo[]' value='"+firstTd+"'> "+ firstTd + "</td> " +
+               "<td> <input type='hidden' name='reportDate[]' value='"+secondTd+"'>"+ secondTd + "</td> " +
+               "<td> <input type='hidden' name='reportAmount[]' value='"+thirdTd+"'>" + thirdTd + "</td> " +
+               "<td class='hidden'> <input type='hidden' name='reportType[]' value='"+fourthTd+"'>" + fourthTd + "</td> " +
                "<td> <input type='radio' id='radButton' name='radButton'> P/O </td>" +
                "</tr>";
 
@@ -140,6 +144,8 @@ $(document).ready(function(){
                     $(this).closest('tr').remove();
                 }
             });
+
+            $('#amountPaid').val(0);
             compute_amount();
             credValue();
 
@@ -182,9 +188,6 @@ $(document).ready(function(){
         var netSales = parseFloat($('#netSales').val().replace(/,/g, ''));
 
 
-
-
-
         if($('#credCheck').prop("checked") == true){
             console.log(paymentPaid);
             if(isNaN(paymentPaid)){
@@ -214,9 +217,9 @@ $(document).ready(function(){
 
         console.log($(this).val());
 
-        if($(this).val() == 0){
+        if($(this).val() == 1){
             $('.cheque').attr("readonly", false);
-        }else if($(this).val() == 1){
+        }else if($(this).val() == 0){
             $('.cheque').attr("readonly", true);
         }
     })

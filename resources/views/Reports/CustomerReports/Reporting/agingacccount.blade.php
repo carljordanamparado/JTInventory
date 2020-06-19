@@ -33,7 +33,8 @@
                                     <th class="text-center">BELOW 30</th>
                                     <th class="text-center">WITHIN 30 AND 60</th>
                                     <th class="text-center">WITHIN 60 AND 90</th>
-                                    <th class="text-center">ABOVE 90</th>
+                                    <th class="text-center">WITHIN 90 AND 120</th>
+                                    <th class="text-center">ABOVE 120</th>
                                     <th class="text-center">TOTAL</th>
                                 </tr>
                             </thead>
@@ -64,7 +65,14 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($data -> AGING > 90)
+                                            @if($data -> AGING > 90 && $data->aging <= 120)
+                                                {{ $data -> BALANCE }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($data -> AGING > 120)
                                                 {{ $data -> BALANCE }}
                                             @else
                                                 -

@@ -28,7 +28,11 @@ class SystemUsersController extends Controller
     public function create()
     {
         //
-        return view('SystemUtilities.Users.addusers');
+        $user_level = db::table('user_level')
+            ->get();
+
+        return view('SystemUtilities.Users.addusers')
+            ->with('user_level', $user_level);
     }
 
     /**
@@ -52,15 +56,15 @@ class SystemUsersController extends Controller
         $mname = $request -> mname;
         $email = $request -> email;
 
-        $user -> USERID = $userid;
-        $user -> PASSWORD = $password;
-        $user -> USERNAME = $username;
-        $user -> DESIGNATION = $designation;
-        $user -> USER_AUTHORIZATION = $auth;
-        $user -> LASTNAME = $lname;
-        $user -> FIRSTNAME = $fname;
-        $user -> MIDDLENAME = $mname;
-        $user -> EMAIL = $email;
+        $user -> userid = $userid;
+        $user -> password = $password;
+        $user -> username = $username;
+        $user -> designation = $designation;
+        $user -> user_authorization = $auth;
+        $user -> lastname = $lname;
+        $user -> firstname = $fname;
+        $user -> middlename = $mname;
+        $user -> email = $email;
 
         $user->save();
 
@@ -86,11 +90,14 @@ class SystemUsersController extends Controller
         //
 
         $users = db::table('users')->where('ID', $id)->get();
+        $user_level = db::table('user_level')
+            ->get();
 
 
         return view('SystemUtilities.Users.editusers')
             ->with('id', $id)
-            ->with('users', $users);
+            ->with('users', $users)
+            ->with('user_level', $user_level);
     }
 
     /**

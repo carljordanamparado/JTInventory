@@ -191,7 +191,7 @@ class SalesInvoice extends Controller
                 'OTHERS' => $request->otherCharge,
                 'CASH' => $totalPayment,
                 'ACCOUNT' => $totalPayment2,
-                'TOTAL' => $request->grandTotal
+                'TOTAL' =>(float)str_replace( ',', '',  $request->grandTotal)
             ]);
 
             $sales_invoice_report_insert = db::table('sales_invoice_report')
@@ -225,6 +225,14 @@ class SalesInvoice extends Controller
                     ->where('SIZE', $request->productSize[$i])
                     ->update(['QUANTITY' => $value]);
             }
+
+            $noController = array([
+                'INVOICE_NO' => $request-> invoiceNo,
+                'REMARKS' => 'DONE'
+            ]);
+
+            db::table('si_assigned_report')
+                    ->insert($noController);
 
             return response()->json(array('status' => 'success'));
 

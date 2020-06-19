@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function Matrix\add;
+use Illuminate\Support\Arr;
 
 class CylinderLoan extends Controller
 {
@@ -118,16 +120,16 @@ class CylinderLoan extends Controller
             }
         }
 
-        $qty = array_add($qty , 'C2H2', $C2H2);
-        $qty = array_add($qty , 'CO2', $CO2);
-        $qty = array_add($qty , 'AR', $AR);
-        $qty = array_add($qty , 'COMPMED', $COMPMED);
-        $qty = array_add($qty , 'H', $H);
-        $qty = array_add($qty , 'IO2', $IO2);
-        $qty = array_add($qty , 'LPG', $LPG);
-        $qty = array_add($qty , 'N2', $N2);
-        $qty = array_add($qty , 'MO2', $MO2);
-        $qty = array_add($qty , 'N2O', $N20);
+        $qty = Arr::add($qty , 'C2H2', $C2H2);
+        $qty = Arr::add($qty , 'CO2', $CO2);
+        $qty = Arr::add($qty , 'AR', $AR);
+        $qty = Arr::add($qty , 'COMPMED', $COMPMED);
+        $qty = Arr::add($qty , 'H', $H);
+        $qty = Arr::add($qty , 'IO2', $IO2);
+        $qty = Arr::add($qty , 'LPG', $LPG);
+        $qty = Arr::add($qty , 'N2', $N2);
+        $qty = Arr::add($qty , 'MO2', $MO2);
+        $qty = Arr::add($qty , 'N2O', $N20);
 
         $sales_invoice_report = array([
             'CLC_NO' => $request -> clcNo,
@@ -145,8 +147,18 @@ class CylinderLoan extends Controller
             'COMPMED' => $qty['COMPMED']
         ]);
 
+        $noController = array([
+            'CLC_NO' => $request-> clcNo,
+            'REMARKS' => 'DONE'
+        ]);
+
+        db::table('clc_assigned_report')
+            ->insert($noController);
+
         $sales_invoice_report_insert = db::table('cylinder_loan_contract_report2')
             ->insert($sales_invoice_report);
+
+        return response()->json(array('status' => 'success'));
 
 
 

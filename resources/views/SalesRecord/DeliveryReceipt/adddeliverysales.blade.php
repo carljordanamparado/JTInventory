@@ -23,7 +23,7 @@
         <section class="content">
             <div class="box">
                 <div class="box-header text-center">
-                    <span> Sales Invoice Information </span>
+                    <span> Delivery as Invoice Information </span>
                 </div>
                 <form method="post" id="salesinvoiceform">
                     <div class="box-body">

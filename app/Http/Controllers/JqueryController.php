@@ -518,12 +518,16 @@ class JqueryController extends Controller
 
         $sales_invoice = db::table('sales_invoice')
             ->select('INVOICE_NO as No', 'INVOICE_DATE as date' , 'BALANCE as balance')
-            ->where('CLIENT_ID', $data_id);
+            ->selectRaw("'INVOICE' as TYPE")
+            ->where('CLIENT_ID', $data_id)
+            ->where('FULLY_PAID', 0);
 
         $delivery_invoice = db::table('delivery_receipt')
             ->select('DR_NO as No', 'DR_DATE as date' , 'BALANCE as balance')
+            ->selectRaw("'DR' as TYPE")
             ->where('CLIENT_ID', $data_id)
             ->where('AS_INVOICE', '=', '1')
+            ->where('FULLY_PAID', 0)
             ->unionAll($sales_invoice)
             ->get();
 
@@ -532,8 +536,9 @@ class JqueryController extends Controller
             $data1 = '<td>'.$data -> No .'</td>';
             $data2 = '<td>'.$data -> date .'</td>';
             $data3 = '<td>'.$data -> balance .'</td>';
+            $data4 = '<td class="hidden">'.$data -> TYPE .'</td>';
 
-            $tableData2 .= '<tr class="text-center">'.$data0.' '.$data1.' '. $data2 .' '.$data3.' </tr>';
+            $tableData2 .= '<tr class="text-center">'.$data0.' '.$data1.' '. $data2 .' '.$data3.' '.$data4.' </tr>';
         }
 
         return response()->json(array('table_data2' => $tableData2));
@@ -560,7 +565,8 @@ class JqueryController extends Controller
         $option = '';
 
         $po_list = db::table('client_po')
-            ->where('CLIENTID', $client_id)->get();
+            ->where('CLIENTID', $client_id)
+            ->get();
 
         foreach($po_list as $data){
             $option .= '<option value="'.$data -> PO_NO.'" custId="'.$data->CLIENTID.'"> '.$data -> PO_NO.' </option>';

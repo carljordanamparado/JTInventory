@@ -11,15 +11,13 @@
 |
 */
 
-Auth::routes();
-
-Route::get('Dashboard', ['uses' => 'PagesController@getDashboard', 'as' => 'Dashboard']);
+Route::get('Homepage', ['uses' => 'PagesController@getDashboard', 'as' => 'Dashboard']);
 Route::get('Customer', ['uses' => 'PagesController@getCustomerView' , 'as' => 'Customer']);
 Route::get('Pricelist', ['uses' => 'PagesController@getPriceCustomerView', 'as' => 'Pricelist']);
 Route::get('Cylinder', ['uses' => 'PagesController@getCylinderBalance', 'as' => 'Cylinder']);
 Route::get('Purchase_Order', ['uses' => 'PagesController@getPurchaseOrder', 'as' => 'Purcase_Order']);
 Route::get('SystemUtilities/SystemUsers', ['uses' => 'PagesController@getSystemUsers', 'as' => 'SystemUsers']);
-Route::get('/', ['uses' => 'PagesController@getLogin' , 'as' => '/']);
+Route::get('/', ['uses' => 'PagesController@getLogin' , 'as' => 'loginPage']);
 route::post('Login', ['uses' => 'PagesController@postLogin' , 'as' => 'Userlogin']);
 
 // Resources Exception

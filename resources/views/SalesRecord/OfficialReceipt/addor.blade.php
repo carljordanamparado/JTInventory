@@ -42,7 +42,7 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-6 radio-label-vertical-wrapper">
-                                <label for = "name">PAYMENT TYPE</label>
+                                <label for = "name">PAY TYPE</label>
                                 <div>
                                     <label class = "checkbox-inline">
                                         <input type = "radio" id="inlineCheckbox1" name="radioType" value="0"> ACCOUNT
@@ -112,7 +112,7 @@
                                     <label class="custom-control-label" for="customRadioInline2">Over Payment</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="p3" name="PaymentType" value="3" class="custom-control-input paymentType">
+                                    <input type="radio" id="p3" name="PaymentType" value="0" class="custom-control-input paymentType">
                                     <label class="custom-control-label" for="customRadioInline2">Not Applicable</label>
                                 </div>
                             </div>
@@ -134,7 +134,7 @@
                             <div class="form-group col-md-3">
                             </div>
                             <div class="form-group col-md-3">
-                                <input type = "checkbox" id="credCheck" name="radioType">
+                                <input type = "checkbox" id="credCheck">
                                 <label class="lbl" for="">1% Creditable</label>
                                 <input type="text" id="creditable" name="creditable" class="form-control" readonly>
                             </div>
@@ -159,7 +159,7 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Double Payment Amount</label>
-                                <input type="text" id="doublePaymentAmt" name="doublePaymentAmt" class="form-control" readonly>
+                                <input type="text" id="doublePaymentAmt" name="doublePaymentAmt" class="form-control">
                             </div>
 
                         </div>
@@ -173,10 +173,10 @@
                                 <label for = "name"></label>
                                 <div>
                                     <label class = "checkbox-inline">
-                                        <input type = "radio" class="payType"  name="cashType" value="0"> Cheque
+                                        <input type = "radio" class="payType"  name="cashType" value="1"> Cheque
                                     </label>
                                     <label class = "checkbox-inline">
-                                        <input type = "radio" class="payType" name="cashType" value="1"> Cash
+                                        <input type = "radio" class="payType" name="cashType" value="0"> Cash
                                     </label>
                                 </div>
                             </div>
@@ -236,12 +236,13 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('Sales.store') }}" ,
+                    url: "{{ route('OfficialReceipt.store') }}" ,
                     type: "POST",
-                    data: $('#salesinvoiceform').serialize(),
+                    data: $('#orForm').serialize(),
                     success: function(response){
                         try{
                             swal('Sales invoice successfully', '', 'success');
+                            windows.location.back();
                         }catch (Exception) {
                             swal(Exception , Exception , 'error');
                         }

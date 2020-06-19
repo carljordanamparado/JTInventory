@@ -29,7 +29,7 @@
     <script>
         $(document).ready(function(){
 
-            $('#custDetails, #agingCust').select2({
+            $('#custStatement, #agingCust').select2({
                 placeholder: 'Select an option',
                 dropdownAutoWidth: true,
                 allowClear: true
@@ -37,7 +37,7 @@
 
             $('#statementAccount, #agingAccount').on('hidden.bs.modal', function(){
                 //$('#statement').clear();
-                $('#custDetails, #agingCust').empty().append('<option>Choose Option</option>')
+                $('#custStatement, #agingCust').empty().append('<option>Choose Option</option>')
             });
 
             $('#statementAccount, #agingAccount').on('shown.bs.modal', function(){
@@ -45,7 +45,7 @@
                     url: "{{ route('StatementReport') }}",
                     type: "GET",
                     success: function(response){
-                        $('#custDetails, #agingCust').append(response.option);
+                        $('#custStatement, #agingCust').append(response.option);
                     },
                     error: function(jqXHR){
                         console.log(jqXHR);

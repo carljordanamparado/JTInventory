@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 
@@ -137,16 +138,16 @@ class CylinderReceipt extends Controller
             }
         }
 
-        $qty = array_add($qty , 'C2H2', $C2H2);
-        $qty = array_add($qty , 'CO2', $CO2);
-        $qty = array_add($qty , 'AR', $AR);
-        $qty = array_add($qty , 'COMPMED', $COMPMED);
-        $qty = array_add($qty , 'H', $H);
-        $qty = array_add($qty , 'IO2', $IO2);
-        $qty = array_add($qty , 'LPG', $LPG);
-        $qty = array_add($qty , 'N2', $N2);
-        $qty = array_add($qty , 'MO2', $MO2);
-        $qty = array_add($qty , 'N2O', $N20);
+        $qty = Arr::add($qty , 'C2H2', $C2H2);
+        $qty = Arr::add($qty , 'CO2', $CO2);
+        $qty = Arr::add($qty , 'AR', $AR);
+        $qty = Arr::add($qty , 'COMPMED', $COMPMED);
+        $qty = Arr::add($qty , 'H', $H);
+        $qty = Arr::add($qty , 'IO2', $IO2);
+        $qty = Arr::add($qty , 'LPG', $LPG);
+        $qty = Arr::add($qty , 'N2', $N2);
+        $qty = Arr::add($qty , 'MO2', $MO2);
+        $qty = Arr::add($qty , 'N2O', $N20);
 
         $icr_report_data = array([
             'ICR_NO' => $request->icrNo,
@@ -166,6 +167,14 @@ class CylinderReceipt extends Controller
 
         $icr_report_insert = db::table('cylinder_receipt_report')
             ->insert($icr_report_data);
+
+        $noController = array([
+            'ICR_NO' => $request-> icrNo,
+            'REMARKS' => 'DONE'
+        ]);
+
+        db::table('icr_assigned_report')
+            ->insert($noController);
 
         return response()->json(array('status' => 'success'));
 

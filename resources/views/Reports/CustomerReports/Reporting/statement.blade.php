@@ -42,85 +42,100 @@
 
                             </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody class="text-center valueBody">
 
-                                @if($data2 == "empty" && $data != "empty")
+                                @if($sales_data != "empty" && $dr_data != "empty")
 
-                                    @foreach($data as $data)
-                                        <tr>
-                                            <td> {{ $data['INVOICE_NO'] }}</td>
-                                            <td> {{ $data['INVOICE_DATE'] }}</td>
-                                            <td> {{ $data['PO_NO'] }}</td>
-                                            <td> {{ $data['C2H2'] }} </td>
-                                            <td> {{ $data['IO2'] }} </td>
-                                            <td> {{ $data['MO2F'] }} </td>
-                                            <td> {{ $data['MO2S'] }} </td>
-                                            <td> {{ $data['N2'] }} </td>
-                                            <td> {{ $data['AR'] }}</td>
-                                            <td> {{ $data['OTHER_CHARGES'] }}</td>
-                                            <td> {{ $data['TOTAL'] }}</td>
-                                        </tr>
-                                    @endforeach
+                                    @for($i = 0; $i < count($sales_data) ; $i++)
+                                        @foreach($sales_data[$i] as $value)
+                                            <tr>
+                                                <td> {{ $value['INVOICE_NO'] }}</td>
+                                                <td> {{ $value['INVOICE_DATE'] }}</td>
+                                                <td> {{ $value['PO_NO'] }} </td>
+                                                <td class="td1">{{ $value['C2H2'] }}</td>
+                                                <td class="td2">{{ $value['IO2'] }}</td>
+                                                <td class="td3">{{ $value['MO2F'] }}</td>
+                                                <td class="td4">{{ $value['MO2S'] }}</td>
+                                                <td class="td5">{{ $value['N2'] }}</td>
+                                                <td class="td6">{{ $value['AR'] }}</td>
+                                                <td class="td7">{{ $value['OTHER_CHARGES'] }}</td>
+                                                <td class="td8">{{ $value['TOTAL'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endfor
 
+                                    @for($i = 0; $i < count($dr_data) ; $i++)
+                                        @foreach($dr_data[$i] as $value)
+                                            <tr>
+                                                <td> {{ $value['DR_NO'] }}</td>
+                                                <td> {{ $value['DR_DATE'] }}</td>
+                                                <td> {{ $value['PO_NO'] }} </td>
+                                                <td class="td1">{{ $value['C2H2'] }}</td>
+                                                <td class="td2">{{ $value['IO2'] }}</td>
+                                                <td class="td3">{{ $value['MO2F'] }}</td>
+                                                <td class="td4">{{ $value['MO2S'] }} </td>
+                                                <td class="td5">{{ $value['N2'] }} </td>
+                                                <td class="td6">{{ $value['AR'] }}</td>
+                                                <td class="td7">{{ $value['OTHER_CHARGES'] }}</td>
+                                                <td class="td8">{{ $value['TOTAL'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endfor
 
+                                @elseif($sales_data != "empty")
+                                    @for($i = 0; $i < count($sales_data) ; $i++)
+                                        @foreach($sales_data[$i] as $value)
+                                            <tr>
+                                                <td> {{ $value['INVOICE_NO'] }}</td>
+                                                <td> {{ $value['INVOICE_DATE'] }}</td>
+                                                <td> {{ $value['PO_NO'] }} </td>
+                                                <td class="td1">{{ $value['C2H2'] }}</td>
+                                                <td class="td2">{{ $value['IO2'] }}</td>
+                                                <td class="td3">{{ $value['MO2F'] }}</td>
+                                                <td class="td4">{{ $value['MO2S'] }}</td>
+                                                <td class="td5">{{ $value['N2'] }}</td>
+                                                <td class="td6">{{ $value['AR'] }}</td>
+                                                <td class="td7">{{ $value['OTHER_CHARGES'] }}</td>
+                                                <td class="td8">{{ $value['TOTAL'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endfor
 
-
-                                @elseif($data == "empty" && $data2 != "empty")
-
-                                    @foreach($data2 as $data2)
-                                        <tr>
-                                            <td> {{ $data2['INVOICE_NO'] }}</td>
-                                            <td> {{ $data2['INVOICE_DATE'] }}</td>
-                                            <td> {{ $data2['PO_NO'] }} </td>
-                                            <td> {{ $data2['C2H2'] }} </td>
-                                            <td> {{ $data2['IO2'] }} </td>
-                                            <td> {{ $data2['MO2F'] }} </td>
-                                            <td> {{ $data2['MO2S'] }} </td>
-                                            <td> {{ $data2['N2'] }} </td>
-                                            <td> {{ $data2['AR'] }}</td>
-                                            <td> {{ $data2['OTHER_CHARGES'] }} </td>
-                                            <td> {{ $data2['TOTAL'] }}</td>
-                                        </tr>
-                                    @endforeach
-
-                                @elseif($data2 == "empty" && $data == "empty")
+                                @elseif($dr_data != "empty")
+                                    @for($i = 0; $i < count($dr_data) ; $i++)
+                                        @foreach($dr_data[$i] as $value)
+                                            <tr>
+                                                <td> {{ $value['DR_NO'] }}</td>
+                                                <td> {{ $value['DR_DATE'] }}</td>
+                                                <td> {{ $value['PO_NO'] }} </td>
+                                                <td class="td1">{{ $value['C2H2'] }}</td>
+                                                <td class="td2">{{ $value['IO2'] }}</td>
+                                                <td class="td3">{{ $value['MO2F'] }}</td>
+                                                <td class="td4">{{ $value['MO2S'] }}</td>
+                                                <td class="td5">{{ $value['N2'] }}</td>
+                                                <td class="td6">{{ $value['AR'] }}</td>
+                                                <td class="td7">{{ $value['OTHER_CHARGES'] }}</td>
+                                                <td class="td8">{{ $value['TOTAL'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endfor
+                                    <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td>TOTAL</td>
+                                        <td></td>
+                                        <td class="Totaltd1"> </td>
+                                        <td class="Totaltd2"> </td>
+                                        <td class="Totaltd3"> </td>
+                                        <td class="Totaltd4"> </td>
+                                        <td class="Totaltd5"> </td>
+                                        <td class="Totaltd6"> </td>
+                                        <td class="Totaltd7"> </td>
+                                        <td class="Totaltd8"> </td>
+                                    </tr>
+                                    </tfoot>
                                 @else
-
-                                    @foreach($data2 as $data2)
-                                        <tr>
-                                            <td> {{ $data2['INVOICE_NO'] }}</td>
-                                            <td> {{ $data2['INVOICE_DATE'] }}</td>
-                                            <td> {{ $data2['PO_NO'] }} </td>
-                                            <td> {{ $data2['C2H2'] }} </td>
-                                            <td> {{ $data2['IO2'] }} </td>
-                                            <td> {{ $data2['MO2F'] }} </td>
-                                            <td> {{ $data2['MO2S'] }} </td>
-                                            <td> {{ $data2['N2'] }} </td>
-                                            <td> {{ $data2['AR'] }}</td>
-                                            <td> {{ $data2['OTHER_CHARGES'] }} </td>
-                                            <td> {{ $data2['TOTAL'] }}</td>
-                                        </tr>
-                                    @endforeach
-
-                                    @foreach($data as $data)
-                                        <tr>
-                                            <td> {{ $data['INVOICE_NO'] }}</td>
-                                            <td> {{ $data['INVOICE_DATE'] }}</td>
-                                            <td> {{ $data['PO_NO'] }}</td>
-                                            <td> {{ $data['C2H2'] }} </td>
-                                            <td> {{ $data['IO2'] }} </td>
-                                            <td> {{ $data['MO2F'] }} </td>
-                                            <td> {{ $data['MO2S'] }} </td>
-                                            <td> {{ $data['N2'] }} </td>
-                                            <td> {{ $data['AR'] }}</td>
-                                            <td> {{ $data['OTHER_CHARGES'] }}</td>
-                                            <td> {{ $data['TOTAL'] }}</td>
-                                        </tr>
-                                    @endforeach
-
                                 @endif
-
-
                             </tbody>
                         </table>
                     </div>
@@ -153,6 +168,14 @@
             } );
 
         } );
+
+        var td1 = 0;
+
+        $('.valueBody').each(function () {
+            td1 = td1 + parseFloat($(this).find('.td1').text());
+        })
+
+
     </script>
 
 @endsection

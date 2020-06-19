@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 
 class DeliverSalesinvoice extends Controller
 {
@@ -136,16 +137,16 @@ class DeliverSalesinvoice extends Controller
                 }
             }
 
-            $qty = array_add($qty , 'C2H2', $C2H2);
-            $qty = array_add($qty , 'CO2', $CO2);
-            $qty = array_add($qty , 'AR', $AR);
-            $qty = array_add($qty , 'COMPMED', $COMPMED);
-            $qty = array_add($qty , 'H', $H);
-            $qty = array_add($qty , 'IO2', $IO2);
-            $qty = array_add($qty , 'LPG', $LPG);
-            $qty = array_add($qty , 'N2', $N2);
-            $qty = array_add($qty , 'MO2', $MO2);
-            $qty = array_add($qty , 'N2O', $N20);
+            $qty = arr::add($qty , 'C2H2', $C2H2);
+            $qty = arr::add($qty , 'CO2', $CO2);
+            $qty = arr::add($qty , 'AR', $AR);
+            $qty = arr::add($qty , 'COMPMED', $COMPMED);
+            $qty = arr::add($qty , 'H', $H);
+            $qty = arr::add($qty , 'IO2', $IO2);
+            $qty = arr::add($qty , 'LPG', $LPG);
+            $qty = arr::add($qty , 'N2', $N2);
+            $qty = arr::add($qty , 'MO2', $MO2);
+            $qty = arr::add($qty , 'N2O', $N20);
 
             $totalPayment = 0;
             $totalPayment2 = 0;
@@ -212,8 +213,16 @@ class DeliverSalesinvoice extends Controller
                     ->update(['QUANTITY' => $value]);
             }
 
+            $noController = array([
+                'DR_NO' => $request-> invoiceNo,
+                'REMARKS' => 'DONE'
+            ]);
+
+            db::table('dr_assigned_report')
+                ->insert($noController);
 
 
+            return response()->json(array('status' => 'success'));
 
         }
 

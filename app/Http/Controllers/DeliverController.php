@@ -88,6 +88,16 @@ class DeliverController extends Controller
                     ->insert($deliver_receipt_order_data);
         }
 
+        $noController = array([
+            'DR_NO' => $request-> deliveryNo,
+            'REMARKS' => 'DONE'
+        ]);
+
+        db::table('dr_assigned_report')
+            ->insert($noController);
+
+        return response()->json(array('status' => 'success'));
+
 
 
 
