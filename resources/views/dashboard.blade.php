@@ -20,8 +20,8 @@
                 <div class="box-body text-center">
                     <div class="row-content">
                         <div class="col-12">
-                            <div class="box">
-                                    <h1>This is the Dashboard</h1>
+                            <div class="box-body">
+                                   
                             </div>
                             <!-- /.card -->
                         </div>
