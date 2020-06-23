@@ -69,8 +69,7 @@ class SystemUsersController extends Controller
         $user->save();
 
         if (Auth::attempt($request->only('userid', 'password'))) {
-            return redirect()
-                ->route('Dashboard')
+            return view('dashboard')
                 ->with('Welcome! Your account has been successfully created!');
         }
 

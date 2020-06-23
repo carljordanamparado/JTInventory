@@ -15,7 +15,7 @@ class PagesController extends Controller
     public function getDashboard(){
 
         if(session()->has('user')){
-            return view('Dashboard');
+            return view('dashboard');
         }else{
             Return view('login');
         }
@@ -76,7 +76,7 @@ class PagesController extends Controller
 
     public function getLogin(){
         if(session()->has('user')){
-            return view('Dashboard');
+            return view('dashboard');
         }else{
             return view('login');
         }
