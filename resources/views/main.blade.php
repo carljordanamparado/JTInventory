@@ -16,6 +16,7 @@
 
         @include('Reports.CustomerReports.Viewing.viewstatement')
         @include('Reports.CustomerReports.Viewing.agingaccount')
+        @include('Reports.CustomerReports.Viewing.viewsummary')
 
         <div class="wrapper">
            @yield('content')
@@ -29,23 +30,23 @@
     <script>
         $(document).ready(function(){
 
-            $('#custStatement, #agingCust').select2({
+            $('#custStatement, #agingCust, #summary').select2({
                 placeholder: 'Select an option',
                 dropdownAutoWidth: true,
                 allowClear: true
             });
 
-            $('#statementAccount, #agingAccount').on('hidden.bs.modal', function(){
+            $('#statementAccount, #agingAccount , #summaryAccount').on('hidden.bs.modal', function(){
                 //$('#statement').clear();
                 $('#custStatement, #agingCust').empty().append('<option>Choose Option</option>')
             });
 
-            $('#statementAccount, #agingAccount').on('shown.bs.modal', function(){
+            $('#statementAccount, #agingAccount, #summaryAccount').on('shown.bs.modal', function(){
                 $.ajax({
                     url: "{{ route('StatementReport') }}",
                     type: "GET",
                     success: function(response){
-                        $('#custStatement, #agingCust').append(response.option);
+                        $('#custStatement, #agingCust , #summary').append(response.option);
                     },
                     error: function(jqXHR){
                         console.log(jqXHR);

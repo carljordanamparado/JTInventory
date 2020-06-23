@@ -28,6 +28,7 @@ class PriceController extends Controller
         //
         $clientInfo = DB::table('client')
             ->where('CLIENTID', $id)
+            ->where('STATUS', '1')
             ->get();
 
         $readonly = "readonly=true";
@@ -81,7 +82,7 @@ class PriceController extends Controller
 				'PROD_CODE' => $prodCode,
 				'PRODUCT' => $prodName,
 				'SIZE' => $prodSize,
-        'PRODUCT_PRICE' => $prodPrice,
+                'PRODUCT_PRICE' => $prodPrice,
 				'PRICE_DATE' => $prodDate
 			]
 	  ]);

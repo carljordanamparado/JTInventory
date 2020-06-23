@@ -1,4 +1,4 @@
-<div class="modal fade" id="agingAccount" tabindex="-1" role="dialog" aria-labelledby="statementAccount" aria-hidden="true">
+<div class="modal fade" id="summaryAccount" tabindex="-1" role="dialog" aria-labelledby="summaryAccount" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="statement" action="{{ route('aging_account') }}"  method="post">
+                <form id="summaryAccount" action="{{ route('summary_account') }}"  method="post">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="form-group col-md-12">

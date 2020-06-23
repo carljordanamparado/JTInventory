@@ -83,5 +83,7 @@ Route::post('statementReport', ['uses'=> 'ReportPageController@statement_report'
 
 Route::post('agingReport', ['uses'=> 'ReportPageController@aging_account', 'as' => 'aging_account']);
 
+Route::post('summaryReport', ['uses'=> 'ReportPageController@summary_account', 'as' => 'summary_account']);
+
 
 Route::get('Logout', ['uses'=> 'PagesController@AccountLogout', 'as' => 'Logout']);

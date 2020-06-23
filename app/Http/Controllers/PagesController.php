@@ -28,7 +28,7 @@ class PagesController extends Controller
 				->select('client.*', 'client_type.CLIENT_TYPE')
                 ->where('STATUS', '1')
                 ->orderByDesc('CLIENTID')
-                ->Paginate(50);
+                ->get();
 
     	return view('customer.viewcustomer' , ['client' => $client]);
 
@@ -40,7 +40,7 @@ class PagesController extends Controller
             ->select('client.*', 'client_type.CLIENT_TYPE')
             ->where('STATUS', '1')
             ->orderByDesc('CLIENTID')
-            ->Paginate(50);
+            ->get();
 
         return view('pricelist.viewpricelist' , ['client' => $client]);
     }
@@ -60,6 +60,7 @@ class PagesController extends Controller
             ->join('client_po' , 'client.CLIENTID' , '=' , 'client_po.CLIENTID')
             ->where('client_po.STATUS', '!=' , null)
             ->where('client_po.CLIENTID', '!=' , null)
+            ->where('client.STATUS', '1')
             ->get();
 
         return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);

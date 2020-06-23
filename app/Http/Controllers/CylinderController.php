@@ -27,6 +27,7 @@ class CylinderController extends Controller
         //
         $clientInfo = db::table('client')
             ->where('CLIENTID', $id)
+            ->where('STATUS', '1')
             ->get();
 
         $clientProduct = db::table('client')

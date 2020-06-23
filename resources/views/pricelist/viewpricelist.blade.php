@@ -68,7 +68,7 @@
 
                                         </tbody>
                                     </table>
-                                    {{ $client->links() }}
+
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -90,10 +90,10 @@
         $(document).ready(function() {
 
             $('#customerTable').DataTable({
-                "paging":   false,
-                "info":     false,
-                "ordering": false,
-                'searching': false,
+                "paging":   true,
+                "info":     true,
+                "ordering": true,
+                'searching': true,
 
             });
 

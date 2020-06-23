@@ -29,6 +29,7 @@ class OfficialReceipt extends Controller
         //
 
         $client = db::table('client')
+            ->where('STATUS', '1')
             ->get();
 
         return view('SalesRecord.OfficialReceipt.addor')

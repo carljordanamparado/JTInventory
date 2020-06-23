@@ -32,6 +32,7 @@ class DeliverSalesinvoice extends Controller
             ->get();
 
         $client = db::table('client')
+            ->where('STATUS', '1')
             ->get();
 
         return view('SalesRecord.DeliveryReceipt.adddeliverysales')

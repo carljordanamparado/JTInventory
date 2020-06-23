@@ -19,6 +19,7 @@ class CylinderReceipt extends Controller
         //
         $cylinder_data = db::table('cylinder_receipt')
             ->join('client', 'cylinder_receipt.CLIENT_NO', '=' , 'client.CLIENTID')
+            ->where('icr_tag', 0)
             ->get();
 
         return view('SalesRecord.CylinderReceipt.viewcylinderreceipt')
@@ -34,6 +35,7 @@ class CylinderReceipt extends Controller
     {
         //
         $client_data = db::table('client')
+            ->where('STATUS', '1')
             ->get();
 
         return view('SalesRecord.CylinderReceipt.addcylinderreceipt')

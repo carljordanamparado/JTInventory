@@ -19,7 +19,6 @@
                                 <th class="text-center">ICR NO.</th>
                                 <th class="text-center">ICR DATE</th>
                                 <th class="text-center">CUSTOMER NAME</th>
-                                <th class="text-center">STATUS</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                             </thead>
@@ -29,12 +28,6 @@
                                         <td>{{ $data -> ICR_NO }}</td>
                                         <td>{{ $data -> ICR_DATE }}</td>
                                         <td>{{ $data -> NAME }}</td>
-                                        <td>@if($data -> ICR_TAG == 0)
-                                                Not Empty
-                                            @else
-                                                Empty
-                                            @endif
-                                        </td>
                                         <td class="text-center">
                                             <div class="btn-group-vertical">
                                                 <a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
@@ -55,7 +48,13 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#salesInvoice').dataTable();
+            $('#salesInvoice').dataTable({
+                "paging":   true,
+                "ordering": true,
+                "info":     true,
+                'searching': true,
+                'bJQueryUI': true
+            });
         });
     </script>
 @endsection

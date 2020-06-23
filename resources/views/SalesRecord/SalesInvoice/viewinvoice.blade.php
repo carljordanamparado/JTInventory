@@ -44,19 +44,15 @@
                 <h5 class="modal-title text-center" id="exampleModalLabel">Order Information</h5>
                 <hr>
                 <div class="row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label for="">Deposit</label>
                         <input type="text" class="form-control" id="Deposit"  value="" readonly>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label for="">Downpayment</label>
                         <input type="text" class="form-control" id="Downpayment" value="" readonly>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="">Payment Type</label>
-                        <input type="text" class="form-control" id="Type"  value="" readonly>
-                    </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label for="">Total Amount</label>
                         <input type="text" class="form-control" id="totalAmt" value="" readonly>
                     </div>

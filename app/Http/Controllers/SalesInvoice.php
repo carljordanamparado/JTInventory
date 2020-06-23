@@ -22,6 +22,7 @@ class SalesInvoice extends Controller
 
         $invoice_data = db::table('client')
             ->join('sales_invoice', 'client.CLIENTID' , '=' , 'sales_invoice.CLIENT_ID')
+            ->where('sales_invoice.FULLY_PAID', 0)
             ->get();
 
 
@@ -42,6 +43,7 @@ class SalesInvoice extends Controller
             ->get();
 
         $client = db::table('client')
+            ->where('STATUS', '1')
             ->get();
 
         return view('SalesRecord.SalesInvoice.addsalesinvoice')
@@ -80,8 +82,7 @@ class SalesInvoice extends Controller
                 'CLIENT_ID' => $request -> custDetails,
                 'FULLY_PAID' => $fullypaid,
                 'CYLINDER_ENTRY' => $request -> cylinderType,
-                'CYLINDER_IDS' => $request -> inputtedTypeId ,
-                'PAYMENT_TYPE' => $request -> PaymentType
+                'CYLINDER_IDS' => $request -> inputtedTypeId
             ]);
 
             $sales_invoice_insert = db::table('sales_invoice')

@@ -329,12 +329,24 @@ class JqueryController extends Controller
            ->distinct()
            ->get();
 
+
+
        $poProducts = db::table('client_po_list')
            ->select('*', 'client_po_list.ID as PROD_ID')
            ->join('products', 'products.PROD_CODE' , '=' , 'client_po_list.PRODUCT')
            ->where('PO_NO', $po_id)
            ->where('QUANTITY' , '!=', '0')
            ->get();
+
+       if($poProducts -> isEmpty()){
+           $poProducts = db::table('client_po_list')
+               ->select('*', 'client_po_list.ID as PROD_ID')
+               ->join('products', 'products.PRODUCT' , '=' , 'client_po_list.PRODUCT')
+               ->where('PO_NO', $po_id)
+               ->where('QUANTITY' , '!=', '0')
+               ->get();
+       }
+
 
        // Dito ko sana ilalagay kaso parang humahaba na
 
@@ -384,6 +396,15 @@ class JqueryController extends Controller
             ->groupBy('b.ID')
             ->get();
 
+        if($amount->isEmpty()){
+            $amount = db::table('client_po as a')
+                ->join('client_po_list as c', 'c.CLIENTPO_ID', '=', 'a.ID')
+                ->join('product_list as b', 'a.CLIENTID' , '=' , 'b.CLIENTID')
+                ->where('c.PO_NO', $po_id)
+                ->where('b.PROD_CODE', $prodCode)
+                ->groupBy('b.ID')
+                ->get();
+        }
 
         foreach($productDetails as $product){
             $size = $product -> SIZE;
@@ -450,24 +471,18 @@ class JqueryController extends Controller
 
         $dataArray = array();
 
-        foreach($invoice_information as $data){
+
+        foreach($invoice_information as $invoice_data){
 
             $data1 = '';
             $data2 = '';
             $data3 = '';
             $data4 = '';
 
-            if($data -> PAYMENT_TYPE == "1"){
-                $data3 = "CASH";
-            }else{
-                $data3 = "ACCOUNT";
-            }
-
             $dataArray = array([
-                'Deposit' => $data -> DEPOSIT,
-                'Downpayment' => $data -> DOWNPAYMENT,
-                'Type' => $data3,
-                'Total' => $data -> TOTAL
+                'Deposit' => $invoice_data -> DEPOSIT,
+                'Downpayment' => $invoice_data -> DOWNPAYMENT,
+                'Total' => $invoice_data -> TOTAL
             ]);
 
         }
@@ -566,7 +581,9 @@ class JqueryController extends Controller
 
         $po_list = db::table('client_po')
             ->where('CLIENTID', $client_id)
+            ->where('STATUS', '1')
             ->get();
+
 
         foreach($po_list as $data){
             $option .= '<option value="'.$data -> PO_NO.'" custId="'.$data->CLIENTID.'"> '.$data -> PO_NO.' </option>';

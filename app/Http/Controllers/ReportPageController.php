@@ -21,6 +21,7 @@ class ReportPageController extends Controller
         $option = '';
 
         $client = db::table('client')
+            ->where('STATUS', '1')
             ->get();
 
         foreach($client as $data){
@@ -41,27 +42,41 @@ class ReportPageController extends Controller
         $from_date = $request -> fromDate;
         $to_date =$request -> toDate;
 
-        $sales_invoice = db::table('sales_invoice as a')
-            ->select('a.INVOICE_NO', 'a.INVOICE_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
-            ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
-            ->join('sales_invoice_order as c', 'a.INVOICE_NO', '=', 'c.INVOICE_NO')
-            ->where('a.CLIENT_ID', $id)
-            ->whereBetween('a.INVOICE_DATE', [$from_date,$to_date])
-            ->get();
+        if($from_date == '' && $to_date == ''){
+            $sales_invoice = db::table('sales_invoice as a')
+                ->select('a.INVOICE_NO', 'a.INVOICE_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
+                ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
+                ->join('sales_invoice_order as c', 'a.INVOICE_NO', '=', 'c.INVOICE_NO')
+                ->where('a.CLIENT_ID', $id)
+                ->get();
 
-        $delivery = db::table('delivery_receipt as a')
-            ->select('a.DR_NO', 'a.DR_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
-            ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
-            ->join('delivery_receipt_order as c', 'a.DR_NO', '=', 'c.DR_NO')
-            ->where('a.CLIENT_ID', $id)
-            ->whereBetween('a.DR_DATE', [$from_date,$to_date])
-            ->get();
+            $delivery = db::table('delivery_receipt as a')
+                ->select('a.DR_NO', 'a.DR_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
+                ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
+                ->join('delivery_receipt_order as c', 'a.DR_NO', '=', 'c.DR_NO')
+                ->where('a.CLIENT_ID', $id)
+                ->get();
+        }else{
+            $sales_invoice = db::table('sales_invoice as a')
+                ->select('a.INVOICE_NO', 'a.INVOICE_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
+                ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
+                ->join('sales_invoice_order as c', 'a.INVOICE_NO', '=', 'c.INVOICE_NO')
+                ->where('a.CLIENT_ID', $id)
+                ->whereBetween('a.INVOICE_DATE', [$from_date,$to_date])
+                ->get();
+
+            $delivery = db::table('delivery_receipt as a')
+                ->select('a.DR_NO', 'a.DR_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
+                ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
+                ->join('delivery_receipt_order as c', 'a.DR_NO', '=', 'c.DR_NO')
+                ->where('a.CLIENT_ID', $id)
+                ->whereBetween('a.DR_DATE', [$from_date,$to_date])
+                ->get();
+        }
 
 
         $arr = array();
         $arr2 = array();
-
-
 
         for($i = 0; $i < count($sales_invoice) ; $i++){
 
@@ -253,10 +268,16 @@ class ReportPageController extends Controller
             ->where('FULLY_PAID', 0)
             ->whereBetween('DR_DATE',[$from_date, $to_date])
             ->unionAll($sales_data)
-            ->paginate(20);
+            ->get();
+
 
         return view('Reports.CustomerReports.Reporting.agingacccount')
             ->with('Aging', $dr_data);
     }
+
+    public function summary_account(Request $request){
+
+    }
+
 
 }

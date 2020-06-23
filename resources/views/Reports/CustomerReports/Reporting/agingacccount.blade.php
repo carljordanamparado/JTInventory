@@ -21,7 +21,7 @@
         <section class="content">
             <div class="box">
                 <div class="box-header text-center">
-                    <span> Statement of Account </span>
+                    <span> Aging of Account </span>
                 </div>
                 <div class="box-body">
                     <div class="box-body table-responsive">
@@ -65,7 +65,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($data -> AGING > 90 && $data->aging <= 120)
+                                            @if($data -> AGING > 90 && $data->AGING <= 120)
                                                 {{ $data -> BALANCE }}
                                             @else
                                                 -
@@ -88,7 +88,6 @@
                         </table>
 
                     </div>
-                    {{ $Aging->links() }}
                 </div>
 
             </div>
@@ -105,6 +104,8 @@
 
     <script>
         $(document).ready(function() {
+
+            $('#salesInvoice').dataTable();
 
 
         } );

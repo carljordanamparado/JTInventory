@@ -54,9 +54,16 @@
 @section('scripts')
 
     <script type="text/javascript">
+
         $(document).ready(function(){
 
-            $('#salesInvoice').DataTable({});
+            $('#salesInvoice').DataTable({
+                "paging":   true,
+                "ordering": true,
+                "info":     true,
+                'searching': true,
+                'bJQueryUI': true
+            });
 
             $(document).on('click', '#invoiceData',  function(){
                 var id = $(this).text();

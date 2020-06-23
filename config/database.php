@@ -43,7 +43,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '192.168.1.106'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'jtgases_gases_new'),
+            'database' => env('DB_DATABASE', 'database'),
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),

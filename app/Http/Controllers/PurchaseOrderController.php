@@ -28,6 +28,7 @@ class PurchaseOrderController extends Controller
         $client = DB::table('client')
             ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
             ->select('client.*', 'client_type.CLIENT_TYPE')
+            ->where('STATUS', '1')
             ->get();
         return view('purchase_order.addpurchaseorder')
             ->with('client', $client);
