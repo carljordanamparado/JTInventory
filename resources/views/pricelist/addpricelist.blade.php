@@ -97,13 +97,7 @@
                                 <button type="button" id="submit" class="btn btn-primary ">Add Price</button>
                             </div>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary pull-left">Back</button>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" id="btnClear" class="btn btn-primary pull-left">Clear</button>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" id="btnMasterlist" class="btn btn-primary pull-left">Masterlist</button>
+                                <button type="button" id="back" class="btn btn-primary pull-left">Back</button>
                             </div>
                         </div>
                     </div>

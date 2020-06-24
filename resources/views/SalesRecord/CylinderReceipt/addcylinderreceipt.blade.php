@@ -155,6 +155,7 @@
                     success: function(response){
                         try{
                             swal('Incoming Cylinder Receipt successfully added', '', 'success');
+                            windows.history.back();
                         }catch (Exception) {
                             swal(Exception , Exception , 'error');
                         }

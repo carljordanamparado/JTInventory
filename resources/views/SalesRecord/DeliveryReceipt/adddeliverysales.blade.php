@@ -278,6 +278,7 @@
                     success: function(response){
                         try{
                             swal('Sales invoice successfully', '', 'success');
+                            windows.history.back();
                         }catch (Exception) {
                             swal(Exception , Exception , 'error');
                         }

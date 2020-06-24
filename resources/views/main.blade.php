@@ -30,6 +30,10 @@
     <script>
         $(document).ready(function(){
 
+            $('#back').on('click', function(){
+                window.history.back();
+            });
+
             $('#custStatement, #agingCust, #summary').select2({
                 placeholder: 'Select an option',
                 dropdownAutoWidth: true,

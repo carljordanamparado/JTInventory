@@ -74,7 +74,7 @@
                                 </table>
                             </div>
                             <div class="form-group col-md-6">
-                                <table id="prodListTable" class="table table-bordered table-striped">
+                                <table id="prodListTable2" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
                                         <th class="text-center">  Invoice No</th>
@@ -227,6 +227,14 @@
     <script type="text/javascript" src="{{ asset('BladeJavascript/SalesRecord/addOR.js') }}"></script>
     <script>
         $(document).ready(function(){
+
+            $('#prodListTable, #prodListTable2').dataTable({
+                scrollY:        '30vh',
+                scrollCollapse: true,
+                paging:         false,
+                searching: false
+            });
+
             function submitButton(){
 
                 $.ajaxSetup({
@@ -242,7 +250,7 @@
                     success: function(response){
                         try{
                             swal('Sales invoice successfully', '', 'success');
-                            windows.location.back();
+                            windows.history.back();
                         }catch (Exception) {
                             swal(Exception , Exception , 'error');
                         }
