@@ -33,7 +33,6 @@ $(document).ready(function(){
                         'price' : price
                     },
                     success: function(response){
-                        console.log(respo)
                         if(response.updateStatus == "true"){
                                 swal({title: "Success!", text: "Product Price is updated.", type: "Success"})
                                     .then((value) => {
