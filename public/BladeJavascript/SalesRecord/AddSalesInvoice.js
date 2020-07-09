@@ -414,15 +414,11 @@ $(document).ready(function(){
                 'id' : id
             },
             success: function(response){
-                $('#CustDetails option').remove();
-                $('#CustDetails').append(response.html);
-                $('#CustDetails').attr("readonly", true);
-                // $('#CustDetails').hide();
-                $('#custName').val(response.html2);
-                $('#poDate').val(response.date);
-                $('#productItem').empty().append("<option value=''> Choose Option </option> ");
-                $('#productItem').append(response.product);
-
+                if(response.status == "ACTIVE") {
+                    $('#cylinderIdStatus').text(response.status).css("color", 'Green');
+                }else{
+                    $('#cylinderIdStatus').text(response.status).css("color", 'Red');
+                }
             },
             error: function(jqXHR){
                 console.log(jqXHR);

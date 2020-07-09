@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     {{--End of line--}}
-                    <div class="row">
+                    {{--<div class="row">
                         <div class="form-group col-md-3">
                             <label>Product</label>
                             <select class="form-control" id="productCode" >
@@ -59,7 +59,7 @@
                             <label for="emailAddress">Add Product</label>
                             <button class="form-control btn btn-info" id="addProduct" type="button"> Add Product </button>
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
 
@@ -76,7 +76,6 @@
                                 <th class="text-center"> Products </th>
                                 <th class="text-center"> Products Size </th>
                                 <th class="text-center"> Product Qty </th>
-                                <th class="text-center"> Action </th>
                             </tr>
                             </thead>
                             <tbody class="poTable">
@@ -86,7 +85,6 @@
                                         <td>{{ $purchaseOrderList -> PRODUCT }}</td>
                                         <td>{{ $purchaseOrderList -> SIZE }}</td>
                                         <td>{{ $purchaseOrderList -> QUANTITY }}</td>
-                                        <td><button class='btn btn-error' type='button' id='btn-remove'> Remove </button></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -96,7 +94,7 @@
                 </div>
                 <div class="box-footer">
                     <div class="form-group col-md-3 pull-right">
-                        <button class="form-control btn btn-info" type="submit"> Add Purchase Order </button>
+                      {{--  <button class="form-control btn btn-info" type="submit"> Add Purchase Order </button>--}}
                     </div>
                 </div>
 

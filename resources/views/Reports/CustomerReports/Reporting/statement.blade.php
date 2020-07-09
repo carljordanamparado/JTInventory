@@ -159,12 +159,10 @@
             $('#salesInvoice').DataTable( {
                 dom: 'Bfrtip',
                 buttons: [
-                    {
-                        extend: 'pdfHtml5',
-                        orientation: 'portrait',
-                        pageSize: 'LEGAL'
-                    }
-                ]
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                orientation: 'landscape',
+                pageSize: 'A5'
             } );
 
         } );

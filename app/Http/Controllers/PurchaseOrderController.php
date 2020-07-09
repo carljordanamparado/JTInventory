@@ -28,7 +28,6 @@ class PurchaseOrderController extends Controller
         $client = DB::table('client')
             ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
             ->select('client.*', 'client_type.CLIENT_TYPE')
-            ->where('STATUS', '1')
             ->get();
         return view('purchase_order.addpurchaseorder')
             ->with('client', $client);
@@ -110,6 +109,15 @@ class PurchaseOrderController extends Controller
             ->join('products', 'client_po_list.PRODUCT' ,'=', 'products.PROD_CODE')
             ->where('PO_NO', $id)
             ->get();
+
+        if($purchaseOrderList->isEmpty()){
+            $purchaseOrderList = DB::table('client_po_list')
+                ->join('products', 'client_po_list.PRODUCT' ,'=', 'products.PRODUCT')
+                ->where('PO_NO', $id)
+                ->get();
+        }
+
+
 
 
         return view('purchase_order.editpurchaseorder')

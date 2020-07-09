@@ -96,6 +96,13 @@
                 dropdownAutoWidth: true,
             });
 
+            $('#deliveryInvoice, #delivery').DataTable({
+                "paging":   true,
+                "ordering": true,
+                "info":     true,
+                'searching': true,
+            });
+
             $('#invoiceValidate').on('click', function(){
                 var deliveryNo = $('#deliveryNo').val();
                 var buttonVal = $('#invoiceValidate').val();

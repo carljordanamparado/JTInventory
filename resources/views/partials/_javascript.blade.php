@@ -36,6 +36,15 @@
 <script src="{{ asset('js/demo.js')}}"></script>
 
 <script src="{{ asset('Datatables/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('Datatables/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('Datatables/js/buttons.flash.min.js') }}"></script>
+<script src="{{ asset('Datatables/js/jszip.min.js') }}"></script>
+<script src="{{ asset('Datatables/js/pdfmake.min.js') }}"></script>
+<script src="{{ asset('Datatables/js/vfs_fonts.js') }}"></script>
+<script src="{{ asset('Datatables/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('Datatables/js/buttons.print.min.js') }}"></script>
+
+
 
 
 

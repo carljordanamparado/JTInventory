@@ -57,6 +57,7 @@ class ReportPageController extends Controller
                 ->where('a.CLIENT_ID', $id)
                 ->get();
         }else{
+
             $sales_invoice = db::table('sales_invoice as a')
                 ->select('a.INVOICE_NO', 'a.INVOICE_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
                 ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
@@ -276,6 +277,323 @@ class ReportPageController extends Controller
     }
 
     public function summary_account(Request $request){
+
+    }
+
+    public function statement_cylinder(Request $request){
+        $id = $request -> custDetails;
+
+        DB::table('summary_cylinder_balance_report')->truncate();
+
+        $C2H2_PRESTOLITE_BAL = 0;
+        $C2H2_MEDIUM_BAL = 0;
+        $C2H2_STANDARD_BAL = 0;
+        $AR_STANDARD_BAL = 0;
+        $CO2_FLASK_BAL = 0;
+        $CO2_STANDARD_BAL = 0;
+        $IO2_FLASK_BAL = 0;
+        $IO2_MEDIUM_BAL = 0;
+        $IO2_STANDARD_BAL = 0;
+        $LPG_11KG_BAL = 0;
+        $LPG_22KG_BAL = 0;
+        $LPG_50KG_BAL = 0;
+        $MO2_FLASK_BAL = 0;
+        $MO2_MEDIUM_BAL = 0;
+        $MO2_STANDARD_BAL = 0;
+        $N2_FLASK_BAL = 0;
+        $N2_STANDARD_BAL = 0;
+        $N2O_FLASK_BAL = 0;
+        $N2O_STANDARD_BAL = 0;
+        $H_STANDARD_BAL = 0;
+        $COMPMED_STANDARD_BAL = 0;
+
+        $query1 = db::table('delivery_new as a')
+            ->join('cylinder_loan_contract as b', 'a.CLC_NO', '=', 'b.CLC_NO')
+            ->where('b.CLIENT_NO', $id)
+            ->orderBy('a.INVOICE_DATE')
+            ->get();
+
+        foreach($query1 as $query1){
+
+            $C2H2_PRESTOLITE_BAL = $C2H2_PRESTOLITE_BAL + $query1 -> C2H2_PRESTOLITE;
+            $C2H2_MEDIUM_BAL = $C2H2_MEDIUM_BAL + $query1 -> C2H2_MEDIUM;
+            $C2H2_STANDARD_BAL = $C2H2_STANDARD_BAL + $query1 -> C2H2_STANDARD;
+            $AR_STANDARD_BAL = $AR_STANDARD_BAL + $query1 -> AR_STANDARD;
+            $CO2_FLASK_BAL = $CO2_FLASK_BAL + $query1 -> CO2_FLASK;
+            $CO2_STANDARD_BAL = $CO2_STANDARD_BAL + $query1 -> CO2_STANDARD;
+            $IO2_FLASK_BAL = $IO2_FLASK_BAL + $query1 -> IO2_FLASK;
+            $IO2_MEDIUM_BAL = $IO2_MEDIUM_BAL + $query1 -> IO2_MEDIUM;
+            $IO2_STANDARD_BAL = $IO2_STANDARD_BAL + $query1 -> IO2_STANDARD;
+            $LPG_11KG_BAL = $LPG_11KG_BAL + $query1 -> LPG_11KG;
+            $LPG_22KG_BAL = $LPG_22KG_BAL + $query1 -> LPG_22KG;
+            $LPG_50KG_BAL = $LPG_50KG_BAL + $query1 -> LPG_50KG;
+            $MO2_FLASK_BAL = $MO2_FLASK_BAL + $query1 -> MO2_FLASK;
+            $MO2_MEDIUM_BAL = $MO2_MEDIUM_BAL + $query1 -> MO2_MEDIUM;
+            $MO2_STANDARD_BAL = $MO2_STANDARD_BAL + $query1 -> MO2_STANDARD;
+            $N2_FLASK_BAL = $N2_FLASK_BAL + $query1 -> N2_FLASK;
+            $N2_STANDARD_BAL = $N2_STANDARD_BAL + $query1 -> N2_STANDARD;
+            $N2O_FLASK_BAL = $N2O_FLASK_BAL + $query1 -> N2O_FLASK;
+            $N2O_STANDARD_BAL = $N2O_STANDARD_BAL + $query1 -> N2O_STANDARD;
+            $H_STANDARD_BAL = $H_STANDARD_BAL + $query1 -> H_STANDARD;
+            $COMPMED_STANDARD_BAL = $COMPMED_STANDARD_BAL + $query1 -> COMPMED_STANDARD;
+
+            $query_1_data = array([
+                'INVOICE_NO' => $query1 -> INVOICE_NO,
+                'INVOICE_DATE' => $query1 -> INVOICE_DATE,
+                'ICR_NO' =>$query1 -> ICR_NO,
+                'CLC_NO'  => $query1 -> CLC_NO,
+                'C2H2_PRESTOLITE_DELIVER' => $query1 -> C2H2_PRESTOLITE,
+                'C2H2_PRESTOLITE_BALANCE' => $C2H2_PRESTOLITE_BAL,
+                'C2H2_MEDIUM_DELIVER' => $query1 -> C2H2_MEDIUM,
+                'C2H2_MEDIUM_BALANCE' => $C2H2_MEDIUM_BAL,
+                'C2H2_STANDARD_DELIVER' => $query1 -> C2H2_STANDARD,
+                'C2H2_STANDARD_BALANCE' => $C2H2_STANDARD_BAL,
+                'AR_STANDARD_DELIVER' => $query1 -> AR_STANDARD,
+                'AR_STANDARD_BALANCE' => $AR_STANDARD_BAL,
+                'CO2_FLASK_DELIVER' => $query1->CO2_FLASK,
+                'CO2_FLASK_BALANCE' => $CO2_FLASK_BAL,
+                'CO2_STANDARD_DELIVER' => $query1 -> CO2_STANDARD,
+                'CO2_STANDARD_BALANCE' => $CO2_STANDARD_BAL,
+                'IO2_FLASK_DELIVER' => $query1 -> IO2_FLASK,
+                'IO2_FLASK_BALANCE' => $IO2_FLASK_BAL,
+                'IO2_MEDIUM_DELIVER' => $query1 -> IO2_MEDIUM,
+                'IO2_MEDIUM_BALANCE' => $IO2_MEDIUM_BAL,
+                'IO2_STANDARD_DELIVER' => $query1 -> IO2_STANDARD,
+                'IO2_STANDARD_BALANCE' => $IO2_STANDARD_BAL,
+                'LPG_11KG_DELIVER' => $query1 -> LPG_11KG,
+                'LPG_11KG_BALANCE' => $LPG_11KG_BAL,
+                'LPG_22KG_DELIVER' => $query1 -> LPG_22KG,
+                'LPG_22KG_BALANCE' => $LPG_22KG_BAL,
+                'LPG_50KG_DELIVER' => $query1 -> LPG_50KG,
+                'LPG_50KG_BALANCE' => $LPG_50KG_BAL,
+                'MO2_FLASK_DELIVER' => $query1 -> MO2_FLASK,
+                'MO2_FLASK_BALANCE' => $MO2_FLASK_BAL,
+                'MO2_MEDIUM_DELIVER' => $query1 -> MO2_MEDIUM,
+                'MO2_MEDIUM_BALANCE' => $MO2_MEDIUM_BAL,
+                'MO2_STANDARD_DELIVER' => $query1 -> MO2_STANDARD,
+                'MO2_STANDARD_BALANCE' => $MO2_STANDARD_BAL,
+                'N2_FLASK_DELIVER' => $query1 -> N2_FLASK,
+                'N2_FLASK_BALANCE' => $N2_FLASK_BAL,
+                'N2_STANDARD_DELIVER' => $query1 -> N2_STANDARD,
+                'N2_STANDARD_BALANCE' => $N2_STANDARD_BAL,
+                'N2O_FLASK_DELIVER' => $query1 -> N2O_FLASK,
+                'N2O_FLASK_BALANCE' => $N2O_FLASK_BAL,
+                'N2O_STANDARD_DELIVER' => $query1 -> N2O_STANDARD,
+                'N2O_STANDARD_BALANCE' => $N2O_STANDARD_BAL,
+                'H_STANDARD_DELIVER' => $query1 -> H_STANDARD,
+                'H_STANDARD_BALANCE' => $H_STANDARD_BAL,
+                'COMPMED_STANDARD_DELIVER' => $query1 -> COMPMED_STANDARD,
+                'COMPMED_STANDARD_BALANCE' => $COMPMED_STANDARD_BAL
+            ]);
+
+            db::table('summary_cylinder_balance_report')
+                ->insert($query_1_data);
+
+            $query2 = db::table('sales_invoice as a')
+                ->where('a.CLIENT_ID', $id)
+                ->where('a.INVOICE_DATE', '>=', $query1 -> INVOICE_DATE)
+                ->orderBy('a.INVOICE_DATE', 'ASC')
+                ->get();
+
+            if($query2->isEmpty()){
+
+            }else{
+                foreach($query2 as $row2){
+                    $query111 = db::table('cylinder_loan_contract as a')
+                        ->where('a.INVOICE', $row2 -> INVOICE_NO)
+                        ->where('a.CLIENT_NO', $id)
+                        ->orderBy('a.CLC_DATE', 'ASC')
+                        ->get();
+
+                    if($query2->count() > 1){
+
+                    }else{
+                        foreach($query111 as $row112){
+                            if($row112 -> CLC_NO != $query1->CLC_NO){
+
+                                $query3 = db::table('delivery_new as a')
+                                    ->where('a.INVOICE_NO', $row2 -> INVOICE_NO)
+                                    ->where('a.INVOICE_DATE', $row2 -> INVOICE_DATE)
+                                    ->get();
+
+                                if($query3 ->isEmpty()){
+
+                                }else{
+                                    foreach($query3 as $row3){
+                                        $C2H2_PRESTOLITE_BAL = $C2H2_PRESTOLITE_BAL + $row3 -> C2H2_PRESTOLITE;
+                                        $C2H2_MEDIUM_BAL = $C2H2_MEDIUM_BAL + $row3 -> C2H2_MEDIUM;
+                                        $C2H2_STANDARD_BAL = $C2H2_STANDARD_BAL + $row3 -> C2H2_STANDARD;
+                                        $AR_STANDARD_BAL = $AR_STANDARD_BAL + $row3 -> AR_STANDARD;
+                                        $CO2_FLASK_BAL = $CO2_FLASK_BAL + $row3 -> CO2_FLASK;
+                                        $CO2_STANDARD_BAL = $CO2_STANDARD_BAL + $row3 -> CO2_STANDARD;
+                                        $IO2_FLASK_BAL = $IO2_FLASK_BAL + $row3 -> IO2_FLASK;
+                                        $IO2_MEDIUM_BAL = $IO2_MEDIUM_BAL + $row3 -> IO2_MEDIUM;
+                                        $IO2_STANDARD_BAL = $IO2_STANDARD_BAL + $row3 -> IO2_STANDARD;
+                                        $LPG_11KG_BAL = $LPG_11KG_BAL + $row3 -> LPG_11KG;
+                                        $LPG_22KG_BAL = $LPG_22KG_BAL + $row3 -> LPG_22KG;
+                                        $LPG_50KG_BAL = $LPG_50KG_BAL + $row3 -> LPG_50KG;
+                                        $MO2_FLASK_BAL = $MO2_FLASK_BAL + $row3 -> MO2_FLASK;
+                                        $MO2_MEDIUM_BAL = $MO2_MEDIUM_BAL + $row3 -> MO2_MEDIUM;
+                                        $MO2_STANDARD_BAL = $MO2_STANDARD_BAL + $row3 -> MO2_STANDARD;
+                                        $N2_FLASK_BAL = $N2_FLASK_BAL + $row3 -> N2_FLASK;
+                                        $N2_STANDARD_BAL = $N2_STANDARD_BAL + $row3 -> N2_STANDARD;
+                                        $N2O_FLASK_BAL = $N2O_FLASK_BAL + $row3 -> N2O_FLASK;
+                                        $N2O_STANDARD_BAL = $N2O_STANDARD_BAL + $row3 -> N2O_STANDARD;
+                                        $H_STANDARD_BAL = $H_STANDARD_BAL + $row3 -> H_STANDARD;
+                                        $COMPMED_STANDARD_BAL = $COMPMED_STANDARD_BAL + $row3 -> COMPMED_STANDARD;
+
+                                        $query_2_data = array([
+                                            'INVOICE_NO' => $row3 -> INVOICE_NO,
+                                            'INVOICE_DATE' => $row3 -> INVOICE_DATE,
+                                            'ICR_NO' =>$row3 -> ICR_NO,
+                                            'CLC_NO'  => $row3 -> CLC_NO,
+                                            'C2H2_PRESTOLITE_DELIVER' => $row3 -> C2H2_PRESTOLITE,
+                                            'C2H2_PRESTOLITE_BALANCE' => $C2H2_PRESTOLITE_BAL,
+                                            'C2H2_MEDIUM_DELIVER' => $row3 -> C2H2_MEDIUM,
+                                            'C2H2_MEDIUM_BALANCE' => $C2H2_MEDIUM_BAL,
+                                            'C2H2_STANDARD_DELIVER' => $row3 -> C2H2_STANDARD,
+                                            'C2H2_STANDARD_BALANCE' => $C2H2_STANDARD_BAL,
+                                            'AR_STANDARD_DELIVER' => $row3 -> AR_STANDARD,
+                                            'AR_STANDARD_BALANCE' => $AR_STANDARD_BAL,
+                                            'CO2_FLASK_DELIVER' => $row3->CO2_FLASK,
+                                            'CO2_FLASK_BALANCE' => $CO2_FLASK_BAL,
+                                            'CO2_STANDARD_DELIVER' => $row3 -> CO2_STANDARD,
+                                            'CO2_STANDARD_BALANCE' => $CO2_STANDARD_BAL,
+                                            'IO2_FLASK_DELIVER' => $row3 -> IO2_FLASK,
+                                            'IO2_FLASK_BALANCE' => $IO2_FLASK_BAL,
+                                            'IO2_MEDIUM_DELIVER' => $row3 -> IO2_MEDIUM,
+                                            'IO2_MEDIUM_BALANCE' => $IO2_MEDIUM_BAL,
+                                            'IO2_STANDARD_DELIVER' => $row3 -> IO2_STANDARD,
+                                            'IO2_STANDARD_BALANCE' => $IO2_STANDARD_BAL,
+                                            'LPG_11KG_DELIVER' => $row3 -> LPG_11KG,
+                                            'LPG_11KG_BALANCE' => $LPG_11KG_BAL,
+                                            'LPG_22KG_DELIVER' => $row3 -> LPG_22KG,
+                                            'LPG_22KG_BALANCE' => $LPG_22KG_BAL,
+                                            'LPG_50KG_DELIVER' => $row3 -> LPG_50KG,
+                                            'LPG_50KG_BALANCE' => $LPG_50KG_BAL,
+                                            'MO2_FLASK_DELIVER' => $row3 -> MO2_FLASK,
+                                            'MO2_FLASK_BALANCE' => $MO2_FLASK_BAL,
+                                            'MO2_MEDIUM_DELIVER' => $row3 -> MO2_MEDIUM,
+                                            'MO2_MEDIUM_BALANCE' => $MO2_MEDIUM_BAL,
+                                            'MO2_STANDARD_DELIVER' => $row3 -> MO2_STANDARD,
+                                            'MO2_STANDARD_BALANCE' => $MO2_STANDARD_BAL,
+                                            'N2_FLASK_DELIVER' => $row3 -> N2_FLASK,
+                                            'N2_FLASK_BALANCE' => $N2_FLASK_BAL,
+                                            'N2_STANDARD_DELIVER' => $row3 -> N2_STANDARD,
+                                            'N2_STANDARD_BALANCE' => $N2_STANDARD_BAL,
+                                            'N2O_FLASK_DELIVER' => $row3 -> N2O_FLASK,
+                                            'N2O_FLASK_BALANCE' => $N2O_FLASK_BAL,
+                                            'N2O_STANDARD_DELIVER' => $row3 -> N2O_STANDARD,
+                                            'N2O_STANDARD_BALANCE' => $N2O_STANDARD_BAL,
+                                            'H_STANDARD_DELIVER' => $row3 -> H_STANDARD,
+                                            'H_STANDARD_BALANCE' => $H_STANDARD_BAL,
+                                            'COMPMED_STANDARD_DELIVER' => $row3 -> COMPMED_STANDARD,
+                                            'COMPMED_STANDARD_BALANCE' => $COMPMED_STANDARD_BAL
+                                        ]);
+
+                                        db::table('summary_cylinder_balance_report')
+                                            ->insert($query_2_data);
+                                    }
+                                }
+                            }
+                            $query5 = db::table('pickup_new as a')
+                                ->where('a.INVOICE', $row2 -> INVOICE_NO)
+                                ->where('a.INVOICE_DATE', $row2 -> INVOICE_DATE)
+                                ->get();
+
+                            if($query5 -> isEmpty()){
+
+                            }else{
+
+                                foreach($query5 as $row4){
+                                    $C2H2_PRESTOLITE_BAL = $C2H2_PRESTOLITE_BAL - $row4 -> C2H2_PRESTOLITE;
+                                    $C2H2_MEDIUM_BAL = $C2H2_MEDIUM_BAL - $row4 -> C2H2_MEDIUM;
+                                    $C2H2_STANDARD_BAL = $C2H2_STANDARD_BAL - $row4 -> C2H2_STANDARD;
+                                    $AR_STANDARD_BAL = $AR_STANDARD_BAL - $row4 -> AR_STANDARD;
+                                    $CO2_FLASK_BAL = $CO2_FLASK_BAL - $row4 -> CO2_FLASK;
+                                    $CO2_STANDARD_BAL = $CO2_STANDARD_BAL - $row4 -> CO2_STANDARD;
+                                    $IO2_FLASK_BAL = $IO2_FLASK_BAL - $row4 -> IO2_FLASK;
+                                    $IO2_MEDIUM_BAL = $IO2_MEDIUM_BAL - $row4 -> IO2_MEDIUM;
+                                    $IO2_STANDARD_BAL = $IO2_STANDARD_BAL - $row4 -> IO2_STANDARD;
+                                    $LPG_11KG_BAL = $LPG_11KG_BAL - $row4 -> LPG_11KG;
+                                    $LPG_22KG_BAL = $LPG_22KG_BAL - $row4 -> LPG_22KG;
+                                    $LPG_50KG_BAL = $LPG_50KG_BAL - $row4 -> LPG_50KG;
+                                    $MO2_FLASK_BAL = $MO2_FLASK_BAL - $row4 -> MO2_FLASK;
+                                    $MO2_MEDIUM_BAL = $MO2_MEDIUM_BAL - $row4 -> MO2_MEDIUM;
+                                    $MO2_STANDARD_BAL = $MO2_STANDARD_BAL - $row4 -> MO2_STANDARD;
+                                    $N2_FLASK_BAL = $N2_FLASK_BAL - $row4 -> N2_FLASK;
+                                    $N2_STANDARD_BAL = $N2_STANDARD_BAL - $row4 -> N2_STANDARD;
+                                    $N2O_FLASK_BAL = $N2O_FLASK_BAL - $row4 -> N2O_FLASK;
+                                    $N2O_STANDARD_BAL = $N2O_STANDARD_BAL - $row4 -> N2O_STANDARD;
+                                    $H_STANDARD_BAL = $H_STANDARD_BAL - $row4 -> H_STANDARD;
+                                    $COMPMED_STANDARD_BAL = $COMPMED_STANDARD_BAL - $row4 -> COMPMED_STANDARD;
+
+                                    $query_3_data = array([
+                                        'INVOICE_NO' => $row4 -> INVOICE_NO,
+                                        'INVOICE_DATE' => $row4 -> INVOICE_DATE,
+                                        'ICR_NO' =>$row4 -> ICR_NO,
+                                        'CLC_NO'  => $row4 -> CLC_NO,
+                                        'C2H2_PRESTOLITE_PICKUP' => $row4 -> C2H2_PRESTOLITE,
+                                        'C2H2_PRESTOLITE_BALANCE' => $C2H2_PRESTOLITE_BAL,
+                                        'C2H2_MEDIUM_PICKUP' => $row4 -> C2H2_MEDIUM,
+                                        'C2H2_MEDIUM_BALANCE' => $C2H2_MEDIUM_BAL,
+                                        'C2H2_STANDARD_PICKUP' => $row4 -> C2H2_STANDARD,
+                                        'C2H2_STANDARD_BALANCE' => $C2H2_STANDARD_BAL,
+                                        'AR_STANDARD_PICKUP' => $row4 -> AR_STANDARD,
+                                        'AR_STANDARD_BALANCE' => $AR_STANDARD_BAL,
+                                        'CO2_FLASK_PICKUP' => $row4->CO2_FLASK,
+                                        'CO2_FLASK_BALANCE' => $CO2_FLASK_BAL,
+                                        'CO2_STANDARD_PICKUP' => $row4 -> CO2_STANDARD,
+                                        'CO2_STANDARD_BALANCE' => $CO2_STANDARD_BAL,
+                                        'IO2_FLASK_PICKUP' => $row4 -> IO2_FLASK,
+                                        'IO2_FLASK_BALANCE' => $IO2_FLASK_BAL,
+                                        'IO2_MEDIUM_PICKUP' => $row4 -> IO2_MEDIUM,
+                                        'IO2_MEDIUM_BALANCE' => $IO2_MEDIUM_BAL,
+                                        'IO2_STANDARD_PICKUP' => $row4 -> IO2_STANDARD,
+                                        'IO2_STANDARD_BALANCE' => $IO2_STANDARD_BAL,
+                                        'LPG_11KG_PICKUP' => $row4 -> LPG_11KG,
+                                        'LPG_11KG_BALANCE' => $LPG_11KG_BAL,
+                                        'LPG_22KG_PICKUP' => $row4 -> LPG_22KG,
+                                        'LPG_22KG_BALANCE' => $LPG_22KG_BAL,
+                                        'LPG_50KG_PICKUP' => $row4 -> LPG_50KG,
+                                        'LPG_50KG_BALANCE' => $LPG_50KG_BAL,
+                                        'MO2_FLASK_PICKUP' => $row4 -> MO2_FLASK,
+                                        'MO2_FLASK_BALANCE' => $MO2_FLASK_BAL,
+                                        'MO2_MEDIUM_PICKUP' => $row4 -> MO2_MEDIUM,
+                                        'MO2_MEDIUM_BALANCE' => $MO2_MEDIUM_BAL,
+                                        'MO2_STANDARD_PICKUP' => $row4 -> MO2_STANDARD,
+                                        'MO2_STANDARD_BALANCE' => $MO2_STANDARD_BAL,
+                                        'N2_FLASK_PICKUP' => $row4 -> N2_FLASK,
+                                        'N2_FLASK_BALANCE' => $N2_FLASK_BAL,
+                                        'N2_STANDARD_PICKUP' => $row4 -> N2_STANDARD,
+                                        'N2_STANDARD_BALANCE' => $N2_STANDARD_BAL,
+                                        'N2O_FLASK_PICKUP' => $row4 -> N2O_FLASK,
+                                        'N2O_FLASK_BALANCE' => $N2O_FLASK_BAL,
+                                        'N2O_STANDARD_PICKUP' => $row4 -> N2O_STANDARD,
+                                        'N2O_STANDARD_BALANCE' => $N2O_STANDARD_BAL,
+                                        'H_STANDARD_PICKUP' => $row4 -> H_STANDARD,
+                                        'H_STANDARD_BALANCE' => $H_STANDARD_BAL,
+                                        'COMPMED_STANDARD_PICKUP' => $row4 -> COMPMED_STANDARD,
+                                        'COMPMED_STANDARD_BALANCE' => $COMPMED_STANDARD_BAL
+                                    ]);
+
+                                    db::table('summary_cylinder_balance_report')
+                                        ->insert($query_3_data);
+                                } // End Foreach of Row4
+                            }
+                        } // End Foreach of Row1112
+                    }
+                } // End Foreach of Query 2
+            }
+        }// End Foreach of Query1
+
+        $summary_cylinder_report = db::table('summary_cylinder_balance_report')
+            ->get();
+
+//        dd($summary_cylinder_report);
+
+        return view('Reports.CustomerReports.Reporting.statementcylinder')
+            ->with('reportdata',$summary_cylinder_report);
 
     }
 

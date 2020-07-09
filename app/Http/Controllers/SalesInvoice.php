@@ -235,6 +235,301 @@ class SalesInvoice extends Controller
             db::table('si_assigned_report')
                     ->insert($noController);
 
+            if($request -> cylinderType == 1){ // ICR
+                 if($request -> inputtedTypeId == ""){ // Inputted ICR ID
+
+                 }else{
+
+                     db::table('cylinder_receipt')
+                         ->where('ICR_NO', $request->inputtedTypeId)
+                         ->update([
+                             'ICR_TAG' => "1"
+                         ]);
+
+                     $delivery_qty1 = 0 ; $delivery_qty6 = 0 ; $delivery_qty10 = 0 ; $delivery_qty14 = 0 ; $delivery_qty18 = 0 ;
+                     $delivery_qty2 = 0 ; $delivery_qty7 = 0 ; $delivery_qty11 = 0 ; $delivery_qty15 = 0 ; $delivery_qty19 = 0 ;
+                     $delivery_qty3 = 0 ; $delivery_qty8 = 0 ; $delivery_qty12 = 0 ; $delivery_qty16 = 0 ; $delivery_qty20 = 0 ;
+                     $delivery_qty4 = 0 ; $delivery_qty9 = 0 ; $delivery_qty13 = 0 ; $delivery_qty17 = 0 ; $delivery_qty21 = 0 ;
+                     $delivery_qty5 = 0 ;
+
+                     for($i = 0; $i < count($request -> productCode) ; $i++ ){
+
+                         if($request -> productCode[$i] == "C2H2"){
+                             if($request -> productSize[$i] == "PRESTOLITE"){
+                                 $delivery_qty1 += (int) $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "MEDIUM"){
+                                 $delivery_qty2 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty3 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "AR"){
+                             if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty4 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "CO2"){
+                             if($request -> productSize[$i] == "PRESTOLITE") {
+                                 $delivery_qty5 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty6 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "H"){
+                             if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty7 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "IO2"){
+                             if($request -> productSize[$i] == "FLASK"){
+                                 $delivery_qty8 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "MEDIUM"){
+                                 $delivery_qty9 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty10 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "LPG"){
+                             if($request -> productSize[$i] == "11KG"){
+                                 $delivery_qty11 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "22KG"){
+                                 $delivery_qty12 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "50KG"){
+                                 $delivery_qty13 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "MO2"){
+                             if($request -> productSize[$i] == "FLASK"){
+                                 $delivery_qty14 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "MEDIUM"){
+                                 $delivery_qty15 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty16 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "N2"){
+                             if($request -> productSize[$i] == "FLASK"){
+                                 $delivery_qty17 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty18 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "N20"){
+                             if($request -> productSize[$i] == "FLASK"){
+                                 $delivery_qty19 = $request -> productQty[$i];
+                             }if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty20 = $request -> productQty[$i];
+                             }
+                         }if($request -> productCode[$i] == "COMPMED"){
+                             if($request -> productSize[$i] == "STANDARD"){
+                                 $delivery_qty21 = $request -> productQty[$i];
+                             }
+                         }
+                     }
+
+                     $delivery_new_data = array([
+                         'INVOICE_NO' => $request -> invoiceNo,
+                         'INVOICE_DATE' => $request -> invoiceDate,
+                         'ICR_NO' => $request -> inputtedTypeId,
+                         'C2H2_PRESTOLITE' =>$delivery_qty1,
+                         'C2H2_MEDIUM' =>$delivery_qty2,
+                         'C2H2_STANDARD' =>$delivery_qty3,
+                         'AR_STANDARD' =>$delivery_qty4,
+                         'CO2_FLASK' =>$delivery_qty5,
+                         'CO2_STANDARD' =>$delivery_qty6,
+                         'H_STANDARD' =>$delivery_qty7,
+                         'IO2_FLASK' =>$delivery_qty8,
+                         'IO2_MEDIUM' =>$delivery_qty9,
+                         'IO2_STANDARD'=>$delivery_qty10,
+                         'LPG_11KG'=>$delivery_qty11,
+                         'LPG_22KG'=>$delivery_qty12,
+                         'LPG_50KG'=>$delivery_qty13,
+                         'MO2_FLASK'=>$delivery_qty14,
+                         'MO2_MEDIUM'=>$delivery_qty15,
+                         'MO2_STANDARD'=>$delivery_qty16,
+                         'N2_FLASK'=>$delivery_qty17,
+                         'N2_STANDARD'=>$delivery_qty18,
+                         'N2O_FLASK'=>$delivery_qty19,
+                         'N2O_STANDARD'=>$delivery_qty20,
+                         'COMPMED_STANDARD'=>$delivery_qty21
+                     ]);
+
+                     db::table('delivery_new')
+                         ->insert($delivery_new_data);
+
+                     db::table('pickup_new')
+                         ->where('ICR_NO', $request->inputtedTypeId)
+                         ->update(['INVOICE_NO' => $request -> invoiceNo]);
+                 }
+
+
+            }elseif($request -> cylinderType == 2){ // CLC
+                if($request -> inputtedTypeId == ""){
+
+                }else{
+
+                    db::table('delivery_new')
+                        ->where('CLC_NO', $request->inputtedTypeId)
+                        ->update(['INVOICE_NO' => $request -> invoiceNo]);
+
+                    db::table('cylinder_loan_contract')
+                        ->where('CLC_NO', $request->inputtedTypeId)
+                        ->update([
+                            'CLC_TAG' => "1"
+                        ]);
+
+
+                }
+            }elseif($request->cylinderType == 0){
+                if($request -> inputtedTypeId == ""){
+
+                }else {
+                    $delivery_qty1 = 0 ; $delivery_qty6 = 0 ; $delivery_qty10 = 0 ; $delivery_qty14 = 0 ; $delivery_qty18 = 0 ;
+                        $delivery_qty2 = 0 ; $delivery_qty7 = 0 ; $delivery_qty11 = 0 ; $delivery_qty15 = 0 ; $delivery_qty19 = 0 ;
+                        $delivery_qty3 = 0 ; $delivery_qty8 = 0 ; $delivery_qty12 = 0 ; $delivery_qty16 = 0 ; $delivery_qty20 = 0 ;
+                        $delivery_qty4 = 0 ; $delivery_qty9 = 0 ; $delivery_qty13 = 0 ; $delivery_qty17 = 0 ; $delivery_qty21 = 0 ;
+                        $delivery_qty5 = 0 ;
+
+                        for($i = 0; $i < count($request -> productCode) ; $i++ ){
+
+                            if($request -> productCode[$i] == "C2H2"){
+                                if($request -> productSize[$i] == "PRESTOLITE"){
+                                    $delivery_qty1 += (int) $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "MEDIUM"){
+                                    $delivery_qty2 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty3 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "AR"){
+                                if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty4 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "CO2"){
+                                if($request -> productSize[$i] == "PRESTOLITE") {
+                                    $delivery_qty5 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty6 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "H"){
+                                if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty7 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "IO2"){
+                                if($request -> productSize[$i] == "FLASK"){
+                                    $delivery_qty8 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "MEDIUM"){
+                                    $delivery_qty9 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty10 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "LPG"){
+                                if($request -> productSize[$i] == "11KG"){
+                                    $delivery_qty11 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "22KG"){
+                                    $delivery_qty12 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "50KG"){
+                                    $delivery_qty13 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "MO2"){
+                                if($request -> productSize[$i] == "FLASK"){
+                                    $delivery_qty14 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "MEDIUM"){
+                                    $delivery_qty15 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty16 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "N2"){
+                                if($request -> productSize[$i] == "FLASK"){
+                                    $delivery_qty17 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty18 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "N20"){
+                                if($request -> productSize[$i] == "FLASK"){
+                                    $delivery_qty19 = $request -> productQty[$i];
+                                }if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty20 = $request -> productQty[$i];
+                                }
+                            }if($request -> productCode[$i] == "COMPMED"){
+                                if($request -> productSize[$i] == "STANDARD"){
+                                    $delivery_qty21 = $request -> productQty[$i];
+                                }
+                            }
+
+                        }
+
+                        $delivery_new_data = array([
+                            'INVOICE_NO' => $request -> invoiceNo,
+                            'INVOICE_DATE' => $request -> invoiceDate,
+                            'CLC_NO' => $request -> inputtedTypeId,
+                            'C2H2_PRESTOLITE' =>$delivery_qty1,
+                            'C2H2_MEDIUM' =>$delivery_qty2,
+                            'C2H2_STANDARD' =>$delivery_qty3,
+                            'AR_STANDARD' =>$delivery_qty4,
+                            'CO2_FLASK' =>$delivery_qty5,
+                            'CO2_STANDARD' =>$delivery_qty6,
+                            'H_STANDARD' =>$delivery_qty7,
+                            'IO2_FLASK' =>$delivery_qty8,
+                            'IO2_MEDIUM' =>$delivery_qty9,
+                            'IO2_STANDARD'=>$delivery_qty10,
+                            'LPG_11KG'=>$delivery_qty11,
+                            'LPG_22KG'=>$delivery_qty12,
+                            'LPG_50KG'=>$delivery_qty13,
+                            'MO2_FLASK'=>$delivery_qty14,
+                            'MO2_MEDIUM'=>$delivery_qty15,
+                            'MO2_STANDARD'=>$delivery_qty16,
+                            'N2_FLASK'=>$delivery_qty17,
+                            'N2_STANDARD'=>$delivery_qty18,
+                            'N2O_FLASK'=>$delivery_qty19,
+                            'N2O_STANDARD'=>$delivery_qty20,
+                            'COMPMED_STANDARD'=>$delivery_qty21
+                        ]);
+
+                    $delivery_new_data2 = array([
+                        'INVOICE_NO' => $request -> invoiceNo,
+                        'INVOICE_DATE' => $request -> invoiceDate,
+                        'ICR_NO' => $request -> inputtedTypeId,
+                        'C2H2_PRESTOLITE' =>$delivery_qty1,
+                        'C2H2_MEDIUM' =>$delivery_qty2,
+                        'C2H2_STANDARD' =>$delivery_qty3,
+                        'AR_STANDARD' =>$delivery_qty4,
+                        'CO2_FLASK' =>$delivery_qty5,
+                        'CO2_STANDARD' =>$delivery_qty6,
+                        'H_STANDARD' =>$delivery_qty7,
+                        'IO2_FLASK' =>$delivery_qty8,
+                        'IO2_MEDIUM' =>$delivery_qty9,
+                        'IO2_STANDARD'=>$delivery_qty10,
+                        'LPG_11KG'=>$delivery_qty11,
+                        'LPG_22KG'=>$delivery_qty12,
+                        'LPG_50KG'=>$delivery_qty13,
+                        'MO2_FLASK'=>$delivery_qty14,
+                        'MO2_MEDIUM'=>$delivery_qty15,
+                        'MO2_STANDARD'=>$delivery_qty16,
+                        'N2_FLASK'=>$delivery_qty17,
+                        'N2_STANDARD'=>$delivery_qty18,
+                        'N2O_FLASK'=>$delivery_qty19,
+                        'N2O_STANDARD'=>$delivery_qty20,
+                        'COMPMED_STANDARD'=>$delivery_qty21
+                    ]);
+
+                    db::table('delivery_new')
+                        ->insert($delivery_new_data2);
+
+                    db::table('pickup_new')
+                        ->insert($delivery_new_data);
+                }
+            }elseif($request->cylinderType == 3){
+                if($request -> inputtedTypeId == ""){
+
+                }else {
+                    db::table('delivery_new')
+                        ->where('DR_NO', $request->inputtedTypeId)
+                        ->update(['INVOICE_NO' => $request -> invoiceNo]);
+                    db::table('pickup_new')
+                        ->where('DR_NO', $request->inputtedTypeId)
+                        ->update(['INVOICE_NO' => $request -> invoiceNo]);
+
+                    db::table('delivery_receipt')
+                        ->where('DR_NO', $request->inputtedTypeId)
+                        ->update([
+                            'DR_TAG' => "1"
+                        ]);
+
+                }
+            }
+
             return response()->json(array('status' => 'success'));
 
         }catch (Exception $e){

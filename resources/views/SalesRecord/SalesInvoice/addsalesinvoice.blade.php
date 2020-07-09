@@ -199,7 +199,7 @@
                                </select>
                            </div>
                            <div class="form-group col-md-3">
-                               <label for="" id="labelOfType"> &nbsp;</label>
+                               <label for="" id="cylinderIdStatus"> &nbsp;</label>
                                <input type="text" class="form-control" id="inputtedTypeId" name="inputtedTypeId">
                            </div>
                            <div class="form-group col-md-3">

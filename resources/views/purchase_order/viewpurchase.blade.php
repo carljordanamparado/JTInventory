@@ -55,7 +55,7 @@
                                         @endif
                                         <td class="text-center">
                                             <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href="{{ route('PurchaseOrderController.show', $purchaselist->PO_NO) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                <a type="button" class="btn btn-info" href="{{ route('PurchaseOrderController.show', $purchaselist->PO_NO) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>View PO</a>
                                              {{--   <a type="button" class="btn btn-warning"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>--}}
                                             </div>
                                         </td>

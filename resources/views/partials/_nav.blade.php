@@ -51,7 +51,7 @@
       <ul class="treeview-menu">
         <li class="{{ (request()->is('SystemUtilities/SystemUsers')) ? 'active' : '' }}"><a
             href="{{ route('SystemUsers') }}"><i class="fa fa-user"></i> System User </a></li>
-        <li class=""><a href=""><i class="fa fa-history"></i> Audit Trail Monitoring </a></li>
+        {{--<li class=""><a href=""><i class="fa fa-history"></i> Audit Trail Monitoring </a></li>--}}
         <li class=""><a href="{{ route('SalesRepController.index') }}"><i class="fa fa-address-card"></i> Sales
             Representative </a></li>
         <li class=""><a href="{{ route('SalesInvoice.index') }}"><i class="fa fa-clipboard-list"></i> Sales Invoice
@@ -105,8 +105,7 @@
               <li><a data-toggle="modal" data-target="#agingAccount"><i class="fa fa-circle-o"></i> Aging Report </a></li>
               <li><a data-toggle="modal" data-target="#statementAccount"> <i class="fa fa-circle-o"></i> Statement of Account </a></li>
               <li><a data-toggle="modal" data-target="#summaryAccount"> <i class="fa fa-circle-o"></i> Summary of Account </a></li>
-
-
+              <li><a data-toggle="modal" data-target="#cylinderBalModal"> <i class="fa fa-circle-o"></i> Statement of Cylinder Balance </a></li>
             </ul>
           </li>
         </ul>

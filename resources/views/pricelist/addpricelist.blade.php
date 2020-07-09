@@ -135,7 +135,6 @@
 
                                             <div class="btn-group-vertical btn-action">
                                                 <a type="button" class="btn btn-info btn-edit"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                                <a type="button" class="btn btn-warning"><span class="fa fa-trash">&nbsp;&nbsp;</span>Delete</a>
                                             </div>
 
                                             <div class="btn-group-vertical btn-edit-yes hidden">

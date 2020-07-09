@@ -21,7 +21,8 @@
                     <div class="row-content">
                         <div class="col-12">
                             <div class="box-body">
-
+                                <h1 class="text-center">This is dashboard</h1>
+                                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
                             </div>
                             <!-- /.card -->
                         </div>

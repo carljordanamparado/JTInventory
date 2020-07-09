@@ -565,12 +565,91 @@ class JqueryController extends Controller
         $cylinder_type = $request -> cylinder_type;
         $cylinder_id = $request -> id;
 
+
+
         /*
             0 => Empty
             1 => ICR
             2 => CLC
             3 => DR
         */
+
+        if($cylinder_type == "1"){
+
+            $assigned = db::table('icr_assigned')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'icr_assigned.SALESREP_ID')
+                ->where('FROM_NO', '<=', $cylinder_id)
+                ->where('TO_NO', '>=', $cylinder_id)
+                ->get();
+
+
+
+            $issuedBy = '';
+
+            if ($assigned->isEmpty() == false) {
+
+                $report = db::table('icr_assigned_report')
+                    ->where('ICR_NO', $cylinder_id)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+
+                if ($report->isEmpty() == true) {
+                    return response()->json(array('status' => 'ACTIVE'));
+                } else {
+                    foreach ($report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
+
+                }
+            }else{
+                return Response()->json(['status' => 'empty']);
+            }
+        }elseif($cylinder_type == 2){
+            $assigned = db::table('clc_assigned')
+                ->join('sales_rep', 'sales_rep.ID', '=', 'clc_assigned.SALESREP_ID')
+                ->where('FROM_NO', '<=', $cylinder_id)
+                ->where('TO_NO', '>=', $cylinder_id)
+                ->get();
+
+            $issuedBy = '';
+
+            foreach ($assigned as $issuerName) {
+                $issuedBy = $issuerName->ASSIGNED_BY;
+                $issuerID = $issuerName->SALESREP_ID;
+            }
+
+
+            if ($assigned->isEmpty() == false) {
+
+                $report = db::table('clc_assigned_report')
+                    ->where('CLC_NO', $cylinder_id)
+                    ->where(function ($query) {
+                        $query->where('REMARKS', '=', 'DONE')
+                            ->orWhere('REMARKS', '=', 'CANCELLED')
+                            ->orWhere('REMARKS', '=', 'NO RECORD FOUND');
+                    })
+                    ->get();
+
+                if ($report->isEmpty() == true) {
+                    return response()->json(array('status' => 'ACTIVE'));
+                } else {
+                    foreach ($report as $remarks) {
+                        return response()->json(array(['status' => $remarks->REMARKS]));
+                    }
+
+                }
+            }else{
+                return Response()->json(['status' => 'empty']);
+            }
+        }
+
+
+
+
 
     }
 

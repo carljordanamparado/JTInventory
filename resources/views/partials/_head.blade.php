@@ -26,7 +26,8 @@
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet" href="{{ asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
 
-<link rel="stylesheet" href="{{ asset('Datatables/css/jquery.dataTables.css') }}">
+<link rel="stylesheet" href="{{ asset('Datatables/css/jquery.dataTables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/buttons.dataTables.min.css') }}">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
