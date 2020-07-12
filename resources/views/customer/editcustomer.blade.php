@@ -104,10 +104,10 @@
                                 </label>
                                 &nbsp;&nbsp;&nbsp;
                                 <label class="radio-inline">
-                                    <input type="radio" name="orCopy" id="origCopy" @if( floatval($row -> ORCOPY) == 1) checked="checked" @else @endif value="1">Original Copy
+                                    <input type="radio" name="orCopy" id="origCopy" @if( floatval($row -> ORCOPY) == 0) checked="checked" @else @endif value="0">Original Copy
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="orCopy" id="pinkCopy" @if( floatval($row -> ORCOPY) == 2) checked="checked" @else @endif value="2">Pink Copy
+                                    <input type="radio" name="orCopy" id="pinkCopy" @if( floatval($row -> ORCOPY) == 1) checked="checked" @else @endif value="1">Pink Copy
                                 </label>
                             </div>
 

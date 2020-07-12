@@ -65,7 +65,7 @@
                             <tbody>
                                 @foreach($client as $row)
                                     <tr>
-                                        <td>{{ $row -> CLIENTID }}</td>
+                                        <td>{{ $row -> CLIENT_CODE }}</td>
                                         <td>{{ $row -> NAME }}</td>
                                         <td>{{ $row -> CLIENT_TYPE }}</td>
                                         <td>{{ $row -> ADDRESS }}</td>
