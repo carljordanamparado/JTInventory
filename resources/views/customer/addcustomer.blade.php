@@ -70,7 +70,7 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="emailAddress">Email Address</label>
-                        <input type="text" class="form-control" id="emailAddress" data-validation="email" name="emailAddress" placeholder="Email Address">
+                        <input type="text" class="form-control" id="emailAddress"  name="emailAddress" placeholder="Email Address">
                     </div>
                 </div>
 
