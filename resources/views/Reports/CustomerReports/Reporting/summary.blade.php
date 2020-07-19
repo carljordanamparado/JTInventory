@@ -26,34 +26,34 @@
                 <div class="box-body">
                     <div class="box-body table-responsive">
                         <table id="salesInvoice" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th class="text-center">REPORT NO</th>
-                                <th class="text-center">REPORT DATE</th>
-                                <th class="text-center">REPORT PO</th>
-                                <th class="text-center">ACETYLENE</th>
-                                <th class="text-center">INDUSTRIAL OXYGEN</th>
-                                <th class="text-center">MEDICAL OXYGEN(FLASK)</th>
-                                <th class="text-center">MEDICAL OXYGEN(STANDARD)</th>
-                                <th class="text-center">NITROGEN</th>
-                                <th class="text-center">ARGON</th>
-                                <th class="text-center">TOTAL</th>
 
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th class="text-center">REPORT NO</th>
+                                    <th class="text-center">REPORT DATE</th>
+                                    <th class="text-center">REPORT PO</th>
+                                    <th class="text-center">ACETYLENE</th>
+                                    <th class="text-center">INDUSTRIAL OXYGEN</th>
+                                    <th class="text-center">MEDICAL OXYGEN</th>
+                                    <th class="text-center">NITROGEN</th>
+                                    <th class="text-center">ARGON</th>
+                                    <th class="text-center">OTHER CHARGES</th>
+                                    <th class="text-center">TOTAL</th>
+                                </tr>
                             </thead>
                             <tbody class="text-center valueBody">
-                                @foreach($statement as $data)
+                                @foreach($summary_account as $data)
                                     <tr class="text-center">
-                                        <td>{{$data->INVOICE_NO}}</td>
-                                        <td>{{$data->INVOICE_DATE}}</td>
-                                        <td>{{$data->PO_NO}}</td>
-                                        <td>{{$data->C2H2}}</td>
-                                        <td>{{$data->IO2}}</td>
-                                        <td>{{$data->MO2F}}</td>
-                                        <td>{{$data->MO2S}}</td>
-                                        <td>{{$data->N2}}</td>
-                                        <td>{{$data->AR}}</td>
-                                        <td>{{$data->TOTAL}}</td>
+                                        <td> {{ $data -> INVOICE_NO }}</td>
+                                        <td> {{ $data -> INVOICE_DATE }}</td>
+                                        <td> {{ $data -> PO_NO }}</td>
+                                        <td> {{ $data ->  C2H2 }}</td>
+                                        <td> {{ $data -> IO2 }}</td>
+                                        <td> {{ $data -> MO2 }}</td>
+                                        <td> {{ $data -> N2 }}</td>
+                                        <td> {{ $data -> AR }}</td>
+                                        <td> {{ $data -> OTHER_CHARGES }}</td>
+                                        <td> {{ $data -> TOTAL }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -82,7 +82,7 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ],
                 orientation: 'landscape',
-                pageSize: 'A5',
+                pageSize: 'A5'
             } );
 
         } );

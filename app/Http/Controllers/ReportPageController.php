@@ -42,210 +42,200 @@ class ReportPageController extends Controller
         $from_date = $request -> fromDate;
         $to_date =$request -> toDate;
 
-        if($from_date == '' && $to_date == ''){
-            $sales_invoice = db::table('sales_invoice as a')
-                ->select('a.INVOICE_NO', 'a.INVOICE_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
-                ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
-                ->join('sales_invoice_order as c', 'a.INVOICE_NO', '=', 'c.INVOICE_NO')
-                ->where('a.CLIENT_ID', $id)
-                ->get();
-
-            $delivery = db::table('delivery_receipt as a')
-                ->select('a.DR_NO', 'a.DR_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
-                ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
-                ->join('delivery_receipt_order as c', 'a.DR_NO', '=', 'c.DR_NO')
-                ->where('a.CLIENT_ID', $id)
-                ->get();
-        }else{
-
-            $sales_invoice = db::table('sales_invoice as a')
-                ->select('a.INVOICE_NO', 'a.INVOICE_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
-                ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
-                ->join('sales_invoice_order as c', 'a.INVOICE_NO', '=', 'c.INVOICE_NO')
-                ->where('a.CLIENT_ID', $id)
-                ->whereBetween('a.INVOICE_DATE', [$from_date,$to_date])
-                ->get();
-
-            $delivery = db::table('delivery_receipt as a')
-                ->select('a.DR_NO', 'a.DR_DATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO','c.PRODUCT', 'c.SIZE', 'c.QTY')
-                ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
-                ->join('delivery_receipt_order as c', 'a.DR_NO', '=', 'c.DR_NO')
-                ->where('a.CLIENT_ID', $id)
-                ->whereBetween('a.DR_DATE', [$from_date,$to_date])
-                ->get();
-        }
+        db::table('statement_account')->truncate();
 
 
-        $arr = array();
-        $arr2 = array();
+        $sales_invoice = db::table('sales_invoice as a')
+            ->select('a.INVOICE_NO as REPORTNO', 'a.INVOICE_DATE as REPORTDATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO')
+            ->selectRaw(" 'INVOICE' as TYPE")
+            ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
+            ->where('a.CLIENT_ID', $id)
+            ->where('a.STATUS', "1")
+            ->where('a.FULLY_PAID', "0")
+            ->whereBetween('a.INVOICE_DATE', [$from_date, $to_date]);
 
-        for($i = 0; $i < count($sales_invoice) ; $i++){
+        $delivery = db::table('delivery_receipt as a')
+            ->select('a.DR_NO as REPORTNO', 'a.DR_DATE as REPORTDATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO')
+            ->selectRaw(" 'DR' as TYPE")
+            ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
+            ->where('a.CLIENT_ID', $id)
+            ->where('a.STATUS', "1")
+            ->where('a.AS_INVOICE', "1")
+            ->where('a.FULLY_PAID', "0")
+            ->whereBetween('a.DR_DATE', [$from_date, $to_date])
+            ->unionAll($sales_invoice)
+            ->get();
 
-            $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
-            $MO2F = 0; $MO2S = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+        foreach($delivery as $data){
 
-            if($sales_invoice[$i] ->PRODUCT == "C2H2"){
-                $C2H2 += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "AR"){
-                $AR += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "CO2"){
-                $CO2 += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "IO2"){
-                $IO2 += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] -> PRODUCT == "LPG"){
-                $LPG += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "MO2"){
-                if($sales_invoice[$i] -> SIZE == "FLASK"){
-                    $MO2F += (int)$sales_invoice[$i] -> QTY ;
-                }elseif($sales_invoice[$i] -> SIZE == "STANDARD"){
-                    $MO2S += (int)$sales_invoice[$i] -> QTY ;
+            if($data -> TYPE == "INVOICE"){
+
+                $sales_product = db::table('sales_invoice_order')
+                    ->where('INVOICE_NO', $data -> REPORTNO)
+                    ->get();
+
+                $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+                $MO2F = 0; $MO2S = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+
+                foreach($sales_product as $product){
+
+                    if($product ->PRODUCT == "C2H2" || $product ->PRODUCT == "ACETYLENE"){
+                        $C2H2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "AR" || $product ->PRODUCT == "ARGON"){
+                        $AR +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "CO2" || $product ->PRODUCT == "CARBON DIOXIDE"){
+                        $CO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "IO2" || $product ->PRODUCT == "INDUSTRIAL OXYGEN"){
+                        $IO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product -> PRODUCT == "LPG"){
+                        $LPG +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "MO2" || $product ->PRODUCT == "MEDICAL OXYGEN"){
+                        if($product -> SIZE == "FLASK"){
+                            $MO2F += (int)$product -> QTY ;
+                        }elseif($product -> SIZE == "STANDARD"){
+                            $MO2S += (int)$product -> QTY ;
+                        }
+                    }
+                    if($product ->PRODUCT == "N2" || $product ->PRODUCT == "NITROGEN"){
+                        $N2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "N20" || $product ->PRODUCT == "NITROUS OXIDE"){
+                        $N20 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "H" || $product ->PRODUCT == "HYDROGEN"){
+                        $H +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "COMPMED" || $product ->PRODUCT == "COMPRESSED AIR"){
+                        $COMPMED +=  (int)$product -> QTY ;
+                    }
+
+                    $totalOther2 = 0;
+
+                    $sales_other = db::table('other_charges')
+                        ->select('QUANTITY', 'UNIT_PRICE')
+                        ->where('INVOICE_NO', $product -> INVOICE_NO)
+                        ->get();
+
+                    foreach($sales_other as $other_price){
+                        $totalOther2 = $totalOther2 + ($other_price -> UNIT_PRICE * $other_price -> QUANTITY);
+                    }
+
                 }
-            }
-            if($sales_invoice[$i] ->PRODUCT == "N2"){
-                $N2 += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "N20"){
-                $N20 += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "H"){
-                $H += (int)$sales_invoice[$i] -> QTY ;
-            }
-            if($sales_invoice[$i] ->PRODUCT == "COMPMED"){
-                $COMPMED += (int)$sales_invoice[$i] -> QTY ;
-            }
 
-            $totalOther2 = 0;
+                $sales_invoice_report = array([
+                    'INVOICE_NO' => $data -> REPORTNO,
+                    'INVOICE_DATE' => $data -> REPORTDATE,
+                    'PO_NO' => $data -> PO_NO,
+                    'C2H2'  => $C2H2,
+                    'AR' => $AR,
+                    'CO2' => $CO2,
+                    'IO2' => $IO2,
+                    'LPG' => $LPG,
+                    'MO2F' => $MO2F,
+                    'MO2S' => $MO2S,
+                    'N2' => $N2,
+                    'N2O' => $N20,
+                    'H' => $H,
+                    'COMPMED' => $COMPMED,
+                    'TOTAL' => $data -> TOTAL + $totalOther2
+                ]);
 
-            $sales_other = db::table('other_charges')
-                ->select('QUANTITY', 'UNIT_PRICE')
-                ->where('INVOICE_NO', $sales_invoice[$i] -> INVOICE_NO)
-                ->get();
+                db::table('statement_account')
+                    ->insert($sales_invoice_report);
 
-            foreach($sales_other as $other_price){
-                $totalOther2 = $totalOther2 + ($other_price -> UNIT_PRICE * $other_price -> QUANTITY);
-            }
+            }elseif($data->TYPE == "DR"){
 
-            $sales_invoice_report[$i] = array([
-                'INVOICE_NO' => $sales_invoice[$i] -> INVOICE_NO,
-                'INVOICE_DATE' => $sales_invoice[$i] -> INVOICE_DATE,
-                'PO_NO' => $sales_invoice[$i] -> PO_NO,
-                'C2H2' => $C2H2,
-                'AR' => $AR,
-                'CO2' => $CO2,
-                'IO2' => $IO2,
-                'LPG' => $LPG,
-                'MO2F' => $MO2F,
-                'MO2S' => $MO2S,
-                'N2' => $N2,
-                'N2O' => $N20,
-                'H' => $H,
-                'COMPMED' => $COMPMED,
-                'OTHER_CHARGES' => $totalOther2,
-                'TOTAL' => $sales_invoice[$i] -> TOTAL
-            ]);
+                $delivery_product = db::table('delivery_receipt_order')
+                    ->where('INVOICE_NO', $data -> REPORTNO)
+                    ->get();
 
-            $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
-            $MO2F = 0; $MO2S = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+                $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+                $MO2F = 0; $MO2S = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
 
-        }
+                foreach($delivery_product as $product){
 
-        for($i = 0; $i < count($delivery) ; $i++){
+                    if($product ->PRODUCT == "C2H2" || $product ->PRODUCT == "ACETYLENE"){
+                        $C2H2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "AR" || $product ->PRODUCT == "ARGON"){
+                        $AR +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "CO2" || $product ->PRODUCT == "CARBON DIOXIDE"){
+                        $CO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "IO2" || $product ->PRODUCT == "INDUSTRIAL OXYGEN"){
+                        $IO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product -> PRODUCT == "LPG"){
+                        $LPG +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "MO2" || $product ->PRODUCT == "MEDICAL OXYGEN"){
+                        if($product -> SIZE == "FLASK"){
+                            $MO2F += (int)$product -> QTY ;
+                        }elseif($product -> SIZE == "STANDARD"){
+                            $MO2S += (int)$product -> QTY ;
+                        }
+                    }
+                    if($product ->PRODUCT == "N2" || $product ->PRODUCT == "NITROGEN"){
+                        $N2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "N20" || $product ->PRODUCT == "NITROUS OXIDE"){
+                        $N20 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "H" || $product ->PRODUCT == "HYDROGEN"){
+                        $H +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "COMPMED" || $product ->PRODUCT == "COMPRESSED AIR"){
+                        $COMPMED +=  (int)$product -> QTY ;
+                    }
 
-            $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
-            $MO2F = 0; $MO2S = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+                    $totalOther2 = 0;
 
-            if($delivery[$i] ->PRODUCT == "C2H2"){
-                $C2H2 += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "AR"){
-                $AR += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "CO2"){
-                $CO2 += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "IO2"){
-                $IO2 += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] -> PRODUCT == "LPG"){
-                $LPG += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "MO2"){
-                if($delivery[$i] -> SIZE == "FLASK"){
-                    $MO2F += (int)$delivery[$i] -> QTY ;
-                }elseif($delivery[$i] -> SIZE == "STANDARD"){
-                    $MO2S += (int)$delivery[$i] -> QTY ;
+                    $sales_other = db::table('other_charges')
+                        ->select('QUANTITY', 'UNIT_PRICE')
+                        ->where('INVOICE_NO', $product -> INVOICE_NO)
+                        ->get();
+
+                    foreach($sales_other as $other_price){
+                        $totalOther2 = $totalOther2 + ($other_price -> UNIT_PRICE * $other_price -> QUANTITY);
+                    }
+
                 }
-            }
-            if($delivery[$i] ->PRODUCT == "N2"){
-                $N2 += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "N20"){
-                $N20 += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "H"){
-                $H += (int)$delivery[$i] -> QTY ;
-            }
-            if($delivery[$i] ->PRODUCT == "COMPMED"){
-                $COMPMED += (int)$delivery[$i] -> QTY ;
+
+                $sales_invoice_report = array([
+                    'INVOICE_NO' => $data -> REPORTNO,
+                    'INVOICE_DATE' => $data -> REPORTDATE,
+                    'PO_NO' => $data -> PO_NO,
+                    'C2H2'  => $C2H2,
+                    'AR' => $AR,
+                    'CO2' => $CO2,
+                    'IO2' => $IO2,
+                    'LPG' => $LPG,
+                    'MO2F' => $MO2F,
+                    'MO2S' => $MO2S,
+                    'N2' => $N2,
+                    'N2O' => $N20,
+                    'H' => $H,
+                    'COMPMED' => $COMPMED,
+                    'TOTAL' => $data -> TOTAL + $totalOther2
+                ]);
+
+                db::table('statement_account')
+                    ->insert($sales_invoice_report);
             }
 
-            $totalOther2 = 0;
-
-            $dr_other = db::table('dr_other_charges')
-                ->select('QUANTITY', 'UNIT_PRICE')
-                ->where('DR_NO', $delivery[$i] -> DR_NO)
-                ->get();
-
-            foreach($dr_other as $other_price){
-                $totalOther2 = $totalOther2 + ($other_price -> UNIT_PRICE * $other_price -> QUANTITY);
-            }
-
-            $delivery_report[$i] = array([
-                'DR_NO' => $delivery[$i] -> DR_NO,
-                'DR_DATE' => $delivery[$i] -> DR_DATE,
-                'PO_NO' => $delivery[$i] -> PO_NO,
-                'C2H2' => $C2H2,
-                'AR' => $AR,
-                'CO2' => $CO2,
-                'IO2' => $IO2,
-                'LPG' => $LPG,
-                'MO2F' => $MO2F,
-                'MO2S' => $MO2S,
-                'N2' => $N2,
-                'N2O' => $N20,
-                'H' => $H,
-                'COMPMED' => $COMPMED,
-                'OTHER_CHARGES' => $totalOther2,
-                'TOTAL' => $delivery[$i] -> TOTAL
-            ]);
-
-            $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
-            $MO2F = 0; $MO2S = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
         }
 
-        if($delivery->isEmpty() && $sales_invoice->isNotEmpty()){
-            return view('Reports.CustomerReports.Reporting.statement')
-                ->with('sales_data', $sales_invoice_report)
-                ->with('dr_data', "empty");
-        }if($sales_invoice->isEmpty() &&  $delivery ->isNotEmpty()){
-            return view('Reports.CustomerReports.Reporting.statement')
-                ->with('dr_data',$delivery_report)
-                 ->with('sales_data', "empty");
-        }if($delivery->isEmpty() && $sales_invoice->isEmpty()){
-            return view('Reports.CustomerReports.Reporting.statement')
-                ->with('dr_data',"empty")
-                ->with('sales_data', "empty");
-        }if($delivery->isNotEmpty() && $sales_invoice->isNotEmpty()){
-            return view('Reports.CustomerReports.Reporting.statement')
-                ->with('sales_data', $sales_invoice_report)
-                ->with('dr_data',$delivery_report);
-        }
+        $statement = db::table('statement_account')
+            ->get();
 
+        return view('Reports.CustomerReports.Reporting.statement')
+           ->with('statement', $statement);
 
     }
 
@@ -277,6 +267,193 @@ class ReportPageController extends Controller
     }
 
     public function summary_account(Request $request){
+        $id = $request -> custDetails;
+
+        DB::table('summary_account')->truncate();
+
+        $sales_invoice = db::table('sales_invoice as a')
+            ->select('a.INVOICE_NO as REPORTNO', 'a.INVOICE_DATE as REPORTDATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO')
+            ->selectRaw(" 'INVOICE' as TYPE")
+            ->join('sales_invoice_po as b', 'a.INVOICE_NO', '=', 'b.INVOICE_NO')
+            ->where('a.CLIENT_ID', $id)
+            ->where('a.STATUS', "1")
+            ->where('a.FULLY_PAID', "0");
+
+        $delivery = db::table('delivery_receipt as a')
+            ->select('a.DR_NO as REPORTNO', 'a.DR_DATE as REPORTDATE', db::raw('(TOTAL - DOWNPAYMENT) as TOTAL'),'b.PO_NO')
+            ->selectRaw(" 'DR' as TYPE")
+            ->join('delivery_receipt_po as b', 'a.DR_NO', '=', 'b.DR_NO')
+            ->where('a.CLIENT_ID', $id)
+            ->where('a.STATUS', "1")
+            ->where('a.AS_INVOICE', "1")
+            ->where('a.FULLY_PAID', "0")
+            ->unionAll($sales_invoice)
+            ->get();
+
+        foreach($delivery as $data){
+
+            if($data -> TYPE == "INVOICE"){
+
+                $sales_product = db::table('sales_invoice_order')
+                    ->where('INVOICE_NO', $data -> REPORTNO)
+                    ->get();
+
+                $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+                $MO2 = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+
+                foreach($sales_product as $product){
+
+                    if($product ->PRODUCT == "C2H2" || $product ->PRODUCT == "ACETYLENE"){
+                        $C2H2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "AR" || $product ->PRODUCT == "ARGON"){
+                        $AR +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "CO2" || $product ->PRODUCT == "CARBON DIOXIDE"){
+                        $CO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "IO2" || $product ->PRODUCT == "INDUSTRIAL OXYGEN"){
+                        $IO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product -> PRODUCT == "LPG"){
+                        $LPG +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "MO2" || $product ->PRODUCT == "MEDICAL OXYGEN"){
+                        $MO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "N2" || $product ->PRODUCT == "NITROGEN"){
+                        $N2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "N20" || $product ->PRODUCT == "NITROUS OXIDE"){
+                        $N20 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "H" || $product ->PRODUCT == "HYDROGEN"){
+                        $H +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "COMPMED" || $product ->PRODUCT == "COMPRESSED AIR"){
+                        $COMPMED +=  (int)$product -> QTY ;
+                    }
+
+                    $totalOther2 = 0;
+
+                    $sales_other = db::table('other_charges')
+                        ->select('QUANTITY', 'UNIT_PRICE')
+                        ->where('INVOICE_NO', $product -> INVOICE_NO)
+                        ->get();
+
+                    foreach($sales_other as $other_price){
+                        $totalOther2 = $totalOther2 + ($other_price -> UNIT_PRICE * $other_price -> QUANTITY);
+                    }
+
+                }
+
+                    $sales_invoice_report = array([
+                        'INVOICE_NO' => $data -> REPORTNO,
+                        'INVOICE_DATE' => $data -> REPORTDATE,
+                        'PO_NO' => $data -> PO_NO,
+                        'C2H2'  => $C2H2,
+                        'AR' => $AR,
+                        'CO2' => $CO2,
+                        'IO2' => $IO2,
+                        'LPG' => $LPG,
+                        'MO2' => $MO2,
+                        'N2' => $N2,
+                        'N2O' => $N20,
+                        'H' => $H,
+                        'COMPMED' => $COMPMED,
+                        'OTHER_CHARGES' => $totalOther2,
+                        'TOTAL' => $data -> TOTAL
+                    ]);
+
+                    db::table('summary_account')
+                        ->insert($sales_invoice_report);
+
+            }elseif($data->TYPE == "DR"){
+
+                $delivery_product = db::table('delivery_receipt_order')
+                    ->where('INVOICE_NO', $data -> REPORTNO)
+                    ->get();
+
+                $C2H2 = 0;$AR = 0;$CO2 = 0;$IO2 = 0;$LPG = 0;
+                $MO2 = 0;$N2 = 0;$N20 = 0;$H = 0;$COMPMED = 0;
+
+                foreach($delivery_product as $product){
+
+                    if($product ->PRODUCT == "C2H2" || $product ->PRODUCT == "ACETYLENE"){
+                        $C2H2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "AR" || $product ->PRODUCT == "ARGON"){
+                        $AR +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "CO2" || $product ->PRODUCT == "CARBON DIOXIDE"){
+                        $CO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "IO2" || $product ->PRODUCT == "INDUSTRIAL OXYGEN"){
+                        $IO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product -> PRODUCT == "LPG"){
+                        $LPG +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "MO2" || $product ->PRODUCT == "MEDICAL OXYGEN"){
+                        $MO2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "N2" || $product ->PRODUCT == "NITROGEN"){
+                        $N2 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "N20" || $product ->PRODUCT == "NITROUS OXIDE"){
+                        $N20 +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "H" || $product ->PRODUCT == "HYDROGEN"){
+                        $H +=  (int)$product -> QTY ;
+                    }
+                    if($product ->PRODUCT == "COMPMED" || $product ->PRODUCT == "COMPRESSED AIR"){
+                        $COMPMED +=  (int)$product -> QTY ;
+                    }
+
+                    $totalOther2 = 0;
+
+                    $sales_other = db::table('other_charges')
+                        ->select('QUANTITY', 'UNIT_PRICE')
+                        ->where('INVOICE_NO', $product -> INVOICE_NO)
+                        ->get();
+
+                    foreach($sales_other as $other_price){
+                        $totalOther2 = $totalOther2 + ($other_price -> UNIT_PRICE * $other_price -> QUANTITY);
+                    }
+
+                }
+
+                $sales_invoice_report = array([
+                    'INVOICE_NO' => $data -> REPORTNO,
+                    'INVOICE_DATE' => $data -> REPORTDATE,
+                    'PO_NO' => $data -> PO_NO,
+                    'C2H2'  => $C2H2,
+                    'AR' => $AR,
+                    'CO2' => $CO2,
+                    'IO2' => $IO2,
+                    'LPG' => $LPG,
+                    'MO2' => $MO2,
+                    'N2' => $N2,
+                    'N2O' => $N20,
+                    'H' => $H,
+                    'COMPMED' => $COMPMED,
+                    'OTHER_CHARGES' => $totalOther2,
+                    'TOTAL' => $data -> TOTAL
+                ]);
+
+                db::table('summary_account')
+                    ->insert($sales_invoice_report);
+            }
+
+        }
+
+         $summary_account = db::table('summary_account')
+             ->get();
+
+        return view('Reports.CustomerReports.Reporting.summary')
+            ->with('summary_account', $summary_account);
+
+
 
     }
 

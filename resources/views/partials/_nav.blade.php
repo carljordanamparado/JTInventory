@@ -101,7 +101,7 @@
                 </span>
             </a>
             <ul class="treeview-menu" style="display: block;">
-              <li><a href="#"><i class="fa fa-circle-o"></i> Pricelist Report </a></li>
+             {{-- <li><a href="#"><i class="fa fa-circle-o"></i> Pricelist Report </a></li>--}}
               <li><a data-toggle="modal" data-target="#agingAccount"><i class="fa fa-circle-o"></i> Aging Report </a></li>
               <li><a data-toggle="modal" data-target="#statementAccount"> <i class="fa fa-circle-o"></i> Statement of Account </a></li>
               <li><a data-toggle="modal" data-target="#summaryAccount"> <i class="fa fa-circle-o"></i> Summary of Account </a></li>

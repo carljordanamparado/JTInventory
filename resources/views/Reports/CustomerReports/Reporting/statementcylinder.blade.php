@@ -193,10 +193,12 @@
         $(document).ready(function() {
 
             $('#salesInvoice').DataTable( {
-                "scrollX": true,
-                "paging":   false,
-                "ordering": false,
-                "info":     false
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                orientation: 'landscape',
+                pageSize: 'A5',
             } );
 
         } );

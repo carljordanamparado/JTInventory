@@ -52,7 +52,7 @@ class CustomerController extends Controller
         }elseif(strlen($clientCode) == 3){
             $cCode = "0" . strval($clientCode);
         }else{
-            $cCode = strlen($clientCode);
+            $cCode = $clientCode;
         }
 
         $custName = $request->input("custName");
