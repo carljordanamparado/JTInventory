@@ -105,7 +105,14 @@
     <script>
         $(document).ready(function() {
 
-            $('#salesInvoice').dataTable();
+            $('#salesInvoice').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'print'
+                ],
+                orientation: 'landscape',
+                pageSize: 'A5',
+            } );
 
 
         } );
