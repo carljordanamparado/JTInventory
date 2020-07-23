@@ -60,6 +60,7 @@
                                     <th class="text-center">To</th>
                                     <th class="text-center">Assigned Date</th>
                                     <th class="text-center">Assigned By</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +72,7 @@
                                         <td>{{ $dr -> TO_NO }}</td>
                                         <td>{{ $dr -> ENCODED_DATE }}</td>
                                         <td>{{ $dr -> ASSIGNED_BY }}</td>
+                                        <td><a href="{{ route('viewDR', $dr -> ID) }}" class="btn btn-info"> Edit </a></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -97,6 +99,12 @@
                 'searching': true,
                 'bJQueryUI': true
             });
+
+            @if(Session::has('status'))
+
+            swal( '{{ Session::get('status') }}' , "", "Success");
+
+            @endif
         });
     </script>
 

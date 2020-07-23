@@ -27,16 +27,18 @@
                          <input type="text" class="form-control" id="ToInvoice" name="ToInvoice" placeholder="Enter To Invoice No.">
                        </div>
                        <div class="form-group col-md-3">
+                           @foreach(Session::get('user') as $user)
+                           @endforeach
                          <label for=""> Assigned By: </label>
-                         <input type="text" class="form-control" id="assignedBy" name="assignedBy" value="Sample User" placeholder="" readonly>
+                         <input type="text" class="form-control" id="assignedBy" name="assignedBy" value="{{ $user->userid }}" placeholder="" readonly>
                        </div>
                    </div>
                </div>
                <div class="box-footer">
                    <div class="row">
                        <div class="form-group col-md-4 pull-right">
-                           <button type="submit" id="addSalesInvoice" class="form-control btn btn-primary"> Add Sales Invoice </button>
-{{--                           <a href="{{ route('SalesInvoice.index') }}" class="form-control btn btn-primary"> Back</a>--}}
+                           <button type="submit" id="addSalesInvoice" class="form-control btn btn-primary"> Add ICR </button>
+                           <a href="{{ route('SalesInvoice.index') }}" class="form-control btn btn-primary"> Back</a>
                        </div>
                    </div>
                </div>
@@ -58,6 +60,7 @@
                                     <th class="text-center">To</th>
                                     <th class="text-center">Assigned Date</th>
                                     <th class="text-center">Assigned By</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,6 +72,7 @@
                                         <td>{{ $icr -> TO_NO }}</td>
                                         <td>{{ $icr -> ENCODED_DATE }}</td>
                                         <td>{{ $icr -> ASSIGNED_BY }}</td>
+                                        <td><a href="{{ route('viewICR', $icr -> ID) }}" class="btn btn-info"> Edit </a></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -94,6 +98,12 @@
                 'searching': true,
                 'bJQueryUI': true
             });
+
+            @if(Session::has('status'))
+
+            swal( '{{ Session::get('status') }}' , "", "Success");
+
+            @endif
         });
     </script>
 @endsection

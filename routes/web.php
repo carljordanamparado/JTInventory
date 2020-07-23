@@ -41,9 +41,18 @@ Route::post('CylinderController/delete', ['uses' => 'CylinderController@destroy'
 
 //GET
 Route::get('viewSalesInvoiceDeclaration/{id}', ['uses' => 'DeclarationController@viewSalesDeclaration' , 'as' => 'viewSD']);
+Route::get('viewICRDeclaration/{id}', ['uses' => 'DeclarationController@viewicrDeclaration' , 'as' => 'viewICR']);
+Route::get('viewCLCDeclaration/{id}', ['uses' => 'DeclarationController@viewclcDeclaration' , 'as' => 'viewCLC']);
+Route::get('viewDRDeclaration/{id}', ['uses' => 'DeclarationController@viewdrDeclaration' , 'as' => 'viewDR']);
+Route::get('viewORDeclaration/{id}', ['uses' => 'DeclarationController@vieworDeclaration' , 'as' => 'viewOR']);
+
 
 //POST
 Route::post('updateSalesInvoiceDeclaration', ['uses' => 'DeclarationController@updateSalesDeclaration' , 'as' => 'updateSD']);
+Route::post('updateICRDeclaration', ['uses' => 'DeclarationController@updateICRDeclaration' , 'as' => 'updateICR']);
+Route::post('updateCLCDeclaration', ['uses' => 'DeclarationController@updateCLCDeclaration' , 'as' => 'updateCLC']);
+Route::post('updateDRDeclaration', ['uses' => 'DeclarationController@updateDRDeclaration' , 'as' => 'updateDR']);
+Route::post('updateORDeclaration', ['uses' => 'DeclarationController@updateORDeclaration' , 'as' => 'updateOR']);
 
 // Get
 Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as' => 'getProductSize']);
