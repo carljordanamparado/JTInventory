@@ -26,7 +26,6 @@ class PagesController extends Controller
 		$client = DB::table('client')
 				->join('client_type', 'client.TYPE', '=', 'client_type.ID')
 				->select('client.*', 'client_type.CLIENT_TYPE')
-                ->where('STATUS', '1')
                 ->orderByDesc('CLIENTID')
                 ->get();
 
@@ -38,7 +37,6 @@ class PagesController extends Controller
         $client = DB::table('client')
             ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
             ->select('client.*', 'client_type.CLIENT_TYPE')
-            ->where('STATUS', '1')
             ->orderByDesc('CLIENTID')
             ->get();
 
@@ -60,7 +58,6 @@ class PagesController extends Controller
             ->join('client_po' , 'client.CLIENTID' , '=' , 'client_po.CLIENTID')
             ->where('client_po.STATUS', '!=' , null)
             ->where('client_po.CLIENTID', '!=' , null)
-            ->where('client.STATUS', '1')
             ->get();
 
         return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);
@@ -80,15 +77,11 @@ class PagesController extends Controller
         }else{
             return view('login');
         }
-
-
     }
 
     public function postLogin(Request $request){
 
-
         $credentials = $request->only('username', 'password');
-
 
         if(Auth::attempt(['userid' => $request -> userid, 'password' => $request->password])){
 
@@ -97,7 +90,8 @@ class PagesController extends Controller
 
         }else{
 
-            return view('/');
+            $request->session()->flash('status', 'Username and Password is wrong');
+            return redirect()->route('loginPage');
 
         }
 

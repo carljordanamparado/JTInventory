@@ -43,6 +43,27 @@ $(document).ready(function(){
                     });
                     $('#poNo').attr("disabled", false);
                     $('#poNo').empty().append("<option value=''> Choose Option </option> ");
+
+                }
+
+                if(response.option2 != ""){
+                    $('#priceDate').attr("disabled", false);
+                    $('#priceDate').empty().append("<option value=''> Choose Option </option> ");
+                    $('#priceDate').append(response.option2);
+                    $('.priceDate').select2({
+                        placeholder: 'Select an option',
+                        dropdownAutoWidth: true,
+                        allowClear: true
+                    });
+                }else{
+                    $('.priceDate').select2({
+                        placeholder: 'Select an option',
+                        dropdownAutoWidth: true,
+                        allowClear: true
+                    });
+                    $('#priceDate').attr("disabled", false);
+                    $('#priceDate').empty().append("<option value=''> Choose Option </option> ");
+
                 }
 
             },
@@ -198,16 +219,17 @@ $(document).ready(function(){
         $('#productAmount').val("");
     }
 
+
     function customerDetailsAndDate(){
-        var cust_id = $('#poNo option:selected').attr("custId");
-        var po_id = $('#poNo option:selected').text();
+        var cust_id = $('#custDetails option:selected').val();
+        var price_date = $('#priceDate option:selected').val();
         $.ajax({
             url: "/poCustomerDetails",
             type: "POST",
             data:{
                 '_token': $('input[name=_token]').val(),
                 'cust_id' : cust_id,
-                'po_id' : po_id
+                'price_date' : price_date
             },
             success: function(response){
                 /*$('#CustDetails option').remove();
@@ -216,9 +238,10 @@ $(document).ready(function(){
                 // $('#CustDetails').hide();
                 $('#custName').val(response.html2);*/
                 $('#poDate').val(response.date);
+                $('#productQuantity').val(0);
+                $('#remQuantity').val(0);
                 $('#productItem').empty().append("<option value=''> Choose Option </option> ");
                 $('#productItem').append(response.product);
-
             },
             error: function(jqXHR){
                 console.log(jqXHR);
@@ -229,8 +252,9 @@ $(document).ready(function(){
     function productDetails(){
         var prodCode = $('#productItem option:selected').val();
         var prodId = $('#productItem option:selected').attr('data-id');
-        var po_id = $('#poNo option:selected').text();
-        var cust_id = $('#poNo option:selected').attr("custId");
+        var po_id = $('#poNo option:selected').text()
+        var price_date = $('#priceDate option:selected').val();
+        var cust_id = $('#priceDate option:selected').attr("custId");
         $.ajax({
             url: "/poProductDetails",
             type: "POST",
@@ -239,6 +263,7 @@ $(document).ready(function(){
                 'prodCode' : prodCode,
                 'po_id' : po_id,
                 'cust_id' : cust_id,
+                'price_date' : price_date,
                 'prodId' : prodId
             },
             success: function(response){
@@ -254,7 +279,7 @@ $(document).ready(function(){
         });
     }
 
-    $('#poNo').on('change', function(){
+    $('#priceDate, #poNo').on('change', function(){
         customerDetailsAndDate();
         clearProductInfo();
         clearForm();
@@ -275,8 +300,9 @@ $(document).ready(function(){
 
         var input_qty = parseFloat($('#productQuantity').val());
         var rem_qty = parseFloat($('#remQuantity').val());
+        var po_no = $('#poNo option:selected').text();
 
-        if(input_qty > rem_qty){
+        if(input_qty > rem_qty && po_no == ""){
             swal("Inputted Qty is higher than Remaining Qty" , "Please input again" , "error");
             $('#productQuantity').val(0);
         }else{

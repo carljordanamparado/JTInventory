@@ -82,6 +82,8 @@
               class="fa fa-user"></i> Cylinder Loan Contract </a></li>
         <li class="{{ (request()->is('Deliver')) ? 'active' : '' }}"><a href="{{ route('Deliver.index') }}"><i
               class="fa fa-user"></i> Delivery Receipt </a></li>
+        <li class="{{ (request()->is('DeliverSales')) ? 'active' : '' }}"><a href="{{ route('DeliverSales.index') }}"><i
+                  class="fa fa-user"></i> Delivery Invoice Receipt </a></li>
         <li class="{{ (request()->is('OfficialReceipt')) ? 'active' : '' }}"><a
             href="{{ route('OfficialReceipt.index') }}"><i class="fa fa-user"></i> Official Receipt </a></li>
       </ul>

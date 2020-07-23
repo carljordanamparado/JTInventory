@@ -34,6 +34,8 @@ class DRController extends Controller
             ->where('SALESREP_ID', $id)
             ->get();
 
+        //dd(session()->all());
+
         //
         return view('SystemUtilities.DRDeclaration.adddr')
             ->with('dr', $dr)

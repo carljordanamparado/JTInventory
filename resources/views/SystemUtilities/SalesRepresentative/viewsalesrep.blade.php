@@ -39,7 +39,7 @@
                                         <td class="text-center">
                                             <div class="btn-group-vertical">
                                                 <a type="button" class="btn btn-info" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                                <a type="button" class="btn btn-warning" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-exclamation">&nbsp;&nbsp;</span>Lost Report</a>
+                                                {{--<a type="button" class="btn btn-warning" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-exclamation">&nbsp;&nbsp;</span>Lost Report</a>--}}
                                             </div>
                                         </td>
                                     </tr>

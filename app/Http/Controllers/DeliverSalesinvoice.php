@@ -16,6 +16,14 @@ class DeliverSalesinvoice extends Controller
     public function index()
     {
         //
+        $deliver_invoice = db::table('delivery_receipt')
+            ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
+            ->where('delivery_receipt.AS_INVOICE', 1)
+            ->where('delivery_receipt.FULLY_PAID', 0)
+            ->get();
+
+        return view('SalesRecord.DeliveryReceipt.viewdeliveryinvoice')
+            ->with('deliver_invoice', $deliver_invoice);
 
     }
 
@@ -32,7 +40,6 @@ class DeliverSalesinvoice extends Controller
             ->get();
 
         $client = db::table('client')
-            ->where('STATUS', '1')
             ->get();
 
         return view('SalesRecord.DeliveryReceipt.adddeliverysales')
@@ -53,6 +60,14 @@ class DeliverSalesinvoice extends Controller
             $fullypaid = 1;
         }else{
             $fullypaid = 0;
+        }
+
+        $po  = 0;
+
+        if($request->poNo == ""){
+            $po = 0;
+        }else{
+            $po = $po;
         }
 
         $sales_invoice = array([
@@ -95,7 +110,7 @@ class DeliverSalesinvoice extends Controller
                 'DR_DATE' => $request -> invoiceDate,
                 'SALESREPID' => $request -> issuedId,
                 'CLIENT_ID' => $request -> custDetails,
-                'PO_NO' => $request -> poNo
+                'PO_NO' => $po
             ]);
 
             $sales_invoice_po_insert = db::table('delivery_receipt_po')
@@ -162,7 +177,7 @@ class DeliverSalesinvoice extends Controller
             $sales_invoice_report = array([
                 'DR_NO' => $request -> invoiceNo,
                 'CLIENT_NAME' => $request -> custDetails,
-                'PO_NO' => $request -> poNo,
+                'PO_NO' => $po,
                 'DR_DATE' => $request -> invoiceDate,
                 'C2H2' => $qty['C2H2'],
                 'AR' => $qty['AR'],
@@ -190,8 +205,6 @@ class DeliverSalesinvoice extends Controller
                 $count = $request -> particular;
             }
 
-            dd($count);
-
             for($i = 0; $i < $count; $i++){
                 $data_array = array([
                     'DR_NO' => $request -> invoiceNo,
@@ -209,7 +222,7 @@ class DeliverSalesinvoice extends Controller
                 $value = (floatval($request -> remQty) - floatval($request -> productQty[$i]));
 
                 $remQty = db::table('client_po_list')
-                    ->where('PO_NO', $request->poNo)
+                    ->where('PO_NO', $po)
                     ->where('PRODUCT', $request->productCode[$i])
                     ->where('SIZE', $request->productSize[$i])
                     ->update(['QUANTITY' => $value]);

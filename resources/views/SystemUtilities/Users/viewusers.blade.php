@@ -53,4 +53,9 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $(document).ready(function(){
+            $('#salesRep').dataTable();
+        });
+    </script>
 @endsection

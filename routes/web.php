@@ -37,6 +37,14 @@ Route::post('CylinderController/delete', ['uses' => 'CylinderController@destroy'
 
 // Jquery Controller
 
+// Declaration Controller
+
+//GET
+Route::get('viewSalesInvoiceDeclaration/{id}', ['uses' => 'DeclarationController@viewSalesDeclaration' , 'as' => 'viewSD']);
+
+//POST
+Route::post('updateSalesInvoiceDeclaration', ['uses' => 'DeclarationController@updateSalesDeclaration' , 'as' => 'updateSD']);
+
 // Get
 Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as' => 'getProductSize']);
 Route::get('getProductSize2', ['uses'  => 'JqueryController@getProductSize2' , 'as' => 'getProductSize2']);

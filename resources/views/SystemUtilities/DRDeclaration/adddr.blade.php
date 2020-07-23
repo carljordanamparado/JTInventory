@@ -28,7 +28,9 @@
                        </div>
                        <div class="form-group col-md-3">
                          <label for=""> Assigned By: </label>
-                         <input type="text" class="form-control" id="assignedBy" name="assignedBy" value="Sample User" placeholder="" readonly>
+                           @foreach(Session::get('user') as $user)
+                           @endforeach
+                         <input type="text" class="form-control" id="assignedBy" name="assignedBy" value="{{ $user->userid }}" placeholder="" readonly>
                        </div>
                    </div>
                </div>
@@ -85,5 +87,17 @@
 
 
 @section('scripts')
+
+    <script>
+        $(document).ready( function(){
+            $('#salesRep').DataTable({
+                "paging":   true,
+                "ordering": true,
+                "info":     true,
+                'searching': true,
+                'bJQueryUI': true
+            });
+        });
+    </script>
 
 @endsection

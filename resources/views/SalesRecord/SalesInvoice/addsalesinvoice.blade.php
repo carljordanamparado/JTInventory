@@ -64,10 +64,18 @@
                             </select>
                        </div>
 
-                       <div class="form-group col-md-4">
+                       <div class="form-group col-md-4 hidden" id="poDateClass">
                            <label for=""> PO DATE </label>
-                           <input type="date" id="poDate" name="poDate" class="form-control" readonly>
+                           <input type="date" id="poDate" name="poDate" class="form-control " readonly>
                        </div>
+
+                       <div class="form-group col-md-4" id="">
+                           <label for=""> PRICE DATE </label>
+                           <select id="priceDate" class="form-control priceDate">
+                               <option value=""> Choose Option </option>
+                           </select>
+                       </div>
+
                    </div>
 
                    </div>
@@ -277,8 +285,9 @@
                 data: $('#salesinvoiceform').serialize(),
                 success: function(response){
                     try{
+                        window.history.back();
                         swal('Sales invoice successfully', '', 'success');
-                        windows.history.back();
+
                     }catch (Exception) {
                         swal(Exception , Exception , 'error');
                     }

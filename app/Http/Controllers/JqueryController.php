@@ -313,59 +313,46 @@ class JqueryController extends Controller
     // Add Sales Invoice Customer Details
     public function poCustomerDetails(Request $request){
        $cust_id = $request-> cust_id;
-       $po_id = $request-> po_id;
+       $price_date = $request-> price_date;
        $html  = '';
        $html2 = '';
        $date = '';
        $product = '';
+       $amount = '';
 
        $cust_details = db::table('client')
            ->where('CLIENTID', $cust_id)
            ->get();
 
-       $po_date = db::table('client_po_list')
-           ->select('po_date')
-           ->where('PO_NO', $po_id)
-           ->distinct()
-           ->get();
-
-
-
-       $poProducts = db::table('client_po_list')
-           ->select('*', 'client_po_list.ID as PROD_ID')
-           ->join('products', 'products.PROD_CODE' , '=' , 'client_po_list.PRODUCT')
-           ->where('PO_NO', $po_id)
-           ->where('QUANTITY' , '!=', '0')
+       $poProducts = db::table('product_list')
+           ->select('*', 'product_list.ID as PROD_ID')
+           ->join('products', 'products.PROD_CODE' , '=' , 'product_list.PRODUCT')
+           ->where('PRICE_DATE', $price_date)
+           ->where('CLIENTID', $cust_id)
            ->get();
 
        if($poProducts -> isEmpty()){
-           $poProducts = db::table('client_po_list')
-               ->select('*', 'client_po_list.ID as PROD_ID')
-               ->join('products', 'products.PRODUCT' , '=' , 'client_po_list.PRODUCT')
-               ->where('PO_NO', $po_id)
-               ->where('QUANTITY' , '!=', '0')
+           $poProducts = db::table('product_list')
+               ->select('*', 'product_list.ID as PROD_ID')
+               ->join('products', 'products.PRODUCT' , '=' , 'product_list.PRODUCT')
+               ->where('PRICE_DATE', $price_date)
+               ->where('CLIENTID', $cust_id)
                ->get();
        }
 
-
        // Dito ko sana ilalagay kaso parang humahaba na
-
-
 
        foreach($cust_details as $cust_detail){
            $html .= '<option value="' . $cust_detail -> CLIENTID . '" id="custOptions" readonly>' . $cust_detail->NAME . '</option>';
            $html2 = $cust_detail->NAME;
        }
 
-       foreach($po_date as $po_date){
-           $date .= $po_date -> po_date;
-       }
-
        foreach($poProducts as $products){
-           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" data-id=" '. $products -> PROD_ID . ' ">' . $products->PRODUCT . ' - '. $products -> SIZE.'</option>';
+           $product .= '<option value="' . $products -> PROD_CODE . '" id="product" data-id=" '. $products -> PRODUCT . ' ">' . $products->PRODUCT . ' - '. $products -> SIZE.'</option>';
+
        }
 
-        return response()->json(array('html' => $html , 'html2' => $html2 , 'date' => $date , 'product' => $product));
+        return response()->json(array('html' => $html , 'html2' => $html2 , 'date' => $date , 'product' => $product , 'amount' => $amount));
     }
 
     function poProductDetails(Request $request){
@@ -373,6 +360,7 @@ class JqueryController extends Controller
         $po_id = $request-> po_id;
         $prodCode = $request -> prodCode;
         $prod_id = $request -> prodId;
+        $price_date = $request-> price_date;
 
 
         $size = '';
@@ -380,34 +368,35 @@ class JqueryController extends Controller
         $amount = '';
         $usedQty = 0;
 
+        //dd($request->all());
+
         $productDetails = db::table('client_po_list as a')
-            ->where('PO_NO', $po_id)
-            ->where('ID', $prod_id)
-            ->get();
-
-
-//        dd($productDetails);
-
-
-        $amount = db::table('client_po_list as a')
-            ->join('product_list as b', 'a.CLIENTPO_ID' , '=' , 'b.CLIENTID')
+            ->join('client_po as b' , 'b.ID', '=' , 'a.CLIENTPO_ID')
             ->where('a.PO_NO', $po_id)
-            ->where('b.PROD_CODE', $prodCode)
-            ->groupBy('b.ID')
+            ->where('PRODUCT', $prod_id)
             ->get();
 
-        if($amount->isEmpty()){
-            $amount = db::table('client_po as a')
-                ->join('client_po_list as c', 'c.CLIENTPO_ID', '=', 'a.ID')
-                ->join('product_list as b', 'a.CLIENTID' , '=' , 'b.CLIENTID')
-                ->where('c.PO_NO', $po_id)
-                ->where('b.PROD_CODE', $prodCode)
-                ->groupBy('b.ID')
+        $amount = db::table('product_list')
+            ->select('*', 'product_list.ID as PROD_ID')
+            ->join('products', 'products.PROD_CODE' , '=' , 'product_list.PRODUCT')
+            ->where('PRICE_DATE', $price_date)
+            ->where('CLIENTID', $cust_id)
+            ->where('product_list.PROD_CODE', $prodCode)
+            ->get();
+
+        if($amount -> isEmpty()){
+            $amount = db::table('product_list')
+                ->select('*', 'product_list.ID as PROD_ID')
+                ->join('products', 'products.PRODUCT' , '=' , 'product_list.PRODUCT')
+                ->where('PRICE_DATE', $price_date)
+                ->where('CLIENTID', $cust_id)
+                ->where('product_list.PROD_CODE', $prodCode)
                 ->get();
         }
 
+
         foreach($productDetails as $product){
-            $size = $product -> SIZE;
+
             $quantity = $product -> QUANTITY;
         }
 
@@ -423,6 +412,7 @@ class JqueryController extends Controller
 
         foreach($amount as $productAmount){
             $amount = $productAmount -> PRODUCT_PRICE;
+            $size = $productAmount -> SIZE;
         }
 
         return response()->json(array('size' => $size , 'quantity' => floatval($quantity) , 'amount' => $amount));
@@ -657,10 +647,17 @@ class JqueryController extends Controller
 
         $client_id = $request -> cust_id;
         $option = '';
+        $option2 = '';
 
         $po_list = db::table('client_po')
             ->where('CLIENTID', $client_id)
             ->where('STATUS', '1')
+            ->get();
+
+        $price_date = db::table('product_list')
+            ->where('CLIENTID', $client_id)
+            ->groupBy('PRICE_DATE')
+            ->orderBy('PRICE_DATE', 'ASC')
             ->get();
 
 
@@ -668,7 +665,11 @@ class JqueryController extends Controller
             $option .= '<option value="'.$data -> PO_NO.'" custId="'.$data->CLIENTID.'"> '.$data -> PO_NO.' </option>';
         }
 
-        return response()->json(array('option' => $option));
+        foreach($price_date as $data2){
+            $option2 .= '<option value="'.$data2 -> PRICE_DATE.'" custId="'.$data2->CLIENTID.'"> '.$data2 -> PRICE_DATE.' </option>';
+        }
+
+        return response()->json(array('option' => $option, 'option2' => $option2));
 
     }
 

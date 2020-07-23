@@ -58,4 +58,15 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $(document).ready( function(){
+            $('#salesRep').DataTable({
+                "paging":   true,
+                "ordering": true,
+                "info":     true,
+                'searching': true,
+                'bJQueryUI': true
+            });
+        });
+    </script>
 @endsection

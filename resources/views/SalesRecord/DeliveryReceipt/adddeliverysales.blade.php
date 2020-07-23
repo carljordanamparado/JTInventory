@@ -64,10 +64,19 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-4 hidden">
                                     <label for=""> PO DATE </label>
                                     <input type="date" id="poDate" name="poDate" class="form-control" readonly>
                                 </div>
+
+                                <div class="form-group col-md-4" id="">
+                                    <label for=""> PRICE DATE </label>
+                                    <select id="priceDate" class="form-control priceDate">
+                                        <option value=""> Choose Option </option>
+                                    </select>
+                                </div>
+
+
                             </div>
 
                         </div>
@@ -278,7 +287,7 @@
                     success: function(response){
                         try{
                             swal('Sales invoice successfully', '', 'success');
-                            windows.history.back();
+                            window.history.back();
                         }catch (Exception) {
                             swal(Exception , Exception , 'error');
                         }

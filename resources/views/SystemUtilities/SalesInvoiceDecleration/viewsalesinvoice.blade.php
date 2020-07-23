@@ -6,7 +6,7 @@
      <section class="content">
          <div class="box">
            <div class="box-header text-center">
-               <span> Add Sales Invoice </span>
+               <span> Add Sales Invoice Declaration </span>
               {{-- <a href="{{ route('SalesInvoiceController.create.create') }}" class="btn btn-block btn-primary btn-flat addCustomer pull-right"> Add Sales Invoice Declaration </a> --}}
            </div>
            <div class="box-body">
@@ -55,4 +55,15 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $(document).ready( function(){
+            $('#salesRep').DataTable({
+                "paging":   true,
+                "ordering": true,
+                "info":     true,
+                'searching': true,
+                'bJQueryUI': true
+            });
+        });
+    </script>
 @endsection
