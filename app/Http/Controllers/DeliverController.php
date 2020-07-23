@@ -40,7 +40,6 @@ class DeliverController extends Controller
         //
 
         $client_data = db::table('client')
-            ->where('STATUS', '1')
             ->get();
 
         return view('SalesRecord.DeliveryReceipt.adddeliver')

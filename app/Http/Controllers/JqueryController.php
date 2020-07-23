@@ -546,7 +546,7 @@ class JqueryController extends Controller
             $tableData2 .= '<tr class="text-center">'.$data0.' '.$data1.' '. $data2 .' '.$data3.' '.$data4.' </tr>';
         }
 
-        return response()->json(array('table_data2' => $tableData2));
+        return Response()->json(['table_data2' => $tableData2]);
 
     }
 
@@ -651,7 +651,6 @@ class JqueryController extends Controller
 
         $po_list = db::table('client_po')
             ->where('CLIENTID', $client_id)
-            ->where('STATUS', '1')
             ->get();
 
         $price_date = db::table('product_list')

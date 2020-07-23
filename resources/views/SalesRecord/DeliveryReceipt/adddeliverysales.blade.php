@@ -208,7 +208,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="" id="labelOfType"> &nbsp;</label>
+                                    <label for="" id="labelOfType"> Cylinder ID &nbsp;</label>
                                     <input type="text" class="form-control" id="inputtedTypeId" name="inputtedTypeId">
                                 </div>
                                 <div class="form-group col-md-3">
@@ -274,28 +274,42 @@
 
             function submitButton(){
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+                var deliveryNo = $('#deliveryNo').val();
+                var cylinderDate = $('#cylinderDate').val();
 
-                $.ajax({
-                    url: "{{ route('DeliverSales.store') }}" ,
-                    type: "POST",
-                    data: $('#salesinvoiceform').serialize(),
-                    success: function(response){
-                        try{
-                            swal('Sales invoice successfully', '', 'success');
-                            window.history.back();
-                        }catch (Exception) {
-                            swal(Exception , Exception , 'error');
+                if(deliveryNo == "0" ){
+                    swal("Please input required fields", "With red line", "error");
+                    $('#deliveryNo').css("border", "1px solid red");
+                }if(cylinderDate == ""){
+                    swal("Please input required fields", "With red line", "error");
+                    $('#cylinderDate').css("border", "1px solid red");
+                }if(deliveryNo != "0" && cylinderDate != "") {
+                    $('#deliveryNo').css("border", "");
+                    $('#cylinderDate').css("border", "");
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
-                    },
-                    error: function(jqXHR){
-                        console.log(jqXHR);
-                    }
-                });
+                    });
+
+                    $.ajax({
+                        url: "{{ route('DeliverSales.store') }}",
+                        type: "POST",
+                        data: $('#salesinvoiceform').serialize(),
+                        success: function (response) {
+                            try {
+                                swal('Delivery invoice successfully added', '', 'success');
+                                window.history.back();
+                            } catch (Exception) {
+                                swal(Exception, Exception, 'error');
+                            }
+                        },
+                        error: function (jqXHR) {
+                            console.log(jqXHR);
+                        }
+                    });
+                }
             }
 
             $('#submitButton').on('click', function(e){

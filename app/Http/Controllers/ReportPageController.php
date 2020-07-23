@@ -21,7 +21,6 @@ class ReportPageController extends Controller
         $option = '';
 
         $client = db::table('client')
-            ->where('STATUS', '1')
             ->get();
 
         foreach($client as $data){

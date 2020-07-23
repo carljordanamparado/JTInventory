@@ -144,4 +144,38 @@ class DeclarationController extends Controller
 
     }
 
+    public function deleteInvoice($id){
+
+        $delete = db::table('si_assigned')
+            ->where('ID', $id)
+            ->delete();
+
+        if($delete == true){
+            session()->flash('status', 'OR Declaration Updated');
+            return redirect()->route('SalesInvoice.create', $id);
+
+        }else{
+
+        }
+
+
+    }
+
+    public function deleteIcr($id){
+
+    }
+
+    public function deleteClc($id){
+
+    }
+
+    public function deleteDr($id){
+
+    }
+
+    public function deleteOr($id){
+
+    }
+
+
 }

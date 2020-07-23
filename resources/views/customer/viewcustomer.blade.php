@@ -38,6 +38,8 @@
 {{--                  @endif--}}
               </div>
               <div class="box-body">
+                  @foreach(Session::get('user') as $user)
+                  @endforeach
                 <div class="row-content">
                   <div class="col-12">
                     <div class="box">
@@ -46,10 +48,11 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="box-body table-responsive">
+
                         <table id="customerTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Client ID</th>
+                                    <th>{{$user -> user_authorization}}</th>
                                     <th>Customer Name</th>
                                     <th>Customer Type</th>
                                     <th>Address</th>
@@ -59,7 +62,9 @@
                                     <th>Tel. NO</th>
                                     <th>Cell. No</th>
                                     <th>Email Addres</th>
-                                    <th>Actions</th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user -> user_authorization == 1)
+                                        <th>Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,11 +80,13 @@
                                         <td>{{ $row -> TEL_NO }}</td>
                                         <td>{{ $row -> CELL_NO }}</td>
                                         <td>{{ $row -> EMAIL_ADDR }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href="{{ route('CustomerController.show', $row->CLIENTID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                            </div>
-                                        </td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user -> user_authorization == 1)
+                                            <td class="text-center">
+                                                <div class="btn-group-vertical">
+                                                    <a type="button" class="btn btn-info" href="{{ route('CustomerController.show', $row->CLIENTID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
 
                                 @endforeach

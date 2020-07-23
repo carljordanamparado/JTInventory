@@ -1,7 +1,8 @@
 @extends('main')
 
 @section('content')
-
+    @foreach(Session::get('user') as $user)
+    @endforeach
   <div class="content-wrapper">
      <section class="content">
          <div class="box">
@@ -22,7 +23,9 @@
                                     <th class="text-center">Birthdate</th>
                                     <th class="text-center">Contact No.</th>
                                     <th class="text-center">Email Address</th>
-                                    <th class="text-center">Actions</th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                        <th class="text-center">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,12 +39,14 @@
                                         <td>{{ $salesrep -> BIRTH_DATE }}</td>
                                         <td>{{ $salesrep -> CONTACT_NO }}</td>
                                         <td>{{ $salesrep -> EMAIL }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                                {{--<a type="button" class="btn btn-warning" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-exclamation">&nbsp;&nbsp;</span>Lost Report</a>--}}
-                                            </div>
-                                        </td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td class="text-center">
+                                                <div class="btn-group-vertical">
+                                                    <a type="button" class="btn btn-info" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                    {{--<a type="button" class="btn btn-warning" href=" {{ route('SalesRepController.show', $salesrep -> ID) }}"><span class="fa fa-exclamation">&nbsp;&nbsp;</span>Lost Report</a>--}}
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

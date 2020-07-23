@@ -207,7 +207,7 @@
                                </select>
                            </div>
                            <div class="form-group col-md-3">
-                               <label for="" id="cylinderIdStatus"> &nbsp;</label>
+                               <label for="" id="cylinderIdStatus"> Cylinder ID </label>
                                <input type="text" class="form-control" id="inputtedTypeId" name="inputtedTypeId">
                            </div>
                            <div class="form-group col-md-3">
@@ -273,29 +273,43 @@
 
         function submitButton(){
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            var deliveryNo = $('#invoiceNo').val();
+            var cylinderDate = $('#invoiceDate').val();
 
-            $.ajax({
-                url: "{{ route('Sales.store') }}" ,
-                type: "POST",
-                data: $('#salesinvoiceform').serialize(),
-                success: function(response){
-                    try{
-                        window.history.back();
-                        swal('Sales invoice successfully', '', 'success');
+            if(deliveryNo == "0" ){
+                swal("Please input required fields", "With red line", "error");
+                $('#invoiceNo').css("border", "1px solid red");
+            }if(cylinderDate == ""){
+                swal("Please input required fields", "With red line", "error");
+                $('#invoiceDate').css("border", "1px solid red");
+            }if(deliveryNo != "0" && cylinderDate != "") {
+                $('#invoiceNo').css("border", "");
+                $('#invoiceDate').css("border", "");
 
-                    }catch (Exception) {
-                        swal(Exception , Exception , 'error');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                },
-                error: function(jqXHR){
-                    console.log(jqXHR);
-                }
-            });
+                });
+
+                $.ajax({
+                    url: "{{ route('Sales.store') }}",
+                    type: "POST",
+                    data: $('#salesinvoiceform').serialize(),
+                    success: function (response) {
+                        try {
+                            window.history.back();
+                            swal('Sales invoice successfully', '', 'success');
+
+                        } catch (Exception) {
+                            swal(Exception, Exception, 'error');
+                        }
+                    },
+                    error: function (jqXHR) {
+                        console.log(jqXHR);
+                    }
+                });
+            }
         }
 
         $('#submitButton').on('click', function(e){

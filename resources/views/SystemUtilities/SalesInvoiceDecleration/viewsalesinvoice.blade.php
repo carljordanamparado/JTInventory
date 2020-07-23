@@ -1,7 +1,8 @@
 @extends('main')
 
 @section('content')
-
+    @foreach(Session::get('user') as $user)
+    @endforeach
     <div class="content-wrapper">
      <section class="content">
          <div class="box">

@@ -62,7 +62,9 @@
                                     <th class="text-center">To</th>
                                     <th class="text-center">Assigned Date</th>
                                     <th class="text-center">Assigned By</th>
-                                    <th class="text-center">Actions</th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                         <th class="text-center">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,7 +76,10 @@
                                         <td>{{ $salesInvoice -> TO_OR_NO }}</td>
                                         <td>{{ $salesInvoice -> ENCODED_DATE }}</td>
                                         <td>{{ $salesInvoice -> ASSIGNED_BY }}</td>
-                                        <td><a href="{{ route('viewSD', $salesInvoice -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td><a href="{{ route('viewSD', $salesInvoice -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                            {{--<td><a href="{{ route('deleteSALES', $salesInvoice -> ID) }}" class="btn btn-info"> Delete </a></td>--}}
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

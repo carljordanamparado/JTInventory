@@ -60,7 +60,9 @@
                                     <th class="text-center">To</th>
                                     <th class="text-center">Assigned Date</th>
                                     <th class="text-center">Assigned By</th>
-                                    <th class="text-center">Actions</th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                        <th class="text-center">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,7 +74,9 @@
                                         <td>{{ $icr -> TO_NO }}</td>
                                         <td>{{ $icr -> ENCODED_DATE }}</td>
                                         <td>{{ $icr -> ASSIGNED_BY }}</td>
-                                        <td><a href="{{ route('viewICR', $icr -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td><a href="{{ route('viewICR', $icr -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -228,7 +228,7 @@
     <script>
         $(document).ready(function(){
 
-            $('#prodListTable, #prodListTable2').dataTable({
+            $('#prodListTable').dataTable({
                 scrollY:        '30vh',
                 scrollCollapse: true,
                 paging:         false,
@@ -237,28 +237,43 @@
 
             function submitButton(){
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+                var deliveryNo = $('#orNo').val();
+                var cylinderDate = $('#cylinderDate').val();
 
-                $.ajax({
-                    url: "{{ route('OfficialReceipt.store') }}" ,
-                    type: "POST",
-                    data: $('#orForm').serialize(),
-                    success: function(response){
-                        try{
-                            swal('Sales invoice successfully', '', 'success');
-                            windows.history.back();
-                        }catch (Exception) {
-                            swal(Exception , Exception , 'error');
+                if(deliveryNo == "0" ){
+                    swal("Please input required fields", "With red line", "error");
+                    $('#invoiceNo').css("border", "1px solid red");
+                }if(cylinderDate == ""){
+                    swal("Please input required fields", "With red line", "error");
+                    $('#invoiceDate').css("border", "1px solid red");
+                }if(deliveryNo != "0" && cylinderDate != "") {
+                    $('#invoiceNo').css("border", "");
+                    $('#invoiceDate').css("border", "");
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
-                    },
-                    error: function(jqXHR){
-                        console.log(jqXHR);
-                    }
-                });
+                    });
+
+                    $.ajax({
+                        url: "{{ route('OfficialReceipt.store') }}",
+                        type: "POST",
+                        data: $('#orForm').serialize(),
+                        success: function (response) {
+                            try {
+                                swal('Sales invoice successfully', '', 'success');
+                                windows.history.back();
+                            } catch (Exception) {
+                                swal(Exception, Exception, 'error');
+                            }
+                        },
+                        error: function (jqXHR) {
+                            console.log(jqXHR);
+                        }
+                    });
+
+                }
             }
 
             $('#submitButton').on('click', function(e){

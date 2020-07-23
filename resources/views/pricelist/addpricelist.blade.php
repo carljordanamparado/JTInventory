@@ -14,7 +14,8 @@
                     <h3 class="box-title"> Add Customer Pricelist </h3>
                 </div>
                 <div class="box-body">
-
+                    @foreach(Session::get('user') as $user)
+                    @endforeach
 
                     @foreach ($clientInfo as $row)
 
@@ -23,33 +24,33 @@
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label for="CustomerName">Customer Name</label>
-                            <input type="text" class="form-control" data-validation="required" id="custName" name="custName" placeholder="Customer Name" value="{{ $row -> NAME  }}" {{ $readonly }}>
+                            <input type="text" class="form-control" data-validation="required" id="custName" name="custName" placeholder="Customer Name" value="{{ $row -> NAME ?? ''  }}" {{ $readonly }}>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="Address">Address</label>
-                            <input type="text" class="form-control" data-validation="required" id="Address" name="Address" placeholder="Address" value="{{ $row -> ADDRESS }}" {{ $readonly }}>
+                            <input type="text" class="form-control" data-validation="required" id="Address" name="Address" placeholder="Address" value="{{ $row -> ADDRESS  ?? '' }}" {{ $readonly }}>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="contPerson">Contact Person</label>
-                            <input type="text" class="form-control" data-validation="required" id="contPerson" name="contPerson" placeholder="Contact Person" value="{{ $row -> CON_PERSON }}" {{ $readonly }}>
+                            <input type="text" class="form-control" data-validation="required" id="contPerson" name="contPerson" placeholder="Contact Person" value="{{ $row -> CON_PERSON ?? '' }}" {{ $readonly }}>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="Designation">Designation</label>
-                            <input type="text" class="form-control" id="Designation" data-validation="required" name="Designation" placeholder="Designation" value="{{ $row -> DESIGNATION }}" {{ $readonly }}>
+                            <input type="text" class="form-control" id="Designation" data-validation="required" name="Designation" placeholder="Designation" value="{{ $row -> DESIGNATION  ?? '' }}" {{ $readonly }}>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="telNumber">Telephone No.</label>
-                            <input type="text" class="form-control" id="telNo" name="telNo" placeholder="Telephone NO." value="{{ $row -> TEL_NO }}" {{ $readonly }}>
+                            <input type="text" class="form-control" id="telNo" name="telNo" placeholder="Telephone NO." value="{{ $row -> TEL_NO ?? '' }}" {{ $readonly ?? '' }}>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="contNumber">Contact No.</label>
-                            <input type="text" class="form-control" id="contNo" name="contNo" placeholder="Contact NO." value="{{ $row -> CELL_NO }}" {{ $readonly }}>
+                            <input type="text" class="form-control" id="contNo" name="contNo" placeholder="Contact NO." value="{{ $row -> CELL_NO ?? '' }}" {{ $readonly ?? '' }}>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="emailAddress">Email Address</label>
-                            <input type="text" class="form-control" id="emailAddress" data-validation="email" name="emailAddress" placeholder="Email Address" value="{{ $row -> EMAIL_ADDR }}" {{ $readonly }}>
+                            <input type="text" class="form-control" id="emailAddress" data-validation="email" name="emailAddress" placeholder="Email Address" value="{{ $row -> EMAIL_ADDR  ?? '' }}" {{ $readonly }}>
                         </div>
 
                     </div>
@@ -120,7 +121,9 @@
                                     <th class="text-center"> Products Size </th>
                                     <th class="text-center"> Product Price </th>
                                     <th class="text-center"> Product Date </th>
-                                    <th class="text-center"> Action </th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                        <th class="text-center"> Action </th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,18 +134,20 @@
                                         <td class="text-center">{{ $prodList-> SIZE }}</td>
                                         <td class="text-center"><input type="text" name="editProdPrice" class="prodPrice" value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" data-value="{{ number_format($prodList-> PRODUCT_PRICE, 2) }}" disabled="true"></td>
                                         <td class="text-center">{{ $prodList-> PRICE_DATE }}</td>
-                                        <td class="text-center">
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td class="text-center">
 
-                                            <div class="btn-group-vertical btn-action">
-                                                <a type="button" class="btn btn-info btn-edit"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                            </div>
+                                                <div class="btn-group-vertical btn-action">
+                                                    <a type="button" class="btn btn-info btn-edit"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                </div>
 
-                                            <div class="btn-group-vertical btn-edit-yes hidden">
-                                                <a type="button" class="btn btn-info btn-yes"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Yes</a>
-                                                <a type="button" class="btn btn-danger btn-no"><span class="fa fa-trash">&nbsp;&nbsp;</span>No</a>
-                                            </div>
+                                                <div class="btn-group-vertical btn-edit-yes hidden">
+                                                    <a type="button" class="btn btn-info btn-yes"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Yes</a>
+                                                    <a type="button" class="btn btn-danger btn-no"><span class="fa fa-trash">&nbsp;&nbsp;</span>No</a>
+                                                </div>
 
-                                        </td>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

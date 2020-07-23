@@ -31,6 +31,8 @@ class CustomerController extends Controller
 
         return view('customer.addcustomer' , ['clientType' => $clientType]);
 
+
+
     }
 
     /**

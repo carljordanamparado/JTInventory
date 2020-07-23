@@ -54,6 +54,15 @@ Route::post('updateCLCDeclaration', ['uses' => 'DeclarationController@updateCLCD
 Route::post('updateDRDeclaration', ['uses' => 'DeclarationController@updateDRDeclaration' , 'as' => 'updateDR']);
 Route::post('updateORDeclaration', ['uses' => 'DeclarationController@updateORDeclaration' , 'as' => 'updateOR']);
 
+//POST DELETE
+
+Route::post('deleteSales', ['uses' => 'DeclarationController@deleteSales' , 'as' => 'deleteSALES']);
+Route::post('deleteIcr', ['uses' => 'DeclarationController@deleteIcr' , 'as' => 'deleteICR']);
+Route::post('deleteClc', ['uses' => 'DeclarationController@deleteClc' , 'as' => 'deleteCLC']);
+Route::post('deleteDr', ['uses' => 'DeclarationController@deleteDr' , 'as' => 'deleteDR']);
+Route::post('deleteOr', ['uses' => 'DeclarationController@deleteOr' , 'as' => 'deleteOR']);
+
+
 // Get
 Route::get('getProductSize', ['uses'  => 'JqueryController@prodCodeToSize' , 'as' => 'getProductSize']);
 Route::get('getProductSize2', ['uses'  => 'JqueryController@getProductSize2' , 'as' => 'getProductSize2']);

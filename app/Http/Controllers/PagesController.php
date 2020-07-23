@@ -29,6 +29,7 @@ class PagesController extends Controller
                 ->orderByDesc('CLIENTID')
                 ->get();
 
+
     	return view('customer.viewcustomer' , ['client' => $client]);
 
     }

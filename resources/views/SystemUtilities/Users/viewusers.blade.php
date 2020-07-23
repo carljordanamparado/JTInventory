@@ -2,6 +2,9 @@
 
 @section('content')
 
+    @foreach(Session::get('user') as $user)
+    @endforeach
+
      <div class="content-wrapper">
         <section class="content">
             <div class="box">
@@ -21,7 +24,9 @@
                                     <th class="text-center">User Designation</th>
                                     <th class="text-center">User Authorization</th>
                                     <th class="text-center">User Email</th>
-                                    <th class="text-center">Actions</th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                        <th class="text-center">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,11 +39,13 @@
                                         <td>{{ $systemUsers -> designation }}</td>
                                         <td>{{ $systemUsers -> user_authorization }}</td>
                                         <td>{{ $systemUsers -> email }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href=" {{ route('SystemUsersController.show', $systemUsers -> id) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                            </div>
-                                        </td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td class="text-center">
+                                                <div class="btn-group-vertical">
+                                                    <a type="button" class="btn btn-info" href=" {{ route('SystemUsersController.show', $systemUsers -> id) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

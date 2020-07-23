@@ -128,35 +128,51 @@
 
             $('#size').maskMoney();
 
+           function validationonFail(){
+
+           }
+
             function submitButton(){
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
 
-                $.ajax({
-                    url: "{{ route('Deliver.store') }}" ,
-                    type: "POST",
-                    data: $('#deliverform').serialize(),
-                    success: function(response){
-                        try{
-                            if(response.success == true){
-                                swal('Delivery Receipt successfully added', '', 'success');
-                                window.history.back();
-                            }else{
-                                swal("Something has an error" , "Please try again" , 'error');
-                            }
+                var deliveryNo = $('#deliveryNo').val();
+                var cylinderDate = $('#cylinderDate').val();
 
-                        }catch (Exception) {
-                            swal(Exception , Exception , 'error');
+                if(deliveryNo == "0" ){
+                    swal("Please input required fields", "With red line", "error");
+                    $('#deliveryNo').css("border", "1px solid red");
+                }if(cylinderDate == ""){
+                    swal("Please input required fields", "With red line", "error");
+                    $('#cylinderDate').css("border", "1px solid red");
+                }if(deliveryNo != "0" && cylinderDate != ""){
+                    $('#deliveryNo').css("border", "");
+                    $('#cylinderDate').css("border", "");
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
-                    },
-                    error: function(jqXHR){
-                        console.log(jqXHR);
-                    }
-                });
+                    });
+
+                    $.ajax({
+                        url: "{{ route('Deliver.store') }}",
+                        type: "POST",
+                        data: $('#deliverform').serialize(),
+                        success: function (response) {
+                            try {
+                                if (response.status == "success") {
+                                    swal('Delivery Receipt successfully added', '', 'success');
+                                    window.history.back();
+                                }
+
+                            } catch (Exception) {
+                                swal(Exception, Exception, 'error');
+                            }
+                        },
+                        error: function (jqXHR) {
+                            console.log(jqXHR);
+                        }
+                    });
+                }
             }
 
             $('#submitButton').on('click', function(e){
