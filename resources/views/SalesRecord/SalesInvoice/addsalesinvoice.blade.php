@@ -214,10 +214,10 @@
                                <label for="" id=""> &nbsp;</label>
                               <button type="button" class="form-control btn btn-info" id="validateCylinder">Validate Cylinder</button>
                            </div>
-                           <div class="form-group col-md-3">
+                           {{--<div class="form-group col-md-3">
                                <label for="" id=""> &nbsp;</label>
                                <button type="button" class="form-control btn btn-info" id="getCylinderRemain">Get Cylinder Remain from Invoice</button>
-                           </div>
+                           </div>--}}
                        </div>
                        <div class="row">
                            <div class="form-group col-md-4">

@@ -546,7 +546,7 @@ class JqueryController extends Controller
             $tableData2 .= '<tr class="text-center">'.$data0.' '.$data1.' '. $data2 .' '.$data3.' '.$data4.' </tr>';
         }
 
-        return Response()->json(['table_data2' => $tableData2]);
+        return response()->json(['table_data2' => $tableData2]);
 
     }
 
@@ -554,7 +554,6 @@ class JqueryController extends Controller
 
         $cylinder_type = $request -> cylinder_type;
         $cylinder_id = $request -> id;
-
 
 
         /*
@@ -571,6 +570,8 @@ class JqueryController extends Controller
                 ->where('FROM_NO', '<=', $cylinder_id)
                 ->where('TO_NO', '>=', $cylinder_id)
                 ->get();
+
+
 
 
 
