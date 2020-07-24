@@ -21,11 +21,11 @@
                         <th class="text-center"> Actions </th>
                         </thead>
                         <tbody>
-                        @foreach($deliver_receipt as $deliver_data)
+                        @foreach($OR as $DATA)
                             <tr class="text-center">
-                                <td> {{ $deliver_data -> DR_NO }}</td>
-                                <td> {{ $deliver_data -> DR_DATE }}</td>
-                                <td> {{ $deliver_data -> NAME }}</td>
+                                <td> {{ $DATA -> OR_NO }}</td>
+                                <td> {{ $DATA -> OR_DATE }}</td>
+                                <td> {{ $DATA -> NAME }}</td>
                                 <td><a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
                             </tr>
                         @endforeach

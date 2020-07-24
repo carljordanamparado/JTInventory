@@ -16,13 +16,13 @@ class OfficialReceipt extends Controller
     {
         //
 
-        $deliver = db::table('delivery_receipt')
-            ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
-            ->where('delivery_receipt.AS_INVOICE', 0)
-            ->where('delivery_receipt.FULLY_PAID', 0)
+        $OR = db::table('official_receipt')
+            ->join('client', 'official_receipt.CLIENT_ID', '=', 'client.CLIENTID')
+            ->where('official_receipt.STATUS', 1)
             ->get();
 
-        return view('SalesRecord.OfficialReceipt.viewor');
+        return view('SalesRecord.OfficialReceipt.viewor')
+                ->with('OR', $OR);
     }
 
     /**
