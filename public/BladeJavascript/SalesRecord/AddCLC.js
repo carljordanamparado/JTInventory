@@ -20,25 +20,28 @@ $(document).ready(function(){
                 'buttonVal': buttonVal
             },
             success: function (response) {
-                if (response.status == "empty") {
-                    $('#status').text("No Sales Invoice");
+                if(response.status == "empty"){
+                    $('#status').text("No Record Found");
                     $('#status').css("color", "red");
                     $('#status').css('font-size', '12px');
                     $('#issuedBy').val("");
+                    // $('#salesDetails').hide();
                     $('#submitButton').attr('disabled', true);
-                } else if (response.status == "DONE" || response.status == 'CANCELLED' || response.status == 'NO RECORD FOUND') {
-                    $('#status').text(response.status);
-                    $('#status').css("color", "red");
-                    $('#status').css('font-size', '12px');
-                    $('#issuedBy').val("");
-                    $('#submitButton').attr('disabled', true);
-                } else {
+                }if(response.status == "active"){
                     $('#status').text('Active');
                     $('#status').css("color", 'Green');
                     $('#status').css('font-size', '12px');
                     $('#issuedBy').val(response.issuedBy);
                     $('#issuedId').val(response.issuerID);
+                    $('#salesDetails').show();
                     $('#submitButton').attr('disabled', false);
+                }if(response[0].status == "DONE" || response[0].status == 'CANCELLED' || response[0].status == 'NO RECORD FOUND'){
+                    $('#status').text(response[0].status);
+                    $('#status').css("color", "red");
+                    $('#status').css('font-size', '12px');
+                    $('#issuedBy').val("");
+                    // $('#salesDetails').hide();
+                    $('#submitButton').attr('disabled', true);
                 }
             }
 

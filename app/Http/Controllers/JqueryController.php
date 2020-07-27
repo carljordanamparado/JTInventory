@@ -145,7 +145,7 @@ class JqueryController extends Controller
                     })
                     ->get();
                 if ($si_report->isEmpty() == true) {
-                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID , 'status' => "active"));
                 } else {
                     foreach ($si_report as $remarks) {
                         return response()->json(array(['status' => $remarks->REMARKS]));
@@ -183,7 +183,7 @@ class JqueryController extends Controller
                     ->get();
 
                 if ($report->isEmpty() == true) {
-                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID , 'status' => "active"));
                 } else {
                     foreach ($report as $remarks) {
                         return response()->json(array(['status' => $remarks->REMARKS]));
@@ -221,7 +221,7 @@ class JqueryController extends Controller
                     ->get();
 
                 if ($report->isEmpty() == true) {
-                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID , 'status' => "active"));
                 } else {
                     foreach ($report as $remarks) {
                         return response()->json(array(['status' => $remarks->REMARKS]));
@@ -259,7 +259,7 @@ class JqueryController extends Controller
                     ->get();
 
                 if ($report->isEmpty() == true) {
-                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID , 'status' => "active"));
                 } else {
                     foreach ($report as $remarks) {
                         return response()->json(array(['status' => $remarks->REMARKS]));
@@ -297,7 +297,7 @@ class JqueryController extends Controller
                     ->get();
 
                 if ($report->isEmpty() == true) {
-                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID));
+                    return response()->json(array('issuedBy' => $issuedBy, 'issuerID' => $issuerID , 'status' => "active"));
                 } else {
                     foreach ($report as $remarks) {
                         return response()->json(array(['status' => $remarks->REMARKS]));
