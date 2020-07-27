@@ -18,13 +18,19 @@ class CylinderLoan extends Controller
     {
         //
 
-        $cylinder_data = db::table('cylinder_loan_contract')
-            ->join('client', 'cylinder_loan_contract.CLIENT_NO', '=' , 'client.CLIENTID')
-            ->where('clc_tag', 1)
-            ->get();
+        if(session()->has('user')){
+            $cylinder_data = db::table('cylinder_loan_contract')
+                ->join('client', 'cylinder_loan_contract.CLIENT_NO', '=' , 'client.CLIENTID')
+                ->where('clc_tag', 1)
+                ->get();
 
-        return view('SalesRecord.CylinderLoan.viewcylinderloan')
-            ->with('cylinder_data' , $cylinder_data);
+            return view('SalesRecord.CylinderLoan.viewcylinderloan')
+                ->with('cylinder_data' , $cylinder_data);
+       }else{
+           return view('login');
+       }
+
+
     }
 
     /**

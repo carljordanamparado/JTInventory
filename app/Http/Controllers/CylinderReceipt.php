@@ -17,13 +17,19 @@ class CylinderReceipt extends Controller
     public function index()
     {
         //
-        $cylinder_data = db::table('cylinder_receipt')
-            ->join('client', 'cylinder_receipt.CLIENT_NO', '=' , 'client.CLIENTID')
-            ->where('icr_tag', 0)
-            ->get();
 
-        return view('SalesRecord.CylinderReceipt.viewcylinderreceipt')
-            ->with('cylinder_data' , $cylinder_data);
+        if(session()->has('user')){
+            $cylinder_data = db::table('cylinder_receipt')
+                ->join('client', 'cylinder_receipt.CLIENT_NO', '=' , 'client.CLIENTID')
+                ->where('icr_tag', 0)
+                ->get();
+
+            return view('SalesRecord.CylinderReceipt.viewcylinderreceipt')
+                ->with('cylinder_data' , $cylinder_data);
+       }else{
+           return view('login');
+       }
+
     }
 
     /**

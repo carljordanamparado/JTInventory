@@ -77,8 +77,11 @@
                                         <td>{{ $salesInvoice -> ENCODED_DATE }}</td>
                                         <td>{{ $salesInvoice -> ASSIGNED_BY }}</td>
                                         @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
-                                            <td><a href="{{ route('viewSD', $salesInvoice -> ID) }}" class="btn btn-info"> Edit </a></td>
-                                            {{--<td><a href="{{ route('deleteSALES', $salesInvoice -> ID) }}" class="btn btn-info"> Delete </a></td>--}}
+                                            <td>
+                                                <a href="{{ route('viewSD', $salesInvoice -> ID) }}" class="btn btn-info"> Edit </a>
+                                                <button type="button" id="delete" value="{{ $salesInvoice -> ID }}" class="btn btn-info"> Delete </button>
+                                            </td>
+
                                         @endif
                                     </tr>
                                 @endforeach
@@ -107,10 +110,40 @@
             });
 
             @if(Session::has('status'))
-
                     swal( '{{ Session::get('status') }}' , "", "Success");
-
             @endif
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('#delete').on('click', function(){
+                var id = $(this).val();
+                $.ajax({
+                    url: "{{ route('deleteSALES') }}",
+                    type: "POST",
+                    data: {'id': id,
+                        "_token": "{{ csrf_token() }}"},
+                    success: function (response) {
+                        try {
+                            if (response.status == "success") {
+                                swal({title: "Success!", text: "Sales Invoice Declaration Deleted.", type: "Success"})
+                                    .then((value) => {
+                                        location.reload();
+                                    });
+                            }
+
+                        } catch (Exception) {
+                            swal(Exception, Exception, 'error');
+                        }
+                    },
+                    error: function (jqXHR) {
+                        console.log(jqXHR);
+                    }
+                });
+            });
 
         });
 

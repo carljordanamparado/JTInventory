@@ -144,37 +144,57 @@ class DeclarationController extends Controller
 
     }
 
-    public function deleteInvoice($id){
+    public function deleteInvoice(Request $request){
+
+        $id = $request->id;
 
         $delete = db::table('si_assigned')
             ->where('ID', $id)
             ->delete();
 
-        if($delete == true){
-            session()->flash('status', 'OR Declaration Updated');
-            return redirect()->route('SalesInvoice.create', $id);
-
-        }else{
-
-        }
+        return response()->json(array('status' => 'success'));
 
 
     }
 
-    public function deleteIcr($id){
+    public function deleteIcr(Request $request){
+        $id = $request->id;
 
+        $delete = db::table('icr_assigned')
+            ->where('ID', $id)
+            ->delete();
+
+        return response()->json(array('status' => 'success'));
     }
 
-    public function deleteClc($id){
+    public function deleteClc(Request $request){
+        $id = $request->id;
 
+        $delete = db::table('clc_assigned')
+            ->where('ID', $id)
+            ->delete();
+
+        return response()->json(array('status' => 'success'));
     }
 
-    public function deleteDr($id){
+    public function deleteDr(Request $request){
+        $id = $request->id;
 
+        $delete = db::table('dr_assigned')
+            ->where('ID', $id)
+            ->delete();
+
+        return response()->json(array('status' => 'success'));
     }
 
-    public function deleteOr($id){
+    public function deleteOr(Request $request){
+        $id = $request->id;
 
+        $delete = db::table('icr_assigned')
+            ->where('ID', $id)
+            ->delete();
+
+        return response()->json(array('status' => 'success'));
     }
 
 

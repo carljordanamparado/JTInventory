@@ -16,18 +16,18 @@ class DeliverController extends Controller
     {
         //
 
-        $deliver = db::table('delivery_receipt')
-            ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
-            ->where('delivery_receipt.AS_INVOICE', 0)
-            ->where('delivery_receipt.FULLY_PAID', 0)
-            ->get();
+        if(session()->has('user')){
+            $deliver = db::table('delivery_receipt')
+                ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
+                ->where('delivery_receipt.AS_INVOICE', 0)
+                ->where('delivery_receipt.FULLY_PAID', 0)
+                ->get();
 
-
-
-
-
-        return view('SalesRecord.DeliveryReceipt.viewdelivery')
-            ->with('deliver_receipt', $deliver);
+            return view('SalesRecord.DeliveryReceipt.viewdelivery')
+                ->with('deliver_receipt', $deliver);
+       }else{
+           return view('login');
+       }
     }
 
     /**

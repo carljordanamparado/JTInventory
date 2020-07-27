@@ -23,53 +23,82 @@ class PagesController extends Controller
 
     public function getCustomerView(){
 
-		$client = DB::table('client')
-				->join('client_type', 'client.TYPE', '=', 'client_type.ID')
-				->select('client.*', 'client_type.CLIENT_TYPE')
+
+
+        if(session()->has('user')){
+            $client = DB::table('client')
+                ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
+                ->select('client.*', 'client_type.CLIENT_TYPE')
                 ->orderByDesc('CLIENTID')
                 ->get();
 
 
-    	return view('customer.viewcustomer' , ['client' => $client]);
+            return view('customer.viewcustomer' , ['client' => $client]);
+       }else{
+           return view('login');
+       }
 
     }
 
     public function getPriceCustomerView(){
-        $client = DB::table('client')
-            ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
-            ->select('client.*', 'client_type.CLIENT_TYPE')
-            ->orderByDesc('CLIENTID')
-            ->get();
+        if(session()->has('user')){
+            $client = DB::table('client')
+                ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
+                ->select('client.*', 'client_type.CLIENT_TYPE')
+                ->orderByDesc('CLIENTID')
+                ->get();
 
-        return view('pricelist.viewpricelist' , ['client' => $client]);
+            return view('pricelist.viewpricelist' , ['client' => $client]);
+       }else{
+           return view('login');
+       }
+
     }
 
     public function getCylinderBalance(){
-        $client = DB::table('client')
-            ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
-            ->select('client.*', 'client_type.CLIENT_TYPE')
-            ->get();
 
-        return view('cylinder.viewcylinder', ['client' => $client]);
+        if(session()->has('user')){
+            $client = DB::table('client')
+                ->join('client_type', 'client.TYPE', '=', 'client_type.ID')
+                ->select('client.*', 'client_type.CLIENT_TYPE')
+                ->get();
+
+            return view('cylinder.viewcylinder', ['client' => $client]);
+       }else{
+           return view('login');
+       }
+
     }
 
     public function getPurchaseOrder(){
 
-        $purchaseList = db::table('client')
-            ->join('client_po' , 'client.CLIENTID' , '=' , 'client_po.CLIENTID')
-            ->where('client_po.STATUS', '!=' , null)
-            ->where('client_po.CLIENTID', '!=' , null)
-            ->get();
+        if(session()->has('user')){
+            $purchaseList = db::table('client')
+                ->join('client_po' , 'client.CLIENTID' , '=' , 'client_po.CLIENTID')
+                ->where('client_po.STATUS', '!=' , null)
+                ->where('client_po.CLIENTID', '!=' , null)
+                ->get();
 
-        return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);
+            return view('purchase_order.viewpurchase', ['purchaselist' => $purchaseList]);
+       }else{
+           return view('login');
+       }
+
+
     }
 
     public function getSystemUsers(){
 
-        $systemUsers = db::Table('users')->get();
-       
-        return view('SystemUtilities.Users.viewusers')
-            ->with('systemUsers', $systemUsers);
+        if(session()->has('user')){
+            $systemUsers = db::Table('users')->get();
+
+            return view('SystemUtilities.Users.viewusers')
+                ->with('systemUsers', $systemUsers);
+       }else{
+           return view('login');
+       }
+
+
     }
 
     public function getLogin(){

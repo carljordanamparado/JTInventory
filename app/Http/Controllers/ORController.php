@@ -15,11 +15,17 @@ class ORController extends Controller
     public function index()
     {
         //
-         $salesRep = db::table('sales_rep')
-            ->get();
 
-        return view('SystemUtilities.ORDeclaration.viewor')
-            ->with('salesRep', $salesRep);
+
+        if(session()->has('user')){
+            $salesRep = db::table('sales_rep')
+                ->get();
+
+            return view('SystemUtilities.ORDeclaration.viewor')
+                ->with('salesRep', $salesRep);
+       }else{
+           return view('login');
+       }
     }
 
     /**

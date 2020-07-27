@@ -16,11 +16,17 @@ class SalesInvoiceController extends Controller
     {
         //
 
-        $salesRep = db::table('sales_rep')
-            ->get();
+        if(session()->has('user')){
+            $salesRep = db::table('sales_rep')
+                ->get();
 
-        return view('SystemUtilities.SalesInvoiceDecleration.viewsalesinvoice')
-            ->with('salesRep', $salesRep);
+            return view('SystemUtilities.SalesInvoiceDecleration.viewsalesinvoice')
+                ->with('salesRep', $salesRep);
+       }else{
+           return view('login');
+       }
+
+
 
     }
 

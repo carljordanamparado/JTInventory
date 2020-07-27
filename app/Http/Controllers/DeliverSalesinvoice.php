@@ -16,14 +16,20 @@ class DeliverSalesinvoice extends Controller
     public function index()
     {
         //
-        $deliver_invoice = db::table('delivery_receipt')
-            ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
-            ->where('delivery_receipt.AS_INVOICE', 1)
-            ->where('delivery_receipt.FULLY_PAID', 0)
-            ->get();
 
-        return view('SalesRecord.DeliveryReceipt.viewdeliveryinvoice')
-            ->with('deliver_invoice', $deliver_invoice);
+        if(session()->has('user')){
+            $deliver_invoice = db::table('delivery_receipt')
+                ->join('client', 'delivery_receipt.CLIENT_ID', '=', 'client.CLIENTID')
+                ->where('delivery_receipt.AS_INVOICE', 1)
+                ->where('delivery_receipt.FULLY_PAID', 0)
+                ->get();
+
+            return view('SalesRecord.DeliveryReceipt.viewdeliveryinvoice')
+                ->with('deliver_invoice', $deliver_invoice);
+       }else{
+           return view('login');
+       }
+
 
     }
 
@@ -202,8 +208,10 @@ class DeliverSalesinvoice extends Controller
             if($request -> particular == ""){
                 $count = 0;
             }else{
-                $count = $request -> particular;
+                $count = count($request -> particular);
             }
+
+
 
             for($i = 0; $i < $count; $i++){
                 $data_array = array([

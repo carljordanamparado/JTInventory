@@ -15,11 +15,22 @@ class CLCController extends Controller
     public function index()
     {
         //
-         $salesRep = db::table('sales_rep')
-            ->get();
 
-        return view('SystemUtilities.CLCDeclaration.viewclc')
-            ->with('salesRep', $salesRep);
+        /*if(session()->has('user')){
+        }else{
+            return view('login');
+        }*/
+
+        if(session()->has('user')){
+            $salesRep = db::table('sales_rep')
+                ->get();
+            return view('SystemUtilities.CLCDeclaration.viewclc')
+                ->with('salesRep', $salesRep);
+        }else{
+            return view('login');
+        }
+
+
     }
 
     /**

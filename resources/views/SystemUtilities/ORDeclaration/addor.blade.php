@@ -75,7 +75,10 @@
                                         <td>{{ $dr -> ENCODED_DATE }}</td>
                                         <td>{{ $dr -> ASSIGNED_BY }}</td>
                                         @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
-                                            <td><a href="{{ route('viewOR', $dr -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                            <td>
+                                                <a href="{{ route('viewOR', $dr -> ID) }}" class="btn btn-info"> Edit </a>
+                                                <button type="button" id="delete" value="{{ $dr -> ID }}" class="btn btn-info"> Delete </button>
+                                            </td>
                                             {{--<td><a href="{{ route('deleteOR', $dr -> ID) }}" class="btn btn-info"> Edit </a></td>--}}
                                         @endif
                                     </tr>
@@ -109,6 +112,32 @@
             swal( '{{ Session::get('status') }}' , "", "Success");
 
             @endif
+
+            $('#delete').on('click', function(){
+                var id = $(this).val();
+                $.ajax({
+                    url: "{{ route('deleteOR') }}",
+                    type: "POST",
+                    data: {'id': id,
+                        "_token": "{{ csrf_token() }}"},
+                    success: function (response) {
+                        try {
+                            if (response.status == "success") {
+                                swal({title: "Success!", text: "OR Declaration Deleted.", type: "Success"})
+                                    .then((value) => {
+                                        location.reload();
+                                    });
+                            }
+
+                        } catch (Exception) {
+                            swal(Exception, Exception, 'error');
+                        }
+                    },
+                    error: function (jqXHR) {
+                        console.log(jqXHR);
+                    }
+                });
+            });
         });
     </script>
 @endsection

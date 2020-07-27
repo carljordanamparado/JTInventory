@@ -20,14 +20,20 @@ class SalesInvoice extends Controller
     {
         //
 
-        $invoice_data = db::table('client')
-            ->join('sales_invoice', 'client.CLIENTID' , '=' , 'sales_invoice.CLIENT_ID')
-            ->where('sales_invoice.FULLY_PAID', 0)
-            ->get();
+        if(session()->has('user')){
+            $invoice_data = db::table('client')
+                ->join('sales_invoice', 'client.CLIENTID' , '=' , 'sales_invoice.CLIENT_ID')
+                ->where('sales_invoice.FULLY_PAID', 0)
+                ->get();
 
 
-        return view('SalesRecord.SalesInvoice.viewsalesinvoice')
-            ->with("invoice_data", $invoice_data);
+            return view('SalesRecord.SalesInvoice.viewsalesinvoice')
+                ->with("invoice_data", $invoice_data);
+       }else{
+           return view('login');
+       }
+
+
     }
 
     /**
@@ -208,7 +214,7 @@ class SalesInvoice extends Controller
             if($request -> particular == ""){
                 $count = 0;
             }else{
-                $count = $request -> particular;
+                $count = count($request -> particular);
             }
 
             for($i = 0; $i < $count; $i++){

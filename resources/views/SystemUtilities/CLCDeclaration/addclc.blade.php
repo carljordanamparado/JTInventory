@@ -75,7 +75,10 @@
                                         <td>{{ $clc -> ENCODED_DATE }}</td>
                                         <td>{{ $clc -> ASSIGNED_BY }}</td>
                                         @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
-                                           <td><a href="{{ route('viewCLC', $clc -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                           <td>
+                                               <a href="{{ route('viewCLC', $clc -> ID) }}" class="btn btn-info"> Edit </a>
+                                               <button type="button" id="delete" value="{{ $clc -> ID }}" class="btn btn-info"> Delete </button>
+                                           </td>
                                         @endif
                                     </tr>
                                 @endforeach
@@ -109,5 +112,31 @@
         swal( '{{ Session::get('status') }}' , "", "Success");
 
         @endif
+
+        $('#delete').on('click', function(){
+            var id = $(this).val();
+            $.ajax({
+                url: "{{ route('deleteCLC') }}",
+                type: "POST",
+                data: {'id': id,
+                    "_token": "{{ csrf_token() }}"},
+                success: function (response) {
+                    try {
+                        if (response.status == "success") {
+                            swal({title: "Success!", text: "CLC Declaration Deleted.", type: "Success"})
+                                .then((value) => {
+                                    location.reload();
+                                });
+                        }
+
+                    } catch (Exception) {
+                        swal(Exception, Exception, 'error');
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                }
+            });
+        });
     </script>
 @endsection

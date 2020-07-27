@@ -56,7 +56,7 @@ Route::post('updateORDeclaration', ['uses' => 'DeclarationController@updateORDec
 
 //POST DELETE
 
-Route::post('deleteSales', ['uses' => 'DeclarationController@deleteSales' , 'as' => 'deleteSALES']);
+Route::post('deleteSales', ['uses' => 'DeclarationController@deleteInvoice' , 'as' => 'deleteSALES']);
 Route::post('deleteIcr', ['uses' => 'DeclarationController@deleteIcr' , 'as' => 'deleteICR']);
 Route::post('deleteClc', ['uses' => 'DeclarationController@deleteClc' , 'as' => 'deleteCLC']);
 Route::post('deleteDr', ['uses' => 'DeclarationController@deleteDr' , 'as' => 'deleteDR']);

@@ -15,9 +15,15 @@ class SalesRepController extends Controller
     public function index()
     {
         //
-        $salesrep = db::table('sales_rep')
-            ->get();
-        return view('SystemUtilities.SalesRepresentative.viewsalesrep', ['salesrep' => $salesrep]);
+
+        if(session()->has('user')){
+            $salesrep = db::table('sales_rep')
+                ->get();
+            return view('SystemUtilities.SalesRepresentative.viewsalesrep', ['salesrep' => $salesrep]);
+       }else{
+           return view('login');
+       }
+
 
     }
 

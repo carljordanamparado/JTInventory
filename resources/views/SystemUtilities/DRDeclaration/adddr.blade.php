@@ -75,7 +75,10 @@
                                         <td>{{ $dr -> ENCODED_DATE }}</td>
                                         <td>{{ $dr -> ASSIGNED_BY }}</td>
                                         @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
-                                            <td><a href="{{ route('viewDR', $dr -> ID) }}" class="btn btn-info"> Edit </a></td>
+                                            <td>
+                                                <a href="{{ route('viewDR', $dr -> ID) }}" class="btn btn-info"> Edit </a>
+                                                <button type="button" id="delete" value="{{ $dr -> ID }}" class="btn btn-info"> Delete </button>
+                                            </td>
                                         @endif
                                     </tr>
                                 @endforeach
@@ -109,6 +112,32 @@
             swal( '{{ Session::get('status') }}' , "", "Success");
 
             @endif
+
+            $('#delete').on('click', function(){
+                var id = $(this).val();
+                $.ajax({
+                    url: "{{ route('deleteDR') }}",
+                    type: "POST",
+                    data: {'id': id,
+                        "_token": "{{ csrf_token() }}"},
+                    success: function (response) {
+                        try {
+                            if (response.status == "success") {
+                                swal({title: "Success!", text: "DR Declaration Deleted.", type: "Success"})
+                                    .then((value) => {
+                                        location.reload();
+                                    });
+                            }
+
+                        } catch (Exception) {
+                            swal(Exception, Exception, 'error');
+                        }
+                    },
+                    error: function (jqXHR) {
+                        console.log(jqXHR);
+                    }
+                });
+            });
         });
     </script>
 

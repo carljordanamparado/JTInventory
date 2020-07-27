@@ -15,11 +15,17 @@ class ICRController extends Controller
     public function index()
     {
         //
-         $salesRep = db::table('sales_rep')
-            ->get();
 
-        return view('SystemUtilities.ICRDeclaration.viewicr')
-            ->with('salesRep', $salesRep);
+
+        if(session()->has('user')){
+            $salesRep = db::table('sales_rep')
+                ->get();
+
+            return view('SystemUtilities.ICRDeclaration.viewicr')
+                ->with('salesRep', $salesRep);
+       }else{
+           return view('login');
+       }
     }
 
     /**
