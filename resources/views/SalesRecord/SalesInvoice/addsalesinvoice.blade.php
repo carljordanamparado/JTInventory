@@ -210,10 +210,10 @@
                                <label for="" id="cylinderIdStatus"> Cylinder ID </label>
                                <input type="text" class="form-control" id="inputtedTypeId" name="inputtedTypeId">
                            </div>
-                           <div class="form-group col-md-3">
+                           {{--<div class="form-group col-md-3">
                                <label for="" id=""> &nbsp;</label>
                               <button type="button" class="form-control btn btn-info" id="validateCylinder">Validate Cylinder</button>
-                           </div>
+                           </div>--}}
                            {{--<div class="form-group col-md-3">
                                <label for="" id=""> &nbsp;</label>
                                <button type="button" class="form-control btn btn-info" id="getCylinderRemain">Get Cylinder Remain from Invoice</button>

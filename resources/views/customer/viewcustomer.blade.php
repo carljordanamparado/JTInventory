@@ -52,7 +52,7 @@
                         <table id="customerTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>{{$user -> user_authorization}}</th>
+                                    <th>Client Code</th>
                                     <th>Customer Name</th>
                                     <th>Customer Type</th>
                                     <th>Address</th>
