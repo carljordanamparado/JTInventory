@@ -52,6 +52,8 @@ $(document).ready(function(){
         idValidation();
     });
 
+    customerProduct();
+
     function customerProduct() {
 
         var cust_id = $('#customer option:selected').val();

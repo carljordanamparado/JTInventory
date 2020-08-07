@@ -80,9 +80,9 @@ class CylinderReceipt extends Controller
             'RETURNED' => $type2,
             'OTHERS' => $type3,
             'OTHERS_TEXT' => $otherDescription,
-            'RELEASEDBY' => $request -> releasedBy,
+            'RELEASEDBY' => $request -> receivedBy,
             'RECEIVED_DATE' => $request -> releasedDate,
-            'RECEIVEDBY' => $request -> receivedBy,
+            'RECEIVEDBY' => $request -> releasedBy,
             'ICR_TAG' => 0,
             'STATUS' => 1
         ]);
@@ -207,6 +207,42 @@ class CylinderReceipt extends Controller
     public function edit($id)
     {
         //
+
+        $data = db::table('cylinder_receipt as a')
+            ->select('*' ,'a.ID')
+            ->leftJoin('sales_rep as b', 'a.RECEIVEDBY', '=', 'b.ID')
+            ->where('a.ID', $id)
+            ->get();
+
+        if($data->isEmpty()){
+            $data = db::table('cylinder_receipt as a')
+                ->select('*' ,'a.ID')
+                ->leftJoin('sales_rep as b', 'a.RECEIVEDBY', '=', 'b.SALESREP_NAME')
+                ->where('a.ID', $id)
+                ->get();
+        }
+
+
+        $icr_no = 0;
+
+        foreach($data as $row){
+            $icr_no = $row -> ICR_NO;
+        }
+
+
+        $data_product = db::table('cylinder_receipt_list')
+            ->where('ICR_NO', $icr_no)
+            ->get();
+
+
+        $client = db::table('client')
+            ->get();
+
+
+        return view('SalesRecord.CylinderReceipt.editcylinderreceipt')
+            ->with('icr', $data)
+            ->with('data', $client)
+            ->with('product', $data_product);
     }
 
     /**

@@ -494,7 +494,7 @@ class JqueryController extends Controller
             ->get();
 
         foreach($product_query as $data){
-            $option .= '<option value="'.$data -> PROD_CODE.'" data-id="'.$data->ID.'"> '.$data -> PRODUCT.' </option>';
+            $option .= '<option value="'.$data -> PROD_CODE.'" data-id="'.$data->ID.'"> '.$data -> PRODUCT.' - '.$data->SIZE.' </option>';
         }
 
         return response()->json(array('option' => $option));

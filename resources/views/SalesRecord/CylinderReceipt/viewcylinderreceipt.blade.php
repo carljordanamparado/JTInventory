@@ -14,12 +14,16 @@
                 <div class="box-body">
                     <div class="box-body table-responsive">
                         <table id="salesInvoice" class="table table-bordered table-striped">
+                            @foreach(Session::get('user') as $user)
+                            @endforeach
                             <thead>
                             <tr>
                                 <th class="text-center">ICR NO.</th>
                                 <th class="text-center">ICR DATE</th>
                                 <th class="text-center">CUSTOMER NAME</th>
-                                <th class="text-center">Actions</th>
+                                @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                  <th class="text-center">Actions</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -28,11 +32,13 @@
                                         <td>{{ $data -> ICR_NO }}</td>
                                         <td>{{ $data -> ICR_DATE }}</td>
                                         <td>{{ $data -> NAME }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group-vertical">
-                                                <a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                            </div>
-                                        </td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td class="text-center">
+                                                <div class="btn-group-vertical">
+                                                    <a type="button" class="btn btn-info" href="{{ route('CylinderReceipt.edit', $data->ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

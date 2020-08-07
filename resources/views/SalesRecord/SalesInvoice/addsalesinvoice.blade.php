@@ -31,7 +31,7 @@
                    <div class="row">
                        <div class="form-group col-md-4">
                          <label for="">INVOICE NO. &nbsp;<label id="status"></label> </label>
-                         <input type="text" class="form-control" id="invoiceNo" name="invoiceNo" value="0">
+                         <input type="text" class="form-control" id="invoiceNo" name="invoiceNo" value="">
                        </div>
                        <div class="form-group col-md-4">
                         <label class="lbl" for=""> &nbsp;</label>

@@ -15,6 +15,8 @@
             <div class="box-body">
                 <div class="box-body table-responsive">
                         <table id="salesInvoice" class="table table-bordered table-striped">
+                            @foreach(Session::get('user') as $user)
+                            @endforeach
                             <thead>
                                 <tr>
                                     <th class="text-center">INVOICE NO</th>
@@ -22,7 +24,9 @@
                                     <th class="text-center">CUSTOMER NAME</th>
                                     <th class="text-center">DESIGNATION</th>
                                     <th class="text-center">CONTACT NO</th>
+                                    @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
                                     <th class="text-center">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,11 +37,13 @@
                                             <td>{{ $data->NAME }}</td>
                                             <td>{{ $data->DESIGNATION }}</td>
                                             <td>{{ $data->CELL_NO }}</td>
+                                            @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
                                             <td class="text-center">
                                                 <div class="btn-group-vertical">
-                                                    <a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                                    <a type="button" class="btn btn-info" href="{{ route('Sales.edit', $data->ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
                                                 </div>
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                             </tbody>

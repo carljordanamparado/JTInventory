@@ -14,12 +14,16 @@
                 <div class="box-body">
                     <div class="box-body table-responsive">
                         <table id="salesInvoice" class="table table-bordered table-striped">
+                            @foreach(Session::get('user') as $user)
+                            @endforeach
                             <thead>
                             <tr>
                                 <th class="text-center">CLC NO.</th>
                                 <th class="text-center">CLC DATE</th>
                                 <th class="text-center">CUSTOMER NAME</th>
-                                <th class="text-center">Actions</th>
+                                @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                    <th class="text-center">Actions</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -28,8 +32,11 @@
                                         <td>{{ $data -> CLC_NO }}</td>
                                         <td>{{ $data -> CLC_DATE }}</td>
                                         <td> {{ $data ->  NAME }}</td>
-                                        <td><a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
-                                        </td>
+                                        @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                            <td>
+                                                <a type="button" class="btn btn-info" href="{{ route('CylinderLoan.edit', $data->ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

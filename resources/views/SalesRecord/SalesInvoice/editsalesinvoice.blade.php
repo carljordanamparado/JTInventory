@@ -23,39 +23,42 @@
         <section class="content">
             <div class="box">
                 <div class="box-header text-center">
-                    <span> Delivery as Invoice Information </span>
+                    <span> Sales Invoice Information </span>
                 </div>
                 <form method="post" id="salesinvoiceform">
                     <div class="box-body">
                         {{ csrf_field() }}
                         <div class="row">
+                            @foreach($sales as $sales)
+                            @endforeach
+                            <input type="hidden" name="id" value="{{$sales->ID}}">
                             <div class="form-group col-md-4">
-                                <label for="">DR NO. &nbsp;<label id="status"></label> </label>
-                                <input type="text" class="form-control" id="invoiceNo" name="invoiceNo" value="">
+                                <label for="">INVOICE NO. &nbsp;<label id="status"></label> </label>
+                                <input type="text" class="form-control" id="invoiceNo" name="invoiceNo" value="{{ $sales->INVOICE_NO }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label class="lbl" for=""> &nbsp;</label>
-                                <button type="button" class="form-control btn btn-primary btn-validate" id="invoiceValidate" value="DR"> Validate DR NO </button>
+                                <button type="button" class="form-control btn btn-primary btn-validate" id="invoiceValidate" value="invoice"> Validate Invoice </button>
                             </div>
                             <div class="form-group col-md-4">
-                                <label class="lbl" for="">DR DATE</label>
-                                <input type="date" id="invoiceDate" name="invoiceDate" class="form-control">
+                                <label class="lbl" for="">INVOICE DATE</label>
+                                <input type="date" id="invoiceDate" name="invoiceDate" class="form-control" value="{{ $sales->INVOICE_DATE }}">
                             </div>
                         </div>
                         <div id="salesDetails">
 
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-12">
                                     <label for=""> CUSTOMER DETAILS </label>
                                     <select id="custDetails" class="form-control custDetails" name="custDetails">
                                         <option value="" custId="">Choose Option</option>
-                                        @foreach($client as $data)
-                                            <option value="{{ $data-> CLIENTID }}">{{ $data->CLIENT_CODE }} - {{ $data -> NAME}}</option>
+                                        @foreach($data as $data)
+                                            <option value="{{ $data-> CLIENTID }}" {{ ( $data->CLIENTID == $sales -> CLIENT_ID) ? 'selected' : '' }}>{{ $data->CLIENT_CODE }} - {{ $data -> NAME}}</option>
                                         @endforeach
                                     </select>
                                     {{--<input type="text" id="custName" class="form-control">--}}
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-4 hidden">
                                     <label for=""> P.O. NO. </label>
                                     <select id="poNo" class="form-control poNo" name="poNo" disabled>
                                         {{--@foreach($poNo as $po)
@@ -64,24 +67,23 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-4 hidden">
+                                <div class="form-group col-md-4 hidden" id="poDateClass">
                                     <label for=""> PO DATE </label>
-                                    <input type="date" id="poDate" name="poDate" class="form-control" readonly>
+                                    <input type="date" id="poDate" name="poDate" class="form-control " readonly>
                                 </div>
 
-                                <div class="form-group col-md-4" id="">
+                                <div class="form-group col-md-4 hidden" id="">
                                     <label for=""> PRICE DATE </label>
                                     <select id="priceDate" class="form-control priceDate">
                                         <option value=""> Choose Option </option>
                                     </select>
                                 </div>
 
-
                             </div>
 
                         </div>
                         <div class="product col-md-12">
-                            <div class="row">
+                            <div class="row hidden">
                                 <div class="box-header text-center">
                                     <span> Product Information </span>
                                 </div>
@@ -130,11 +132,21 @@
                                         <th class="text-center"> Products Size </th>
                                         <th class="text-center"> Product Price </th>
                                         <th class="text-center"> Product Qty </th>
-                                        <th class="text-center"> Action </th>
+                                        {{--<th class="text-center"> Action </th>--}}
                                     </tr>
                                     </thead>
                                     <tbody id="productBody">
-
+                                    @foreach($product as $product)
+                                        <tr class="text-center">
+                                            <td>{{ $product -> PRODUCT }}</td>
+                                            <td>{{ $product -> SIZE }}</td>
+                                            <td> {{ $product ->  UNIT_PRICE }}</td>
+                                            <td> {{ $product ->  QTY }}</td>
+                                            {{--<td>
+                                                <button type="button" class="btn btn-warning" id="deleteButton" value="{{ $product -> ID }}">Delete</button>
+                                            </td>--}}
+                                        </tr>
+                                    @endforeach
                                     </tbody>
 
                                 </table>
@@ -179,11 +191,11 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="">Grand Total</label>
-                                    <input type="text" value="0" class="form-control" name="grandTotal" id="grandTotal" style="" readonly>
+                                    <input type="text" value="{{ $sales -> TOTAL }}" class="form-control" name="grandTotal" id="grandTotal"  style="" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="">Balance</label>
-                                    <input type="text" value="0" class="form-control" name="balAmount" id="balAmount" style="" readonly>
+                                    <input type="text" value="{{ $sales -> BALANCE }}" class="form-control" name="balAmount" id="balAmount" style="" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="">Payment Type</label>
@@ -201,19 +213,19 @@
                                 <div class="form-group col-md-3">
                                     <label for="">Return cylinder</label>
                                     <select id="cylinderType" class="form-control" name="cylinderType">
-                                        <option value="0">Empty</option>
-                                        <option value="1">ICR</option>
-                                        <option value="2">CLC</option>
-                                        <option value="3">DR</option>
+                                        <option value="0" {{ ( $sales -> CYLINDER_ENTRY == 0) ? 'selected' : '' }}>Empty</option>
+                                        <option value="1" {{ ( $sales -> CYLINDER_ENTRY == 1) ? 'selected' : '' }}>ICR</option>
+                                        <option value="2" {{ ( $sales -> CYLINDER_ENTRY == 2) ? 'selected' : '' }}>CLC</option>
+                                        <option value="3" {{ ( $sales -> CYLINDER_ENTRY == 3) ? 'selected' : '' }}>DR</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="" id="cylinderIdStatus"> Cylinder ID </label>
-                                    <input type="text" class="form-control" id="inputtedTypeId" name="inputtedTypeId">
+                                    <input type="text" class="form-control" id="inputtedTypeId" name="inputtedTypeId" value="{{ $sales->CYLINDER_IDS }}">
                                 </div>
                                 {{--<div class="form-group col-md-3">
                                     <label for="" id=""> &nbsp;</label>
-                                    <button type="button" class="form-control btn btn-info" id="validateCylinder">Validate Cylinder</button>
+                                   <button type="button" class="form-control btn btn-info" id="validateCylinder">Validate Cylinder</button>
                                 </div>--}}
                                 {{--<div class="form-group col-md-3">
                                     <label for="" id=""> &nbsp;</label>
@@ -223,16 +235,16 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="" id="labelOfType"> Issued by </label>
-                                    <input type="text" class="form-control" id="issuedBy" name="issuedBy" readonly>
+                                    <input type="text" class="form-control" id="issuedBy" name="issuedBy" value="{{ $sales-> SALESREP_NAME }}" readonly>
                                     <input type="text" class="form-control hidden" id="issuedId" name="issuedId" readonly >
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="" id="labelOfType"> Received Date </label>
-                                    <input type="date" class="form-control" id="recDate" name="recDate">
+                                    <input type="date" class="form-control" id="recDate" name="recDate" value="{{ $sales->RECEIVED_DATE }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="" id="labelOfType"> Received By</label>
-                                    <input type="text" class="form-control" id="recBy" name="recBy">
+                                    <input type="text" class="form-control" id="recBy" name="recBy" value="{{ $sales->RECEIVED_BY }}">
                                 </div>
                             </div>
                         </div>
@@ -241,10 +253,10 @@
                     <div class="box-footer">
                         <div class="row">
                             <div class="form-group col-md-3 pull-left">
-                                <button type="button" id="cancelInvoice" class="form-control btn btn-primary"> Cancel DR </button>
+                                <button type="button" id="cancelInvoice" class="form-control btn btn-primary"> Cancel Invoice </button>
                             </div>
                             <div class="form-group col-md-3 pull-right">
-                                <button type="button" id="submitButton" class="form-control btn btn-primary"> Add DR </button>
+                                <button type="button" id="submitButton" class="form-control btn btn-primary"> Edit Sales Invoice </button>
                             </div>
                         </div>
                     </div>
@@ -262,7 +274,7 @@
 
 @section('scripts')
 
-    <script type="text/javascript" src="{{ asset('BladeJavascript/SalesRecord/AddDRInvoice.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('BladeJavascript/SalesRecord/AddSalesInvoice.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
 
@@ -274,18 +286,18 @@
 
             function submitButton(){
 
-                var deliveryNo = $('#deliveryNo').val();
-                var cylinderDate = $('#cylinderDate').val();
+                var deliveryNo = $('#invoiceNo').val();
+                var cylinderDate = $('#invoiceDate').val();
 
                 if(deliveryNo == "0" ){
                     swal("Please input required fields", "With red line", "error");
-                    $('#deliveryNo').css("border", "1px solid red");
+                    $('#invoiceNo').css("border", "1px solid red");
                 }if(cylinderDate == ""){
                     swal("Please input required fields", "With red line", "error");
-                    $('#cylinderDate').css("border", "1px solid red");
+                    $('#invoiceDate').css("border", "1px solid red");
                 }if(deliveryNo != "0" && cylinderDate != "") {
-                    $('#deliveryNo').css("border", "");
-                    $('#cylinderDate').css("border", "");
+                    $('#invoiceNo').css("border", "");
+                    $('#invoiceDate').css("border", "");
 
                     $.ajaxSetup({
                         headers: {
@@ -294,13 +306,14 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('DeliverSales.store') }}",
+                        url: "{{ route('updateSALES') }}",
                         type: "POST",
                         data: $('#salesinvoiceform').serialize(),
                         success: function (response) {
                             try {
-                                swal('Delivery invoice successfully added', '', 'success');
-                                window.history.back();
+                                location.reload();
+                                swal('Sales invoice Edited successfully', '', 'success');
+
                             } catch (Exception) {
                                 swal(Exception, Exception, 'error');
                             }

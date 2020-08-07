@@ -21,7 +21,7 @@
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="">ICR NO. &nbsp;<label id="status"></label> </label>
-                                    <input type="text" class="form-control" id="icrNo" name="icrNo" value="0">
+                                    <input type="text" class="form-control" id="icrNo" name="icrNo" value="">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="lbl" for=""> &nbsp;</label>
@@ -36,7 +36,7 @@
                                     <select id="customer" name="customer" class="form-control">
                                             <option value=""> Choose option </option>
                                         @foreach($data as $client_data)
-                                            <option value="{{ $client_data -> CLIENTID }}"> {{ $client_data -> CLIENT_CODE }} - {{ $client_data -> NAME  }} </option>
+                                            <option value="{{ $client_data -> CLIENTID }}" > {{ $client_data -> CLIENT_CODE }} - {{ $client_data -> NAME  }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -84,12 +84,12 @@
                                 
                                 <div class="form-group col-md-4">
                                     <label class="checkbox-inline">
-                                        <input type="radio" class="radButton" name="cylinderType" value="1"> For Refilling
+                                        <input type="radio" class="radButton" name="cylinderType" value="1"  > For Refilling
                                     </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="checkbox-inline">
-                                        <input type="radio" class="radButton" name="cylinderType" value="2"> For Return of Cylinder Loan
+                                        <input type="radio" class="radButton" name="cylinderType" value="2" > For Return of Cylinder Loan
                                     </label>
                                 </div>
                                 <div class="form-group col-md-4">

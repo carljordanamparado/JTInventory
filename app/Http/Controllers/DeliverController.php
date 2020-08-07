@@ -123,6 +123,42 @@ class DeliverController extends Controller
     public function edit($id)
     {
         //
+        $data = db::table('delivery_receipt as a')
+            ->select('*' ,'a.ID')
+            ->join('sales_rep as b', 'a.SALESREPID', '=', 'b.ID')
+            ->where('a.ID', $id)
+            ->where('a.AS_INVOICE', 0)
+            ->get();
+
+        if($data->isEmpty()){
+            $data = db::table('delivery_receipt as a')
+                ->select('*' ,'a.ID')
+                ->join('sales_rep as b', 'a.SALESREPID', '=', 'b.ID')
+                ->where('a.ID', $id)
+                ->where('a.AS_INVOICE', 0)
+                ->get();
+        }
+
+        $dr_no = 0;
+
+        foreach($data as $row){
+            $dr_no = $row -> DR_NO;
+        }
+
+
+        $data_product = db::table('delivery_receipt_order')
+            ->where('DR_NO', $dr_no)
+            ->get();
+
+
+        $client = db::table('client')
+            ->get();
+
+
+        return view('SalesRecord.DeliveryReceipt.editdelivery')
+            ->with('dr', $data)
+            ->with('data', $client)
+            ->with('product', $data_product);
     }
 
     /**

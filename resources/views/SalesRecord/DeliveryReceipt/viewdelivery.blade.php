@@ -17,11 +17,15 @@
                 </div>
                 <div class="box-body table-responsive">
                     <table id="delivery" class="table table-bordered table-striped">
+                        @foreach(Session::get('user') as $user)
+                        @endforeach
                         <thead>
-                        <th class="text-center"> Delivery No. </th>
-                        <th class="text-center"> Delivery Date. </th>
-                        <th class="text-center"> Customer Name </th>
-                        <th class="text-center"> Actions </th>
+                            <th class="text-center"> Delivery No. </th>
+                            <th class="text-center"> Delivery Date. </th>
+                            <th class="text-center"> Customer Name </th>
+                            @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                <th class="text-center"> Actions </th>
+                            @endif
                         </thead>
                         <tbody>
                         @foreach($deliver_receipt as $deliver_data)
@@ -29,7 +33,11 @@
                                 <td> {{ $deliver_data -> DR_NO }}</td>
                                 <td> {{ $deliver_data -> DR_DATE }}</td>
                                 <td> {{ $deliver_data -> NAME }}</td>
-                                <td><a type="button" class="btn btn-info" href=""><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                @if($user -> user_authorization == "ADMINISTRATOR" || $user->user_authorization == 1)
+                                    <td>
+                                        <a type="button" class="btn btn-info" href="{{ route('Deliver.edit', $deliver_data->ID) }}"><span class="fa fa-pencil">&nbsp;&nbsp;</span>Edit</a>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>

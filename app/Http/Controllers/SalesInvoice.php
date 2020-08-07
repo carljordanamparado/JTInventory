@@ -560,6 +560,7 @@ class SalesInvoice extends Controller
     public function show($id)
     {
         //
+
     }
 
     /**
@@ -571,6 +572,39 @@ class SalesInvoice extends Controller
     public function edit($id)
     {
         //
+        $data = db::table('sales_invoice as a')
+            ->select('*' ,'a.ID', 'b.ID as sID')
+            ->join('sales_rep as b', 'a.SALESREPID', '=', 'b.ID')
+            ->where('a.ID', $id)
+            ->get();
+
+        if($data->isEmpty()){
+            $data = db::table('sales_invoice as a')
+                ->select('*' ,'a.ID', 'b.ID as sID')
+                ->join('sales_rep as b', 'a.SALESREPID', '=', 'b.SALESREP_NAME')
+                ->where('a.ID', $id)
+                ->get();
+        }
+
+        $sales = 0;
+
+        foreach($data as $row){
+            $sales = $row -> INVOICE_NO;
+        }
+
+
+        $data_product = db::table('sales_invoice_order')
+            ->where('INVOICE_NO', $sales)
+            ->get();
+
+        $client = db::table('client')
+            ->get();
+
+
+        return view('SalesRecord.SalesInvoice.editsalesinvoice')
+            ->with('sales', $data)
+            ->with('data', $client)
+            ->with('product', $data_product);
     }
 
     /**

@@ -167,8 +167,6 @@ class CylinderLoan extends Controller
 
         return response()->json(array('status' => 'success'));
 
-
-
     }
 
     /**
@@ -180,6 +178,8 @@ class CylinderLoan extends Controller
     public function show($id)
     {
         //
+
+
     }
 
     /**
@@ -191,6 +191,40 @@ class CylinderLoan extends Controller
     public function edit($id)
     {
         //
+        $data = db::table('cylinder_loan_contract as a')
+            ->select('*' ,'a.ID')
+            ->join('sales_rep as b', 'a.RELEASEDBY', '=', 'b.ID')
+            ->where('a.ID', $id)
+            ->get();
+
+        if($data->isEmpty()){
+            $data = db::table('cylinder_loan_contract as a')
+                ->select('*' ,'a.ID')
+                ->join('sales_rep as b', 'a.RELEASEDBY', '=', 'b.SALESREP_NAME')
+                ->where('a.ID', $id)
+                ->get();
+        }
+
+        $clc_no = 0;
+
+        foreach($data as $row){
+            $clc_no = $row -> CLC_NO;
+        }
+
+
+        $data_product = db::table('cylinder_loan_contract_list')
+            ->where('CLC_NO', $clc_no)
+            ->get();
+
+
+        $client = db::table('client')
+            ->get();
+
+
+        return view('SalesRecord.CylinderLoan.editcylinderloan')
+            ->with('clc', $data)
+            ->with('data', $client)
+            ->with('product', $data_product);
     }
 
     /**

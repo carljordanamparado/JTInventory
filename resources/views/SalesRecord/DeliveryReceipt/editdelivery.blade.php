@@ -17,11 +17,14 @@
                 </div>
                 <form method="post" id="deliverform">
                     <div class="box-body">
+                        @foreach($dr as $dr)
+                        @endforeach
                         {{ csrf_field() }}
+                        <input type="hidden" name="id" value="{{$dr->ID}}">
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="">DELIVERY NO. &nbsp;<label id="status"></label> </label>
-                                <input type="text" class="form-control" id="deliveryNo" name="deliveryNo" value="">
+                                <input type="text" class="form-control" id="deliveryNo" name="deliveryNo" value="{{ $dr -> DR_NO }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for=""> &nbsp;</label>
@@ -29,14 +32,14 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">DELIVERY DATE</label>
-                                <input type="date" id="cylinderDate" name="cylinderDate" class="form-control">
+                                <input type="date" id="cylinderDate" name="cylinderDate" class="form-control" value="{{ $dr -> DR_DATE }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="lbl" for="">Customer</label>
                                 <select id="customer" name="customer" class="form-control">
                                     <option value=""> Choose option </option>
                                     @foreach($data as $client_data)
-                                        <option value="{{ $client_data -> CLIENTID }}"> {{ $client_data -> CLIENT_CODE }} - {{ $client_data -> NAME  }} </option>
+                                        <option value="{{ $client_data -> CLIENTID }}" {{ ( $client_data->CLIENTID == $dr -> CLIENT_ID) ? 'selected' : '' }}> {{ $client_data -> CLIENT_CODE }} - {{ $client_data -> NAME  }} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -59,24 +62,65 @@
                                 <button type="button" class="btn-info form-control" id="addProduct"> Add Product</button>
                             </div>
                         </div>
-                        <div class="box-header text-center">
-                            <span> Product List </span>
+                        <div class="row">
+                            <div class="box-header text-center">
+                                <span> Added Product List </span>
+                            </div>
+
+                            <div class="row table-responsive col-md-12">
+                                <table id="prodListTable" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center"> Product </th>
+                                        <th class="text-center"> Products Size </th>
+                                        <th class="text-center"> Product Qty </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="">
+                                    @foreach($product as $product)
+                                        <tr class="text-center">
+                                            <td>{{ $product -> PRODUCT }}</td>
+                                            <td>{{ $product -> UNIT_PRICE }}</td>
+                                            <td> {{ $product ->  SIZE }}</td>
+                                            {{--<td>
+                                                <button type="button" class="btn btn-warning" id="deleteButton" value="{{ $product -> ID }}">Delete</button>
+                                            </td>--}}
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                </div>
+                                <div class="form-group col-md-4">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for=""> Total Amount: </label>
+                                    <input type="text" class="form-control" id="" name="" value="{{ $dr->TOTAL }}" readonly>
+                                </div>
+                            </div>
+                        <div class="row">
+                            <div class="box-header text-center">
+                                <span> Product List </span>
+                            </div>
 
-                        <div class="row table-responsive col-md-12">
-                            <table id="prodListTable" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th class="text-center"> Product </th>
-                                    <th class="text-center"> Products Price </th>
-                                    <th class="text-center"> Product Qty </th>
-                                    <th class="text-center"> Action </th>
-                                </tr>
-                                </thead>
-                                <tbody id="productBody">
+                            <div class="row table-responsive col-md-12">
+                                <table id="prodListTable" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center"> Product </th>
+                                        <th class="text-center"> Products Price </th>
+                                        <th class="text-center"> Product Qty </th>
+                                        <th class="text-center"> Action </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="productBody">
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
@@ -91,15 +135,15 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for=""> Returned</label>
-                                <input type="text" class="form-control" name="returned">
+                                <input type="text" class="form-control" name="returned" value="{{ $dr -> SALESREP_NAME }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for=""> Received Date </label>
-                                <input type="date" class="form-control" name="releasedDate">
+                                <input type="date" class="form-control" name="releasedDate" value="{{ $dr -> RECEIVED_DATE }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for=""> Received By </label>
-                                <input type="text" class="form-control" name="receivedBy">
+                                <input type="text" class="form-control" name="receivedBy" value="{{ $dr -> RECEIVED_BY }}">
                             </div>
                         </div>
 
@@ -110,7 +154,7 @@
                                 <button type="button" id="cancelInvoice" class="form-control btn btn-primary"> Cancel Invoice </button>
                             </div>
                             <div class="form-group col-md-3 pull-right">
-                                <button type="button" id="submitButton" class="form-control btn btn-primary"> Add Cylinder Receipt </button>
+                                <button type="button" id="submitButton" class="form-control btn btn-primary"> Edit Delivery Receipt </button>
                             </div>
                         </div>
                     </div>
@@ -128,9 +172,9 @@
 
             $('#size').maskMoney();
 
-           function validationonFail(){
+            function validationonFail(){
 
-           }
+            }
 
             function submitButton(){
 
@@ -154,14 +198,14 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('Deliver.store') }}",
+                        url: "{{ route('UpdateDELIVER') }}",
                         type: "POST",
                         data: $('#deliverform').serialize(),
                         success: function (response) {
                             try {
                                 if (response.status == "success") {
                                     swal('Delivery Receipt successfully added', '', 'success');
-                                    window.history.back();
+                                    location.reload();
                                 }
 
                             } catch (Exception) {

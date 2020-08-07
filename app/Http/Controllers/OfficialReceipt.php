@@ -187,6 +187,37 @@ class OfficialReceipt extends Controller
     public function edit($id)
     {
         //
+        $client = db::table('client')
+            ->get();
+
+        $data = db::table('official_receipt as a')
+            ->select('*' ,'a.ID', 'b.ID as sID')
+            ->join('sales_rep as b', 'a.SALESREPID', '=', 'b.ID')
+            ->where('a.ID', $id)
+            ->get();
+
+        if($data->isEmpty()){
+            $data = db::table('official_receipt as a')
+                ->select('*' ,'a.ID', 'b.ID as sID')
+                ->Join('sales_rep as b', 'a.SALESREPID', '=', 'b.SALESREP_NAME')
+                ->where('a.ID', $id)
+                ->get();
+        }
+
+        $or = 0;
+
+        foreach($data as $row){
+            $or = $row -> OR_NO;
+        }
+
+        $data_product = db::table('official_receipt_paid')
+            ->where('OR_NO', $or)
+            ->get();
+
+        return view('SalesRecord.OfficialReceipt.editor')
+            ->with('data', $client)
+            ->with('or_list', $data_product)
+            ->with('or', $data);
     }
 
     /**
